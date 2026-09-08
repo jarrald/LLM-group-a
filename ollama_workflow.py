@@ -1,207 +1,100 @@
-"""Run a small two-model workflow against a local Ollama server."""
+"""Entry point for the local multi-LLM coding workflow.
+
+Usage:
+  python ollama_workflow.py --web                  # start the Flask dashboard
+  python ollama_workflow.py --health               # check configured endpoints
+  python ollama_workflow.py --run "Requirement"    # run the pipeline headlessly
+  python ollama_workflow.py "Requirement"          # alias of --run
+"""
+
+from __future__ import annotations
 
 import argparse
-import json
-import os
 import sys
-import urllib.error
-import urllib.request
-from pathlib import Path
+from typing import List, Optional
 
-from flask import Flask, jsonify, render_template_string, request
-
-
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
-ARCHITECT_MODEL = os.getenv("ARCHITECT_MODEL", "qwen2.5-coder:7b")
-REVIEWER_MODEL = os.getenv("REVIEWER_MODEL", "llama3.2:3b")
-
-app = Flask(__name__)
-
-INDEX_HTML = """
-<!doctype html>
-<html lang="da">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Local LLM Workflow</title>
-    <style>
-        body { max-width: 900px; margin: 40px auto; padding: 0 20px; font: 16px system-ui, sans-serif; color: #18202a; }
-        textarea { width: 100%; min-height: 140px; padding: 12px; box-sizing: border-box; font: inherit; }
-        button { margin-top: 12px; padding: 10px 18px; cursor: pointer; }
-        pre { white-space: pre-wrap; background: #f1f3f5; padding: 16px; border-radius: 6px; }
-        #status { min-height: 24px; margin-top: 16px; }
-    </style>
-</head>
-<body>
-    <h1>Local Multi-LLM Workflow</h1>
-    <p>Skriv hvad systemet skal kunne. Ollama-modellerne laver derefter en arkitekturplan og et review.</p>
-    <form id="workflow-form">
-        <textarea id="requirement" placeholder="Eksempel: Jeg skal bruge en webshop med login og produkter..."></textarea>
-        <button type="submit">Kør workflow</button>
-    </form>
-    <div id="status"></div>
-    <pre id="result"></pre>
-    <script>
-        const form = document.getElementById('workflow-form');
-        const status = document.getElementById('status');
-        const result = document.getElementById('result');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            status.textContent = 'Arbejder... Det kan tage lidt tid, mens begge modeller svarer.';
-            result.textContent = '';
-            try {
-                const response = await fetch('/api/workflow', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({requirement: document.getElementById('requirement').value})
-                });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || 'Ukendt fejl');
-                status.textContent = 'Færdig';
-                result.textContent = JSON.stringify(data, null, 2);
-            } catch (error) {
-                status.textContent = 'Fejl: ' + error.message;
-            }
-        });
-    </script>
-</body>
-</html>
-"""
+from workflow.config import ConfigError, load_config
+from workflow.pipeline import Pipeline
 
 
-def ask_ollama(model: str, prompt: str) -> str:
-    request_data = json.dumps(
-        {"model": model, "prompt": prompt, "stream": False}
-    ).encode("utf-8")
-    request = urllib.request.Request(
-        f"{OLLAMA_URL}/api/generate",
-        data=request_data,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-
+def _run_headless(requirement: str, config_path: Optional[str]) -> int:
     try:
-        with urllib.request.urlopen(request, timeout=300) as response:
-            result = json.loads(response.read().decode("utf-8"))
-    except urllib.error.URLError as error:
-        raise RuntimeError(
-            f"Kunne ikke forbinde til Ollama på {OLLAMA_URL}. "
-            "Start Ollama og prøv igen."
-        ) from error
+        config = load_config(config_path)
+    except ConfigError as exc:
+        print(f"Config error: {exc}", file=sys.stderr)
+        return 1
 
-    if "error" in result:
-        raise RuntimeError(f"Ollama-fejl for {model}: {result['error']}")
-    return result["response"]
+    pipeline = Pipeline(config)
+    result = pipeline.run(requirement)
+    print("Workflow finished.")
+    print(f"  run_id:    {result.run_id}")
+    print(f"  status:    {result.status}")
+    print(f"  duration:  {result.duration_s:.1f}s")
+    print(f"  workspace: {result.workspace_dir}")
+    if result.error:
+        print(f"  error:     {result.error}", file=sys.stderr)
+    if result.tickets:
+        print(f"  tickets:   {len(result.tickets)}")
+        for ticket in result.tickets:
+            print(f"    - {ticket['ticket_id']} [{ticket['status']}] {ticket['title']}")
+    return 0 if result.status != "failed" else 1
 
 
-def verify_models() -> list[str]:
+def _print_health(config_path: Optional[str]) -> int:
     try:
-        with urllib.request.urlopen(f"{OLLAMA_URL}/api/tags", timeout=10) as response:
-            installed = json.loads(response.read().decode("utf-8"))
-    except urllib.error.URLError as error:
-        raise RuntimeError(
-            f"Ollama svarer ikke på {OLLAMA_URL}. Er Ollama startet?"
-        ) from error
+        config = load_config(config_path)
+    except ConfigError as exc:
+        print(f"Config error: {exc}", file=sys.stderr)
+        return 1
+    from webapp import collect_health
 
-    installed_names = {model["name"] for model in installed.get("models", [])}
-    missing = [
-        model
-        for model in (ARCHITECT_MODEL, REVIEWER_MODEL)
-        if model not in installed_names
-    ]
-    if missing:
-        raise RuntimeError(
-            "Disse modeller er ikke installeret i Ollama: "
-            + ", ".join(missing)
-            + ". Kør `ollama pull MODELNAVN` eller ret miljøvariablerne."
-        )
-    return [ARCHITECT_MODEL, REVIEWER_MODEL]
+    health = collect_health(config)
+    print(f"Overall: {health['status']}")
+    for endpoint in health["endpoints"]:
+        state = "OK" if endpoint["ok"] else f"DOWN ({endpoint['error']})"
+        print(f"  endpoint {endpoint['name']}: {endpoint['url']} -> {state}")
+        if endpoint["ok"]:
+            print(f"    models: {', '.join(endpoint['models']) or '(none)'}")
+    for role in health["roles"]:
+        mark = "ready" if role["model_available"] else "MODEL MISSING"
+        print(f"  role {role['role']}: {role['model']} @ {role['url']} ({mark})")
+    return 0 if health["status"] == "ok" else 1
 
 
-def run_workflow(requirement: str) -> dict[str, str | list[str]]:
-    models = verify_models()
-    architecture = ask_ollama(
-        ARCHITECT_MODEL,
-        """Du er softwarearkitekt. Lav en kort, konkret plan for følgende behov.
-Returner præcis disse overskrifter: Components, API, Tasks, Acceptance criteria.
-Behov:
-"""
-        + requirement,
-    )
-    review = ask_ollama(
-        REVIEWER_MODEL,
-        """Du er tech lead og reviewer. Gennemgå behovet og arkitekturplanen.
-Find mangler, foreslå tests og lav en kort deployment-checkliste.
-Behov:
-"""
-        + requirement
-        + "\nArkitekturplan:\n"
-        + architecture,
-    )
-    return {
-        "requirement": requirement,
-        "models": models,
-        "architecture": architecture,
-        "review_and_tests": review,
-    }
-
-
-@app.get("/")
-def index():
-    return render_template_string(INDEX_HTML)
-
-
-@app.get("/api/health")
-def health():
-    try:
-        models = verify_models()
-    except RuntimeError as error:
-        return jsonify({"status": "error", "error": str(error)}), 503
-    return jsonify({"status": "ok", "models": models})
-
-
-@app.post("/api/workflow")
-def workflow_api():
-    data = request.get_json(silent=True) or {}
-    requirement = str(data.get("requirement", "")).strip()
-    if not requirement:
-        return jsonify({"error": "Feltet requirement må ikke være tomt."}), 400
-
-    try:
-        return jsonify(run_workflow(requirement))
-    except RuntimeError as error:
-        return jsonify({"error": str(error)}), 503
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Kør workflowet med to lokale Ollama-modeller.")
-    parser.add_argument("requirement", nargs="?", help="Det behov, der skal analyseres")
-    parser.add_argument("--output", default="output/workflow-result.json")
-    parser.add_argument("--web", action="store_true", help="Start Flask-webserveren")
+def main(argv: Optional[List[str]] = None) -> int:
+    parser = argparse.ArgumentParser(description="Run the local multi-LLM coding workflow.")
+    parser.add_argument("requirement", nargs="?", help="the requirement to process")
+    parser.add_argument("--run", dest="run", metavar="REQUIREMENT", help="run the pipeline headlessly")
+    parser.add_argument("--web", action="store_true", help="start the Flask dashboard")
+    parser.add_argument("--health", action="store_true", help="check configured endpoints")
+    parser.add_argument("--config", default=None, help="path to config.yaml")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=5000)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.web:
+        from webapp import create_app
+
+        try:
+            app = create_app(load_config(args.config))
+        except ConfigError as exc:
+            print(f"Config error: {exc}", file=sys.stderr)
+            return 1
         app.run(host=args.host, port=args.port, debug=False)
         return 0
 
-    requirement = args.requirement or input("Hvad skal systemet kunne?\n> ").strip()
+    if args.health:
+        return _print_health(args.config)
+
+    requirement = args.run or args.requirement
     if not requirement:
-        print("Du skal skrive et behov.", file=sys.stderr)
+        requirement = input("What should the system do?\n> ").strip()
+    if not requirement:
+        print("A requirement is required.", file=sys.stderr)
+        parser.print_help()
         return 1
 
-    try:
-        result = run_workflow(requirement)
-    except RuntimeError as error:
-        print(f"Fejl: {error}", file=sys.stderr)
-        return 1
-
-    output_path = Path(args.output)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"Færdig. Resultatet er gemt i {output_path}")
-    return 0
+    return _run_headless(requirement, args.config)
 
 
 if __name__ == "__main__":

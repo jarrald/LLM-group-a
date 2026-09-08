@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Local Multi-LLM Workflow{% endblock %}
+{% block body %}
+<h1>Local Multi-LLM Workflow</h1>
+<p class="muted">Architect &rarr; Tech lead &rarr; parallel coding workers, driven by two local model endpoints.</p>
+
+<div class="grid">
+  <div>
+    <h2>Start a run</h2>
+    <div class="card">
+      <textarea id="requirement" placeholder="Example: a minimal task manager REST API with in-memory storage (create, list, update, delete tasks)"></textarea>
+      <button id="start">Run workflow</button>
+      <div id="status" class="muted" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div>
+    <h2>Endpoints &amp; roles</h2>
+    <div class="card">
+      <table>
+        <tr><th>Role</th><th>Model</th><th>Endpoint</th><th></th></tr>
+        {% for r in health.roles %}
+        <tr>
+          <td>{{ r.role }}</td>
+          <td><code>{{ r.model }}</code></td>
+          <td class="muted">{{ r.url }}</td>
+          <td><span class="badge {{ 'ok' if r.model_available else 'bad' }}">{{ 'ready' if r.model_available else 'missing' }}</span></td>
+        </tr>
+        {% endfor %}
+      </table>
+      <p class="muted">Overall: <span class="badge {{ health.status }}">{{ health.status }}</span> &middot; {{ health.worker_count }} workers</p>
+    </div>
+  </div>
+</div>
+
+<h2>Recent runs</h2>
+<div class="card">
+  {% if runs %}
+  <table>
+    <tr><th>Run</th><th>Status</th><th>Requirement</th></tr>
+    {% for r in runs %}
+    <tr>
+      <td><a href="/runs/{{ r.run_id }}">{{ r.run_id }}</a></td>
+      <td><span class="badge {{ r.status }}">{{ r.status }}</span></td>
+      <td class="muted">{{ r.requirement }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p class="muted">No runs yet.</p>
+  {% endif %}
+</div>
+
+<script>
+const btn = document.getElementById('start');
+const status = document.getElementById('status');
+btn.addEventListener('click', async () => {
+  const requirement = document.getElementById('requirement').value.trim();
+  if (!requirement) { status.textContent = 'Please enter a requirement.'; return; }
+  btn.disabled = true; status.textContent = 'Starting\u2026';
+  try {
+    const res = await fetch('/api/workflow', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({requirement})
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'unknown error');
+    window.location = data.monitor;
+  } catch (e) {
+    status.textContent = 'Error: ' + e.message;
+    btn.disabled = false;
+  }
+});
+</script>
+{% endblock %}

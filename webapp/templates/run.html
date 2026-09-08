@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Run {{ run_id }}{% endblock %}
+{% block body %}
+<h1>Run <code>{{ run_id }}</code></h1>
+<p><a href="/">&#8592; back to overview</a></p>
+
+<div id="summary" class="muted">Loading&#8230;</div>
+
+<h2>Stages</h2>
+<div class="card" id="stages"></div>
+
+<h2>Tickets</h2>
+<div class="card" id="tickets"></div>
+
+<h2>Artifacts</h2>
+<div class="card" id="artifacts"></div>
+
+<script>
+const runId = {{ run_id | tojson }};
+const stageNames = ['architect', 'tech_lead', 'workers'];
+
+function badge(status) {
+  return '<span class="badge ' + status + '">' + status + '</span>';
+}
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+async function poll() {
+  let data;
+  try {
+    const res = await fetch('/api/runs/' + runId);
+    if (res.status === 404) { document.getElementById('summary').textContent = 'Run not found.'; return; }
+    data = await res.json();
+  } catch (e) {
+    document.getElementById('summary').textContent = 'Error: ' + e.message;
+    return;
+  }
+  const live = data.live || {};
+  const mf = data.manifest || {};
+  const status = (mf.status || live.status || 'running');
+  document.getElementById('summary').innerHTML =
+    badge(status) + ' <span class="muted">' + esc(mf.requirement || live.requirement || '') + '</span>' +
+    (mf.duration_s ? ' &middot; ' + mf.duration_s + 's' : '') +
+    (mf.error ? ' &middot; <span class="bad">' + esc(mf.error) + '</span>' : '');
+
+  const stages = live.stages || mf.stages || {};
+  let stagesHtml = '<table><tr><th>Stage</th><th>Status</th><th>Detail</th></tr>';
+  for (const name of stageNames) {
+    const s = stages[name] || {};
+    stagesHtml += '<tr><td>' + esc(name) + '</td><td>' + badge(s.status || 'pending') + '</td><td class="muted">' + esc(s.detail || s.error || '') + '</td></tr>';
+  }
+  stagesHtml += '</table>';
+  document.getElementById('stages').innerHTML = stagesHtml;
+
+  const tickets = (mf.tickets && mf.tickets.length)
+    ? mf.tickets
+    : Object.keys(live.tickets || {}).map((id, i) => ({ticket_id: id, title: '', status: (live.tickets[id] || {}).status}));
+  let tHtml = '<table><tr><th>ID</th><th>Title</th><th>Status</th><th>Worker</th><th>Files</th></tr>';
+  for (const t of tickets) {
+    const files = (t.files || []).map(f => '<a href="/api/runs/' + runId + '/file?path=' + encodeURIComponent('repo/' + f) + '">' + esc(f) + '</a>').join('<br>');
+    tHtml += '<tr><td>' + esc(t.ticket_id) + '</td><td>' + esc(t.title) + '</td><td>' + badge(t.status) + '</td><td class="muted">' + esc(t.worker || '') + '</td><td>' + files + '</td></tr>';
+  }
+  tHtml += '</table>';
+  document.getElementById('tickets').innerHTML = tHtml;
+
+  const arts = data.artifacts || [];
+  const aHtml = arts.length
+    ? '<ul>' + arts.map(a => '<li><a href="/api/runs/' + runId + '/file?path=' + encodeURIComponent(a) + '">' + esc(a) + '</a></li>').join('') + '</ul>'
+    : '<p class="muted">No artifacts yet.</p>';
+  document.getElementById('artifacts').innerHTML = aHtml;
+
+  if (status === 'running') setTimeout(poll, 2000);
+}
+poll();
+</script>
+{% endblock %}

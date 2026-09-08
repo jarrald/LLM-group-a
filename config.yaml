@@ -1,0 +1,40 @@
+# Role-based model routing for the local multi-LLM coding workflow.
+#
+# Every role (architect, tech_lead, worker) is bound to a local endpoint and a
+# model. This satisfies Hard Requirement 1: switching/routing between two
+# separate local model endpoints happens through configuration only -- no code
+# changes and no manual rewiring.
+#
+# Every value below can be overridden with an environment variable (see
+# .env.example for the supported names).
+
+endpoints:
+  ollama_a:
+    url: http://127.0.0.1:11434
+    description: Primary Ollama server (default port)
+  ollama_b:
+    url: http://127.0.0.1:11435
+    description: Secondary Ollama server (second local endpoint)
+
+roles:
+  architect:
+    endpoint: ollama_a
+    model: qwen2.5-coder:7b
+    temperature: 0.2
+    num_predict: 4096
+  tech_lead:
+    endpoint: ollama_b
+    model: llama3.2:3b
+    temperature: 0.2
+    num_predict: 4096
+  worker:
+    endpoint: ollama_a
+    model: qwen2.5-coder:7b
+    temperature: 0.2
+    num_predict: 4096
+
+workflow:
+  worker_count: 2            # FR3: N >= 2 parallel coding workers
+  max_retries: 1             # retry once with feedback on malformed output
+  request_timeout_seconds: 900
+  workspace_dir: workspace

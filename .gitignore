@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated workflow runs (reproducible; re-run the pipeline to regenerate)
+workspace/
