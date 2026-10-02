@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: Local Multi-LLM Workflow API
+  version: 1.0.0
+  description: >-
+    HTTP API for the local Ollama multi-LLM workflow. Served by
+    model/ollama_workflow.py on http://127.0.0.1:5000. No authentication is
+    required because the service binds to loopback only.
+servers:
+  - url: http://127.0.0.1:5000
+paths:
+  /api/health:
+    get:
+      summary: Verify Ollama endpoints and models
+      operationId: health
+      responses:
+        "200":
+          description: Both endpoints reachable and required models present
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  endpoints:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                  models:
+                    type: array
+                    items:
+                      type: string
+        "503":
+          description: An endpoint is unreachable or a model is missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [error]
+                  error:
+                    type: string
+  /api/workflow:
+    post:
+      summary: Run the ten-agent workflow for a requirement
+      operationId: runWorkflow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [requirement]
+              properties:
+                requirement:
+                  type: string
+                  minLength: 1
+      responses:
+        "200":
+          description: Workflow result for all ten agents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requirement:
+                    type: string
+                  agent_count:
+                    type: integer
+                  agents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        model:
+                          type: string
+                        endpoint:
+                          type: string
+                        result:
+                          type: string
+        "400":
+          description: Empty requirement
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        "503":
+          description: Workflow runtime error (e.g. endpoint unavailable)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

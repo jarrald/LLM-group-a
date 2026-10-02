@@ -1,5 +1,10 @@
 # Mandatory 1 delivery plan
 
+> **Update:** the final comparison pivoted to two established harnesses —
+> **Hermes Agent vs. OpenHands** — documented in `docs/synopsis.md`
+> (recommendation: Hermes) and `docs/SETUP_GUIDE.md`. The Flask prototype below is
+> retained as a reference implementation only.
+
 ## Goal
 
 Turn the existing local Ollama/Flask prototype into a submission-ready Mandatory 1 delivery within approximately 100 minutes. The focus is demonstrating every requirement with reproducible evidence, rather than rebuilding the project.

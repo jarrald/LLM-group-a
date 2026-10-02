@@ -1,0 +1,12 @@
+[tool.ruff]
+line-length = 240
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.ruff.format]
+line-ending = "cr-lf"
+
+[tool.mypy]
+ignore_missing_imports = true

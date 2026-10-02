@@ -1,0 +1,56 @@
+# .clineignore — files Cline must NOT auto-load into context.
+# Same syntax as .gitignore, matched relative to the repo root.
+# NOTE: this only filters automatic context/search, it is not a security boundary
+# (an explicit @mention or a shell command can still reach these files).
+#
+# This file is separate from .gitignore on purpose: it also excludes files that are
+# git-tracked but useless/huge as raw context (e.g. the PDF/PPTX deliverables).
+
+# --- Python bytecode & interpreter caches (the big win) ---
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --- Test / lint / type-check caches ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Generated Ollama workflow runs (regenerated on every demo) ---
+workspace/
+
+# --- Logs & transient output ---
+*.log
+
+# --- Binary / large documents (never useful as raw context) ---
+*.pdf
+*.pptx
+*.docx
+*.xlsx
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.zip
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

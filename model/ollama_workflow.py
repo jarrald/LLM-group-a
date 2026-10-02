@@ -3,19 +3,30 @@
 import json
 import os
 import sys
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import cast
 
 from flask import Flask, jsonify, render_template_string, request
 
-
-# Ollama kører lokalt på denne adresse. Miljøvariabler gør det muligt at ændre
+# Ollama kører lokalt på disse adresser. Miljøvariabler gør det muligt at ændre
 # server eller modeller uden at redigere Python-filen.
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
+#
+# Hard requirement om "minimum 2 separate lokale endpoints" løses her:
+# arkitekt-roller kører mod ARCHITECT_ENDPOINT, mens reviewer-/worker-roller
+# kører mod WORKER_ENDPOINT. Sættes kun OLLAMA_URL, falder begge tilbage på den,
+# så eksisterende opsætninger stadig virker uden ændringer.
+DEFAULT_ENDPOINT = os.getenv("OLLAMA_URL", "http://localhost:11434")
+ARCHITECT_ENDPOINT = os.getenv("ARCHITECT_ENDPOINT", DEFAULT_ENDPOINT)
+WORKER_ENDPOINT = os.getenv("WORKER_ENDPOINT", DEFAULT_ENDPOINT)
 ARCHITECT_MODEL = os.getenv("ARCHITECT_MODEL", "qwen2.5-coder:7b")
-REVIEWER_MODEL = os.getenv("REVIEWER_MODEL", "llama3.2:3b")
+WORKER_MODEL = os.getenv("WORKER_MODEL", "llama3.2:3b")
 MAX_PARALLEL_AGENTS = int(os.getenv("MAX_PARALLEL_AGENTS", "2"))
+
+# Arkitekt-rolle-agenter kører mod ARCHITECT_ENDPOINT; alle øvrige agenter
+# (reviewer-/worker-roller) kører mod WORKER_ENDPOINT.
+ARCHITECT_ROLE_AGENTS = {"architecture", "tech_lead", "implementation"}
 
 # Disse fire værdier er faste standarder for alle agenter. De kan ændres her i
 # koden, men brugeren skal ikke udfylde dem i browseren.
@@ -29,13 +40,13 @@ AGENTS = {
     "architecture": (ARCHITECT_MODEL, "Funktionelt krav: Architecture responsibility. Lav komponenter, ansvar, interface/API-kontrakter, deployment-topologi og ADR-forslag."),
     "tech_lead": (ARCHITECT_MODEL, "Funktionelt krav: Tech lead responsibility. Opdel arbejdet i tickets med scope, out of scope, acceptance criteria, definition of done og afhængigheder."),
     "implementation": (ARCHITECT_MODEL, "Funktionelt krav: Implementation responsibility. Beskriv hvordan mindst to coding workers kan paralleliseres, hvilke filer de ændrer, og hvordan ændringer integreres og reviewes."),
-    "testing_quality": (REVIEWER_MODEL, "Funktionelt krav: Testing & quality responsibility. Foreslå unit/integration tests, testkørsel, statiske checks, quality report, kendte begrænsninger og risici."),
-    "documentation": (REVIEWER_MODEL, "Funktionelt krav: Documentation responsibility. Planlæg README, API-brug, runbook, konfiguration og design-/ADR-dokumentation."),
-    "deployment": (REVIEWER_MODEL, "Funktionelt krav: Deployment validation responsibility. Lav en deploy-checkliste eller script-plan med build, container, miljøvariabler, health check og konfiguration."),
-    "predictability": (REVIEWER_MODEL, "Non-funktionelt krav: Predictability & control. Beskriv plan, diff, approval-flow og hvordan kommandoer eller filændringer kontrolleres."),
-    "reproducibility": (REVIEWER_MODEL, "Non-funktionelt krav: Reproducibility. Beskriv Git-flow, versionering og hvordan samme workflow kan køres igen med sammenlignelige resultater."),
-    "context_management": (REVIEWER_MODEL, "Non-funktionelt krav: Context management. Beskriv artifact handoffs, summaries, scoping og hvordan workflowet håndterer større repositories og dokumenter."),
-    "security": (REVIEWER_MODEL, "Non-funktionelt krav: Security baseline. Beskriv lokal endpoint-sikkerhed, netværksadgang, secrets og hvorfor en offentlig unauthenticated model endpoint ikke er nødvendig."),
+    "testing_quality": (WORKER_MODEL, "Funktionelt krav: Testing & quality responsibility. Foreslå unit/integration tests, testkørsel, statiske checks, quality report, kendte begrænsninger og risici."),
+    "documentation": (WORKER_MODEL, "Funktionelt krav: Documentation responsibility. Planlæg README, API-brug, runbook, konfiguration og design-/ADR-dokumentation."),
+    "deployment": (WORKER_MODEL, "Funktionelt krav: Deployment validation responsibility. Lav en deploy-checkliste eller script-plan med build, container, miljøvariabler, health check og konfiguration."),
+    "predictability": (WORKER_MODEL, "Non-funktionelt krav: Predictability & control. Beskriv plan, diff, approval-flow og hvordan kommandoer eller filændringer kontrolleres."),
+    "reproducibility": (WORKER_MODEL, "Non-funktionelt krav: Reproducibility. Beskriv Git-flow, versionering og hvordan samme workflow kan køres igen med sammenlignelige resultater."),
+    "context_management": (WORKER_MODEL, "Non-funktionelt krav: Context management. Beskriv artifact handoffs, summaries, scoping og hvordan workflowet håndterer større repositories og dokumenter."),
+    "security": (WORKER_MODEL, "Non-funktionelt krav: Security baseline. Beskriv lokal endpoint-sikkerhed, netværksadgang, secrets og hvorfor en offentlig unauthenticated model endpoint ikke er nødvendig."),
 }
 
 # Flask-objektet samler webadresserne og starter selve webserveren.
@@ -106,7 +117,7 @@ INDEX_HTML = r"""
         function formatResult(data) {
             const agents = data.agents.map(agent => `
                 <section>
-                    <h3>${escapeHtml(agent.name)} (${escapeHtml(agent.model)})</h3>
+                    <h3>${escapeHtml(agent.name)} (${escapeHtml(agent.model)} · ${escapeHtml(agent.endpoint)})</h3>
                     ${renderMarkdown(agent.result)}
                 </section>
             `).join('');
@@ -145,15 +156,13 @@ INDEX_HTML = r"""
 """
 
 
-# Sender en prompt til en bestemt lokal Ollama-model.
-def ask_ollama(model: str, prompt: str) -> str:
+# Sender en prompt til en bestemt lokal Ollama-model på en given endpoint.
+def ask_ollama(model: str, prompt: str, endpoint: str) -> str:
     # Ollama bruger et JSON-kald til /api/generate. stream=False betyder, at vi
     # venter på hele svaret, før vi sender det videre til næste model.
-    request_data = json.dumps(
-        {"model": model, "prompt": prompt, "stream": False}
-    ).encode("utf-8")
+    request_data = json.dumps({"model": model, "prompt": prompt, "stream": False}).encode("utf-8")
     request = urllib.request.Request(
-        f"{OLLAMA_URL}/api/generate",
+        f"{endpoint}/api/generate",
         data=request_data,
         headers={"Content-Type": "application/json"},
         method="POST",
@@ -163,10 +172,7 @@ def ask_ollama(model: str, prompt: str) -> str:
         with urllib.request.urlopen(request, timeout=300) as response:
             result = json.loads(response.read().decode("utf-8"))
     except (urllib.error.URLError, TimeoutError) as error:
-        raise RuntimeError(
-            f"Kunne ikke forbinde til Ollama på {OLLAMA_URL}. "
-            "Start Ollama, prøv igen, eller øg timeouten i koden."
-        ) from error
+        raise RuntimeError(f"Kunne ikke forbinde til Ollama på {endpoint}. Start Ollama, prøv igen, eller øg timeouten i koden.") from error
 
     # Ollama kan returnere en fejl i et ellers gyldigt HTTP-svar.
     if "error" in result:
@@ -174,66 +180,65 @@ def ask_ollama(model: str, prompt: str) -> str:
     return result["response"]
 
 
-# Kontrollerer, at begge modeller findes i Ollama, før workflowet starter.
-def verify_models() -> list[str]:
+# Henter listen over modeller, som en given Ollama-server har installeret.
+def _installed_models(endpoint: str) -> set[str]:
     # /api/tags indeholder listen over modeller, som Ollama har installeret.
-    # Vi stopper tidligt med en tydelig fejl, hvis en model mangler.
     try:
-        with urllib.request.urlopen(f"{OLLAMA_URL}/api/tags", timeout=10) as response:
+        with urllib.request.urlopen(f"{endpoint}/api/tags", timeout=10) as response:
             installed = json.loads(response.read().decode("utf-8"))
     except urllib.error.URLError as error:
-        raise RuntimeError(
-            f"Ollama svarer ikke på {OLLAMA_URL}. Er Ollama startet?"
-        ) from error
+        raise RuntimeError(f"Ollama svarer ikke på {endpoint}. Er Ollama startet?") from error
+    return {model["name"] for model in installed.get("models", [])}
 
-    installed_names = {model["name"] for model in installed.get("models", [])}
-    missing = [
-        model
-        for model in (ARCHITECT_MODEL, REVIEWER_MODEL)
-        if model not in installed_names
+
+# Kontrollerer, at de valgte modeller findes på deres respektive endpoints.
+def verify_models() -> dict[str, list[str]]:
+    # Hver endpoint kontrolleres for den model, dens roller skal bruge. Hvis
+    # begge endpoints peger på samme server, kontrolleres serveren kun én gang.
+    checks = [
+        (ARCHITECT_ENDPOINT, ARCHITECT_MODEL),
+        (WORKER_ENDPOINT, WORKER_MODEL),
     ]
-    if missing:
-        raise RuntimeError(
-            "Disse modeller er ikke installeret i Ollama: "
-            + ", ".join(missing)
-            + ". Kør `ollama pull MODELNAVN` eller ret miljøvariablerne."
-        )
-    return [ARCHITECT_MODEL, REVIEWER_MODEL]
+    endpoints: dict[str, list[str]] = {}
+    for endpoint, model in checks:
+        installed_names = _installed_models(endpoint)
+        if model not in installed_names:
+            raise RuntimeError(f"Modellen {model} er ikke installeret på {endpoint}. Kør `ollama pull MODELNAVN` eller ret miljøvariablerne.")
+        if model not in endpoints.setdefault(endpoint, []):
+            endpoints[endpoint].append(model)
+    return endpoints
+
+
+# Vælger hvilken lokal endpoint en agent kører mod, ud fra agentens rolle.
+def endpoint_for(agent_name: str) -> str:
+    if agent_name in ARCHITECT_ROLE_AGENTS:
+        return ARCHITECT_ENDPOINT
+    return WORKER_ENDPOINT
 
 
 # Kører de ti agenter parallelt, så en langsom agent ikke blokerer de andre.
 def run_workflow(requirement: str) -> dict[str, object]:
-    # Begge modeller kontrolleres én gang, før vi starter de ti agentkald.
-    models = verify_models()
-    context = (
-        f"Traits (roller og behaviors): {DEFAULT_TRAITS}\n"
-        f"Tasks: {DEFAULT_TASKS}\n"
-        f"Tone: {DEFAULT_TONE}\n"
-        f"Targets (målgruppe og mål): {DEFAULT_TARGETS}"
-    )
+    # Begge endpoints kontrolleres én gang, før vi starter de ti agentkald.
+    endpoints = verify_models()
+    models = sorted({model for endpoint_models in endpoints.values() for model in endpoint_models})
+    context = f"Traits (roller og behaviors): {DEFAULT_TRAITS}\nTasks: {DEFAULT_TASKS}\nTone: {DEFAULT_TONE}\nTargets (målgruppe og mål): {DEFAULT_TARGETS}"
 
     def run_agent(agent_name: str) -> dict[str, str]:
         model, responsibility = AGENTS[agent_name]
-        prompt = (
-            f"Du er agenten {agent_name}. {responsibility}\n\n"
-            f"Projektkrav:\n{requirement}\n\n"
-            f"Fælles arbejdsramme:\n{context}\n\n"
-            "Returner et konkret, kort og handlingsorienteret forslag."
-        )
+        endpoint = endpoint_for(agent_name)
+        prompt = f"Du er agenten {agent_name}. {responsibility}\n\nProjektkrav:\n{requirement}\n\nFælles arbejdsramme:\n{context}\n\nReturner et konkret, kort og handlingsorienteret forslag."
         return {
             "name": agent_name,
             "model": model,
-            "result": ask_ollama(model, prompt),
+            "endpoint": endpoint,
+            "result": ask_ollama(model, prompt, endpoint),
         }
 
     # Vi kører stadig agenterne parallelt, men begrænser antallet af samtidige
     # kald. Lokale Ollama-servere kan ellers løbe tør for RAM eller timeout.
     agent_results = []
     with ThreadPoolExecutor(max_workers=min(MAX_PARALLEL_AGENTS, len(AGENTS))) as executor:
-        futures = {
-            executor.submit(run_agent, agent_name): agent_name
-            for agent_name in AGENTS
-        }
+        futures = {executor.submit(run_agent, agent_name): agent_name for agent_name in AGENTS}
         for future in as_completed(futures):
             agent_results.append(future.result())
 
@@ -249,6 +254,7 @@ def run_workflow(requirement: str) -> dict[str, object]:
             "targets": DEFAULT_TARGETS,
         },
         "models": models,
+        "endpoints": endpoints,
         "agent_count": len(agent_results),
         "agents": agent_results,
     }
@@ -258,8 +264,9 @@ def print_readable_result(result: dict[str, object]) -> None:
     """Printer workflow-resultatet i en form, der er nem at læse i terminalen."""
     print(f"KRAV\n{result['requirement']}")
     print(f"\nAGENTER ({result['agent_count']})")
-    for agent in result["agents"]:
-        print(f"\n--- {agent['name']} ({agent['model']}) ---\n{agent['result']}")
+    agents = cast(list[dict[str, str]], result["agents"])
+    for agent in agents:
+        print(f"\n--- {agent['name']} ({agent['model']} @ {agent['endpoint']}) ---\n{agent['result']}")
 
 
 # Viser frontend-siden i browseren.
@@ -274,10 +281,11 @@ def index():
 def health():
     # Dette endpoint kan bruges til hurtigt at se, om Ollama er tilgængelig.
     try:
-        models = verify_models()
+        endpoints = verify_models()
     except RuntimeError as error:
         return jsonify({"status": "error", "error": str(error)}), 503
-    return jsonify({"status": "ok", "models": models})
+    models = sorted({model for endpoint_models in endpoints.values() for model in endpoint_models})
+    return jsonify({"status": "ok", "endpoints": endpoints, "models": models})
 
 
 # Modtager brugerens krav fra frontend og starter workflowet.
