@@ -90,6 +90,11 @@ python .\model\ollama_workflow.py "Lav en todo-app med login" --json
 
 # start the Flask web app -> http://127.0.0.1:5000
 python .\model\ollama_workflow.py --web
+
+# agentic mode: agents call tools (write files, run tests) in a sandbox
+python .\model\ollama_workflow.py --agentic "Lav en Python-funktion add(a, b) med en pytest-test"          # dry-run: diffs only
+python .\model\ollama_workflow.py --agentic --apply "Lav en Python-funktion add(a, b) med en pytest-test"  # write files + run commands
+python .\model\ollama_workflow.py --agentic --apply --workspace workspace\demo "Dit krav"
 ```
 
 ### Configuration (environment variables, no code changes needed)
@@ -102,6 +107,9 @@ python .\model\ollama_workflow.py --web
 | `ARCHITECT_MODEL` | `qwen2.5-coder:7b` | model for architect-role agents |
 | `WORKER_MODEL` | `llama3.2:3b` | model for reviewer/worker agents |
 | `MAX_PARALLEL_AGENTS` | `2` | max concurrent Ollama calls (RAM guard) |
+| `WORKSPACE_DIR` | `workspace` | sandbox directory for agent file operations |
+| `CONTEXT_BUDGET` | `6000` | max chars per artifact handed to the next agent |
+| `MAX_AGENT_ROUNDS` | `8` | max tool-calling rounds per agent |
 
 ```powershell
 $env:ARCHITECT_ENDPOINT = "http://127.0.0.1:11434"
@@ -115,6 +123,7 @@ python .\model\ollama_workflow.py --web
 
 - `GET  /api/health` — verifies Ollama + models; `200` ok, `503` on error.
 - `POST /api/workflow` — JSON body `{"requirement": "..."}`; `400` if empty.
+  Optional `"mode": "agentic"` and `"apply": true` run the tool-calling pipeline.
 
 ---
 
@@ -172,6 +181,7 @@ Prefer reading specific files over broad recursive searches, and scope searches 
 - [ ] `python -m pip install -r requirements.txt` succeeds.
 - [ ] `python .\model\ollama_workflow.py "<requirement>"` runs and prints all 10 agents.
 - [ ] `--json` emits valid JSON; `--web` serves `http://127.0.0.1:5000`.
+- [ ] `--agentic` prints proposed diffs; `--agentic --apply` writes files and runs allowlisted commands.
 - [ ] `GET /api/health` returns `{"status": "ok", ...}` when Ollama is up.
 - [ ] No new files were added outside the requested scope; `git status` is clean of
       accidental cache/binary additions.
