@@ -7,33 +7,53 @@ Results from a real run of the test and static-check toolchain on the current
 
 | Test type | Command | Result |
 | --- | --- | --- |
-| Unit (pytest) | `python -m pytest -q` | `16 passed in 0.11s` |
+| Unit (pytest) | `python -m pytest -q` | `40 passed in 0.45s` |
 
 Covered units: environment-variable parsing (defaults + endpoint routing), the
 Ollama helpers (`ask_ollama`, `_installed_models`, `verify_models`), the parallel
-workflow runner (`run_workflow`), and the Flask routes (`/api/health`,
-`/api/workflow`).
+workflow runner (`run_workflow`), the Flask routes (`/api/health`,
+`/api/workflow`), the sandboxed tool layer (`ToolRuntime`: path-traversal guard,
+file operations, diff generation, command allowlist), the agentic pipeline
+(`run_agentic_workflow`, `run_tool_agent`, artifact handoff), the CLI argument
+parser (`_parse_arguments`) and the content-based tool-call recovery parser
+(`_extract_tool_calls_from_content`).
 
 ## Static checks
 
 | Check | Command | Result |
 | --- | --- | --- |
 | Lint | `python -m ruff check model tests` | `All checks passed` |
-| Format | `python -m ruff format --check model tests` | `5 files already formatted` |
+| Format | `python -m ruff format --check model tests` | `7 files already formatted` |
 | Type check | `python -m mypy model` | `Success: no issues found in 1 source file` |
 
 Tool configuration lives in `pyproject.toml` (ruff `line-length = 240`,
 `target-version = "py39"`, lint rules `E F I W`, `line-ending = "cr-lf"`; mypy
 `ignore_missing_imports` for Flask).
 
+## Live verification (two local endpoints)
+
+Run against two live `ollama serve` instances (`127.0.0.1:11434` and
+`127.0.0.1:11435`):
+
+| Step | Command | Result |
+| --- | --- | --- |
+| Agentic pipeline | `python .\model\ollama_workflow.py --agentic --apply --workspace workspace\demo "<krav>"` | all 10 agents ran; files written; unified diffs shown; exit 0 |
+| Tool calling (structured) | models `llama3.1:8b`, `qwen3.5:9b` | emit `tool_calls` directly in the Ollama response |
+| Tool calling (text fallback) | models `qwen2.5-coder:7b`, `llama3.2:3b` | emit the call as JSON text; recovered by `_extract_tool_calls_from_content` |
+
 ## Known limitations
 
-- Tests monkeypatch `urllib.request.urlopen` and `ask_ollama`; they do **not**
-  require a running Ollama server, so the suite is deterministic and offline.
+- Tests monkeypatch `urllib.request.urlopen`, `ask_ollama` and `chat_ollama`;
+  they do **not** require a running Ollama server, so the suite is deterministic
+  and offline.
 - No automated end-to-end test performs a real LLM generation — that is exercised
   by the manual demo (`docs/SETUP_GUIDE.md`) to avoid non-deterministic assertions.
 - The two endpoints are unit-tested independently; a full two-server run is
   documented rather than asserted in CI.
+- Tool-calling quality varies by model. `llama3.1:8b` and `qwen3.5:9b` emit
+  structured `tool_calls`; `qwen2.5-coder:7b` and `llama3.2:3b` emit the call as
+  JSON text. The fallback parser keeps the small models usable but is a heuristic
+  (it only accepts known tool names).
 
 ## Known risks
 

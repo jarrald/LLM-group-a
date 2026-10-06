@@ -47,3 +47,26 @@ def test_non_architect_agents_route_to_worker_endpoint(monkeypatch):
     for name in m.AGENTS:
         if name not in m.ARCHITECT_ROLE_AGENTS:
             assert m.endpoint_for(name) == "http://worker"
+
+
+def test_agentic_env_defaults(monkeypatch):
+    for name in ("WORKSPACE_DIR", "CONTEXT_BUDGET", "MAX_AGENT_ROUNDS"):
+        monkeypatch.delenv(name, raising=False)
+    _reload()
+    assert m.WORKSPACE_DIR == "workspace"
+    assert m.CONTEXT_BUDGET == 6000
+    assert m.MAX_AGENT_ROUNDS == 8
+
+
+def test_parse_arguments_separates_flags_from_requirement():
+    flags, values, requirement = m._parse_arguments(["--agentic", "--apply", "lav", "en", "todo-app"])
+    assert flags == {"--agentic", "--apply"}
+    assert values == {}
+    assert requirement == "lav en todo-app"
+
+
+def test_parse_arguments_reads_workspace_value():
+    flags, values, requirement = m._parse_arguments(["--workspace", "out", "krav"])
+    assert "--workspace" not in flags
+    assert values["--workspace"] == "out"
+    assert requirement == "krav"
