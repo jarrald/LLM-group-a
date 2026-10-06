@@ -1,0 +1,217 @@
+{
+  "run_id": "runA_demo",
+  "config": "C:\\Users\\novij\\Desktop\\Pba Softwareudvikling\\2. Semester\\LLMs for udviklere\\project\\Test\\config\\endpoints.yaml",
+  "control": "apply",
+  "endpoints": {
+    "alpha": {
+      "base_url": "http://localhost:11434",
+      "description": "Ollama server A (primary host)"
+    },
+    "beta": {
+      "base_url": "http://localhost:11435",
+      "description": "Ollama server B (secondary host)"
+    }
+  },
+  "roles": {
+    "architect": {
+      "endpoint": "alpha",
+      "model": "architect:latest"
+    },
+    "techlead": {
+      "endpoint": "alpha",
+      "model": "techlead:latest"
+    },
+    "coder": {
+      "endpoint": "beta",
+      "model": "coder:latest"
+    },
+    "tester": {
+      "endpoint": "beta",
+      "model": "tester:latest"
+    },
+    "docs": {
+      "endpoint": "alpha",
+      "model": "docs:latest"
+    },
+    "deploy": {
+      "endpoint": "beta",
+      "model": "deploy:latest"
+    }
+  },
+  "events": [
+    "architect -> docs/architecture.md, ADR-0001, api/openapi.yaml",
+    "techlead -> 3 tickets",
+    "coders (parallel) -> 3 files: ['src/taskflow/api.py', 'src/taskflow/service.py', 'src/taskflow/store.py']",
+    "tester -> 2 test files: ['tests/test_service.py', 'tests/test_store.py']",
+    "pytest: rc=2 passed=0 failed=0 errors=1",
+    "repair round 1: rewrote 3 files",
+    "pytest: rc=2 passed=0 failed=0 errors=1",
+    "repair round 2: rewrote 3 files",
+    "pytest: rc=2 passed=0 failed=0 errors=1",
+    "docs -> 0 files: []",
+    "deploy -> 3 files; validation FAILED",
+    "quality -> reports/quality_report.md",
+    "apply: +17 files, ~0 changed, applied=True commit rc=0"
+  ],
+  "test_result": {
+    "exit_code": 2,
+    "passed": 0,
+    "failed": 0,
+    "errors": 1,
+    "passed_ok": false
+  },
+  "deploy_validation": {
+    "ran": true,
+    "exit_code": 1,
+    "ok": false
+  },
+  "llm_calls": [
+    {
+      "role": "architect",
+      "endpoint": "http://localhost:11434",
+      "model": "architect:latest",
+      "seconds": 28.0,
+      "chars": 1199,
+      "ok": true
+    },
+    {
+      "role": "architect",
+      "endpoint": "http://localhost:11434",
+      "model": "architect:latest",
+      "seconds": 29.6,
+      "chars": 1795,
+      "ok": true
+    },
+    {
+      "role": "architect",
+      "endpoint": "http://localhost:11434",
+      "model": "architect:latest",
+      "seconds": 20.3,
+      "chars": 4250,
+      "ok": true
+    },
+    {
+      "role": "techlead",
+      "endpoint": "http://localhost:11434",
+      "model": "techlead:latest",
+      "seconds": 15.2,
+      "chars": 1656,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11435",
+      "model": "coder:latest",
+      "seconds": 19.8,
+      "chars": 1006,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11434",
+      "model": "coder:latest",
+      "seconds": 46.2,
+      "chars": 3253,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11434",
+      "model": "coder:latest",
+      "seconds": 49.5,
+      "chars": 950,
+      "ok": true
+    },
+    {
+      "role": "tester",
+      "endpoint": "http://localhost:11435",
+      "model": "tester:latest",
+      "seconds": 233.5,
+      "chars": 3147,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11435",
+      "model": "coder:latest",
+      "seconds": 35.0,
+      "chars": 932,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11434",
+      "model": "coder:latest",
+      "seconds": 38.2,
+      "chars": 950,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11434",
+      "model": "coder:latest",
+      "seconds": 48.6,
+      "chars": 3172,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11435",
+      "model": "coder:latest",
+      "seconds": 20.6,
+      "chars": 862,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11434",
+      "model": "coder:latest",
+      "seconds": 22.6,
+      "chars": 950,
+      "ok": true
+    },
+    {
+      "role": "coder",
+      "endpoint": "http://localhost:11434",
+      "model": "coder:latest",
+      "seconds": 32.8,
+      "chars": 3233,
+      "ok": true
+    },
+    {
+      "role": "docs",
+      "endpoint": "http://localhost:11434",
+      "model": "docs:latest",
+      "seconds": 21.7,
+      "chars": 2721,
+      "ok": true
+    },
+    {
+      "role": "deploy",
+      "endpoint": "http://localhost:11435",
+      "model": "deploy:latest",
+      "seconds": 28.0,
+      "chars": 992,
+      "ok": true
+    }
+  ],
+  "artifacts": {
+    "architecture": true,
+    "tickets": 3,
+    "code_files": [
+      "src/taskflow/api.py",
+      "src/taskflow/service.py",
+      "src/taskflow/store.py"
+    ],
+    "test_files": [
+      "tests/test_service.py",
+      "tests/test_store.py"
+    ],
+    "docs_files": [],
+    "deploy_files": [
+      "Dockerfile",
+      "deploy/validate_deploy.py",
+      "docs/environment.md"
+    ]
+  }
+}

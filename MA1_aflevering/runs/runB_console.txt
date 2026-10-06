@@ -1,0 +1,7 @@
+[run runB_demo] building crew (6 role agents, 2 endpoints)
+
+
++----------------------------- Execution Traces ------------------------------+
+|                                                                             |
+|  files collected: ['Dockerfile', 'README.md', 'deploy/validate_deploy.py', 'src/taskflow/__main__.py', 'src/taskflow/api.py', 'src/taskflow/service.py', 'src/taskflow/store.py', 'tests/test_service.py', 'tests/test_store.py']
+run artifacts: C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runB_demo

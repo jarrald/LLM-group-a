@@ -1,0 +1,47 @@
+```json
+[
+  {
+    "id": 1,
+    "title": "Implement In-Memory Task Store",
+    "scope": "src/taskflow/store.py",
+    "acceptance_criteria": [
+      "Implement TaskStore class with CRUD operations",
+      "Tasks are stored in memory, no persistence",
+      "Ids are assigned sequentially starting at 1"
+    ],
+    "depends_on": []
+  },
+  {
+    "id": 2,
+    "title": "Implement Task Service with Validation and Business Rules",
+    "scope": "src/taskflow/service.py",
+    "acceptance_criteria": [
+      "TaskService class is constructed with TaskStore instance",
+      "Validation: title is required, 1..100 chars, no whitespace",
+      "Business rules: create() rejects invalid titles, update() and delete() update store"
+    ],
+    "depends_on": [1]
+  },
+  {
+    "id": 3,
+    "title": "Implement HTTP Handler and Server Setup",
+    "scope": "src/taskflow/api.py",
+    "acceptance_criteria": [
+      "make_server() returns configured HTTPServer instance",
+      "HTTP handler implements HTTP surface (GET, POST, GET/<id>, PATCH/<id>, DELETE/<id>, GET/healthz)",
+      "JSON responses match specified shapes"
+    ],
+    "depends_on": [1, 2]
+  },
+  {
+    "id": 4,
+    "title": "Implement Server Startup and Configuration",
+    "scope": "src/taskflow/__main__.py",
+    "acceptance_criteria": [
+      "Server starts on PORT env var (default 8080)",
+      "Server calls serve_forever() on configured HTTPServer instance"
+    ],
+    "depends_on": [3]
+  }
+]
+```

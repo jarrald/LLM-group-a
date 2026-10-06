@@ -1,0 +1,43 @@
+# =============================================================================
+# CrewAI routing profile (Candidate B)
+# -----------------------------------------------------------------------------
+# Identical to endpoints.yaml EXCEPT the `tester` role is bound to a
+# tool-capable model.
+#
+# Why: Crew(memory=True) is a NATIVE CrewAI feature, but enabling it makes
+# CrewAI attach the built-in "Search memory" and "Save to memory" tools to
+# EVERY agent. Those tool schemas are sent to the model, and Ollama rejects the
+# request with HTTP 400 ("does not support tools") for any model that does not
+# advertise the `tools` capability. `tester:latest` (deepseek-coder:6.7b) only
+# advertises ["completion"], so the crew cannot complete with the default
+# profile. Rebinding the role to a tool-capable model fixes it with a
+# one-line, config-only change - no code change.
+# =============================================================================
+
+endpoints:
+  alpha:
+    base_url: "http://localhost:11434"
+    description: "Ollama server A (primary host)"
+  beta:
+    base_url: "http://localhost:11435"
+    description: "Ollama server B (secondary host)"
+
+defaults:
+  temperature: 0.2
+  num_ctx: 8192
+  num_predict: 1400
+  request_timeout_s: 900
+  max_repair_rounds: 3
+
+roles:
+  architect:  { endpoint: alpha, model: "architect:latest" }
+  techlead:   { endpoint: alpha, model: "techlead:latest" }
+  coder:      { endpoint: beta,  model: "coder:latest" }
+  # was tester:latest (completion-only) -> not tool-capable; see note above
+  tester:     { endpoint: beta,  model: "coder:latest" }
+  docs:       { endpoint: alpha, model: "docs:latest" }
+  deploy:     { endpoint: beta,  model: "deploy:latest" }
+
+worker_pool:
+  endpoints: [alpha, beta]
+  max_workers: 3

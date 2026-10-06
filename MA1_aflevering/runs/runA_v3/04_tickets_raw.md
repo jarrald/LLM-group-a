@@ -1,0 +1,49 @@
+```json
+[
+  {
+    "id": 1,
+    "title": "Implement in-memory CRUD operations for tasks",
+    "scope": "src/taskflow/store.py",
+    "acceptance_criteria": [
+      "Implement TaskStore class with __init__, create, list, get, update, delete methods",
+      "Store tasks in memory, using a dictionary to map task IDs to task data",
+      "Implement sequential ID assignment starting at 1"
+    ],
+    "depends_on": []
+  },
+  {
+    "id": 2,
+    "title": "Implement validation and business rules for tasks",
+    "scope": "src/taskflow/service.py",
+    "acceptance_criteria": [
+      "Import TaskStore from taskflow/store.py",
+      "Implement TaskService class with create, list, get, update, delete methods",
+      "Validate title length and content in create method",
+      "Implement business rules for update and delete methods"
+    ],
+    "depends_on": [1]
+  },
+  {
+    "id": 3,
+    "title": "Implement HTTP handler and server setup",
+    "scope": "src/taskflow/api.py",
+    "acceptance_criteria": [
+      "Import TaskService from taskflow/service.py",
+      "Implement make_server function to create an HTTP server",
+      "Implement HTTP handler to serve CRUD operations and healthz endpoint"
+    ],
+    "depends_on": [1, 2]
+  },
+  {
+    "id": 4,
+    "title": "Implement server startup and configuration",
+    "scope": "src/taskflow/__main__.py",
+    "acceptance_criteria": [
+      "Import make_server function from taskflow/api.py",
+      "Read PORT environment variable or default to 8080",
+      "Build and start the server using make_server"
+    ],
+    "depends_on": [3]
+  }
+]
+```

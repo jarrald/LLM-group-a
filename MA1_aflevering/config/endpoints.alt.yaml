@@ -1,0 +1,36 @@
+# =============================================================================
+# Alternate routing profile (Candidate A - LangGraph)
+# -----------------------------------------------------------------------------
+# Identical workflow, DIFFERENT routing: every role is swapped to the opposite
+# endpoint and the heavier roles are moved onto server B. Passing this file with
+# --config proves that endpoint switching is purely configuration driven.
+# =============================================================================
+
+endpoints:
+  alpha:
+    base_url: "http://localhost:11434"
+    description: "Ollama server A (primary host)"
+  beta:
+    base_url: "http://localhost:11435"
+    description: "Ollama server B (secondary host)"
+
+defaults:
+  temperature: 0.2
+  num_ctx: 8192
+  num_predict: 1400
+  request_timeout_s: 900
+  max_repair_rounds: 3
+
+# NOTE: architect/techlead/coder/tester/docs/deploy are all swapped vs the
+# default profile, and coder/tester now run on server A.
+roles:
+  architect:  { endpoint: beta,  model: "architect:latest" }
+  techlead:   { endpoint: beta,  model: "techlead:latest" }
+  coder:      { endpoint: alpha, model: "coder:latest" }
+  tester:     { endpoint: alpha, model: "tester:latest" }
+  docs:       { endpoint: beta,  model: "docs:latest" }
+  deploy:     { endpoint: alpha, model: "deploy:latest" }
+
+worker_pool:
+  endpoints: [beta, alpha]
+  max_workers: 3

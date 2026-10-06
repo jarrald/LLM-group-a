@@ -1,0 +1,128 @@
+F.FFFF......                                                             [100%]
+================================== FAILURES ===================================
+_________________________________ test_create _________________________________
+
+    def test_create():
+        store = TaskStore()
+        service = TaskService(store)
+>       task = service.create('Test Task')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_service.py:8: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\taskflow\service.py:11: in create
+    return self.store.create(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <taskflow.store.TaskStore object at 0x00000149C5793CB0>
+title = {'id': 1, 'title': 'Test Task', 'done': False}
+
+    def create(self, title):
+>       if not title.strip() or len(title) > 100:
+               ^^^^^^^^^^^
+E       AttributeError: 'dict' object has no attribute 'strip'
+
+src\taskflow\store.py:7: AttributeError
+__________________________________ test_list __________________________________
+
+    def test_list():
+        store = TaskStore()
+        service = TaskService(store)
+        assert service.list() == []
+>       service.create('Task 1')
+
+tests\test_service.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\taskflow\service.py:11: in create
+    return self.store.create(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <taskflow.store.TaskStore object at 0x00000149C57D56D0>
+title = {'id': 1, 'title': 'Task 1', 'done': False}
+
+    def create(self, title):
+>       if not title.strip() or len(title) > 100:
+               ^^^^^^^^^^^
+E       AttributeError: 'dict' object has no attribute 'strip'
+
+src\taskflow\store.py:7: AttributeError
+__________________________________ test_get ___________________________________
+
+    def test_get():
+        store = TaskStore()
+        service = TaskService(store)
+        assert service.get(1) is None
+>       service.create('Task 1')
+
+tests\test_service.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\taskflow\service.py:11: in create
+    return self.store.create(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <taskflow.store.TaskStore object at 0x00000149C5A44D60>
+title = {'id': 1, 'title': 'Task 1', 'done': False}
+
+    def create(self, title):
+>       if not title.strip() or len(title) > 100:
+               ^^^^^^^^^^^
+E       AttributeError: 'dict' object has no attribute 'strip'
+
+src\taskflow\store.py:7: AttributeError
+_________________________________ test_update _________________________________
+
+    def test_update():
+        store = TaskStore()
+        service = TaskService(store)
+        assert service.update(1, 'Updated Task') is None
+>       service.create('Task 1')
+
+tests\test_service.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\taskflow\service.py:11: in create
+    return self.store.create(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <taskflow.store.TaskStore object at 0x00000149C5A45350>
+title = {'id': 1, 'title': 'Task 1', 'done': False}
+
+    def create(self, title):
+>       if not title.strip() or len(title) > 100:
+               ^^^^^^^^^^^
+E       AttributeError: 'dict' object has no attribute 'strip'
+
+src\taskflow\store.py:7: AttributeError
+_________________________________ test_delete _________________________________
+
+    def test_delete():
+        store = TaskStore()
+        service = TaskService(store)
+        assert service.delete(1) == False
+>       service.create('Task 1')
+
+tests\test_service.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\taskflow\service.py:11: in create
+    return self.store.create(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <taskflow.store.TaskStore object at 0x00000149C5AD7650>
+title = {'id': 1, 'title': 'Task 1', 'done': False}
+
+    def create(self, title):
+>       if not title.strip() or len(title) > 100:
+               ^^^^^^^^^^^
+E       AttributeError: 'dict' object has no attribute 'strip'
+
+src\taskflow\store.py:7: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/test_service.py::test_create - AttributeError: 'dict' object has...
+FAILED tests/test_service.py::test_list - AttributeError: 'dict' object has n...
+FAILED tests/test_service.py::test_get - AttributeError: 'dict' object has no...
+FAILED tests/test_service.py::test_update - AttributeError: 'dict' object has...
+FAILED tests/test_service.py::test_delete - AttributeError: 'dict' object has...

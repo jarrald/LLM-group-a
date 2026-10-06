@@ -1,0 +1,14 @@
+[run runB_native_v2] endpoints:
+  alpha: http://localhost:11434
+  beta: http://localhost:11435
+[run runB_native_v2] role -> endpoint:
+  architect  -> alpha (http://localhost:11434)  model=architect:latest
+  techlead   -> alpha (http://localhost:11434)  model=techlead:latest
+  tester     -> beta (http://localhost:11435)  model=coder:latest
+  docs       -> alpha (http://localhost:11434)  model=docs:latest
+  deploy     -> beta (http://localhost:11435)  model=deploy:latest
+[run runB_native_v2] coding workers (one agent per parallel task):
+  coder      -> beta (http://localhost:11435)  model=coder:latest
+  coder      -> beta (http://localhost:11435)  model=coder:latest
+  coder      -> beta (http://localhost:11435)  model=coder:latest
+  coder      -> beta (http://localhost:11435)  model=coder:latest

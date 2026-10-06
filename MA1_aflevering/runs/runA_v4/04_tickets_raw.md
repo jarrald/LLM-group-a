@@ -1,0 +1,55 @@
+```json
+[
+  {
+    "id": 1,
+    "title": "Implement TaskStore in-memory CRUD",
+    "scope": "src/taskflow/store.py",
+    "acceptance_criteria": [
+      "Implement __init__() method",
+      "Implement create(title) method",
+      "Implement list() method",
+      "Implement get(id) method",
+      "Implement update(id, title=None, done=None) method",
+      "Implement delete(id) method"
+    ],
+    "depends_on": []
+  },
+  {
+    "id": 2,
+    "title": "Implement TaskService with validation and business rules",
+    "scope": "src/taskflow/service.py",
+    "acceptance_criteria": [
+      "Delegate to TaskStore with correct method calls",
+      "Implement validation for title length and emptiness",
+      "Implement business rules for task creation and updates"
+    ],
+    "depends_on": [1]
+  },
+  {
+    "id": 3,
+    "title": "Implement HTTP handler and server creation",
+    "scope": "src/taskflow/api.py",
+    "acceptance_criteria": [
+      "Create a shared instance of TaskService",
+      "Implement HTTP handler for GET /tasks",
+      "Implement HTTP handler for POST /tasks",
+      "Implement HTTP handler for GET /tasks/<id>",
+      "Implement HTTP handler for PATCH /tasks/<id>",
+      "Implement HTTP handler for DELETE /tasks/<id>",
+      "Implement HTTP handler for GET /healthz"
+    ],
+    "depends_on": [2]
+  },
+  {
+    "id": 4,
+    "title": "Implement server startup and management",
+    "scope": "src/taskflow/__main__.py",
+    "acceptance_criteria": [
+      "Read PORT env var or default to 8080",
+      "Build the server with make_server()",
+      "Call serve_forever() on the server"
+    ],
+    "depends_on": [3]
+  }
+]
+```

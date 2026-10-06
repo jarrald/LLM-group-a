@@ -1,0 +1,12 @@
+DEPLOY FAILED: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+Exception in thread Thread-1 (run_server):
+Traceback (most recent call last):
+  File "C:\Python314\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Python314\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_demo\staged\deploy\validate_deploy.py", line 7, in run_server
+    import taskflow
+ModuleNotFoundError: No module named 'taskflow'

@@ -1,0 +1,22 @@
+[run runA_alt] config=config/endpoints.alt.yaml  control=apply
+[run runA_alt] endpoint alpha: http://localhost:11434
+[run runA_alt] endpoint beta: http://localhost:11435
+[run runA_alt] routing: architect->beta:architect:latest, techlead->beta:techlead:latest, coder->alpha:coder:latest, tester->alpha:tester:latest, docs->beta:docs:latest, deploy->alpha:deploy:latest
+
+=== workflow events ===
+ - architect -> docs/architecture.md, ADR-0001, api/openapi.yaml
+ - techlead -> 4 tickets
+ - coders -> 4 files in 2 dependency-ordered batch(es): ['src/taskflow/__main__.py', 'src/taskflow/api.py', 'src/taskflow/service.py', 'src/taskflow/store.py']
+ - tester -> 3 test files: ['tests/test_api.py', 'tests/test_service.py', 'tests/test_store.py']
+ - pytest: rc=1 passed=9 failed=1 errors=0
+ - repair round 1: rewrote 1 test file(s)
+ - pytest: rc=1 passed=16 failed=1 errors=0
+ - repair round 2: rewrote 3 test file(s)
+ - pytest: rc=0 passed=12 failed=0 errors=0
+ - docs -> 3 files: ['README.md', 'docs/api-usage.md', 'docs/runbook.md']
+ - deploy -> 3 files; validation OK
+ - quality -> reports/quality_report.md
+ - apply: +23 files, ~0 changed, applied=True commit rc=0
+
+tests: passed=12 failed=0 errors=0
+run artifacts: C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_alt
