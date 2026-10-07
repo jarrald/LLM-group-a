@@ -1,0 +1,12 @@
+{
+  "principle": "Each role receives a SCOPED subset of upstream artifacts, never the whole repository. Handoffs happen through files on disk plus an explicit, bounded prompt context.",
+  "scoping": {
+    "architect": "PROJECT_BRIEF only",
+    "techlead": "PROJECT_BRIEF + architecture.md (truncated to 1500 chars)",
+    "coder": "PROJECT_BRIEF + its own ticket + code of already-produced dependency files (context handoff, not the whole repo)",
+    "tester": "PROJECT_BRIEF + the implementation files under test",
+    "docs": "PROJECT_BRIEF + architecture.md (truncated to 1200 chars)",
+    "deploy": "PROJECT_BRIEF only"
+  },
+  "growth_behaviour": "Prompt size stays bounded because only dependency-ordered artifacts are passed forward; raw model output is kept on disk under runs/<id>/ rather than accumulated in context."
+}

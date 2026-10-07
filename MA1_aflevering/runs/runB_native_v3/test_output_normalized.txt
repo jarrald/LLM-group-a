@@ -1,0 +1,169 @@
+EEEEEE.FFF.....F...........                                              [100%]
+=================================== ERRORS ====================================
+_______________________ ERROR at setup of test_healthz ________________________
+
+    @pytest.fixture
+    def server():
+        port = int(os.getenv('PORT', 8080))
+>       server = start_server('localhost', port)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+host = 'localhost', port = 8080
+
+    def start_server(host, port):
+>       server = make_server(host, port)
+                 ^^^^^^^^^^^
+E       NameError: name 'make_server' is not defined
+
+tests\test_api.py:7: NameError
+_____________________ ERROR at setup of test_create_task ______________________
+
+    @pytest.fixture
+    def server():
+        port = int(os.getenv('PORT', 8080))
+>       server = start_server('localhost', port)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+host = 'localhost', port = 8080
+
+    def start_server(host, port):
+>       server = make_server(host, port)
+                 ^^^^^^^^^^^
+E       NameError: name 'make_server' is not defined
+
+tests\test_api.py:7: NameError
+______________________ ERROR at setup of test_get_tasks _______________________
+
+    @pytest.fixture
+    def server():
+        port = int(os.getenv('PORT', 8080))
+>       server = start_server('localhost', port)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+host = 'localhost', port = 8080
+
+    def start_server(host, port):
+>       server = make_server(host, port)
+                 ^^^^^^^^^^^
+E       NameError: name 'make_server' is not defined
+
+tests\test_api.py:7: NameError
+_______________________ ERROR at setup of test_get_task _______________________
+
+    @pytest.fixture
+    def server():
+        port = int(os.getenv('PORT', 8080))
+>       server = start_server('localhost', port)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+host = 'localhost', port = 8080
+
+    def start_server(host, port):
+>       server = make_server(host, port)
+                 ^^^^^^^^^^^
+E       NameError: name 'make_server' is not defined
+
+tests\test_api.py:7: NameError
+_____________________ ERROR at setup of test_update_task ______________________
+
+    @pytest.fixture
+    def server():
+        port = int(os.getenv('PORT', 8080))
+>       server = start_server('localhost', port)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+host = 'localhost', port = 8080
+
+    def start_server(host, port):
+>       server = make_server(host, port)
+                 ^^^^^^^^^^^
+E       NameError: name 'make_server' is not defined
+
+tests\test_api.py:7: NameError
+_____________________ ERROR at setup of test_delete_task ______________________
+
+    @pytest.fixture
+    def server():
+        port = int(os.getenv('PORT', 8080))
+>       server = start_server('localhost', port)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+host = 'localhost', port = 8080
+
+    def start_server(host, port):
+>       server = make_server(host, port)
+                 ^^^^^^^^^^^
+E       NameError: name 'make_server' is not defined
+
+tests\test_api.py:7: NameError
+================================== FAILURES ===================================
+______________________ test_create_task_with_empty_title ______________________
+
+    def test_create_task_with_empty_title():
+        store = TaskStore()
+        service = TaskService(store)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_service.py:16: Failed
+___________________ test_create_task_with_whitespace_title ____________________
+
+    def test_create_task_with_whitespace_title():
+        store = TaskStore()
+        service = TaskService(store)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_service.py:22: Failed
+____________________ test_create_task_with_too_long_title _____________________
+
+    def test_create_task_with_too_long_title():
+        store = TaskStore()
+        service = TaskService(store)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_service.py:28: Failed
+______________________ test_update_task_with_invalid_id _______________________
+
+    def test_update_task_with_invalid_id():
+        store = TaskStore()
+        service = TaskService(store)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_service.py:68: Failed
+=========================== short test summary info ===========================
+FAILED tests/test_service.py::test_create_task_with_empty_title - Failed: DID...
+FAILED tests/test_service.py::test_create_task_with_whitespace_title - Failed...
+FAILED tests/test_service.py::test_create_task_with_too_long_title - Failed: ...
+FAILED tests/test_service.py::test_update_task_with_invalid_id - Failed: DID ...
+ERROR tests/test_api.py::test_healthz - NameError: name 'make_server' is not ...
+ERROR tests/test_api.py::test_create_task - NameError: name 'make_server' is ...
+ERROR tests/test_api.py::test_get_tasks - NameError: name 'make_server' is no...
+ERROR tests/test_api.py::test_get_task - NameError: name 'make_server' is not...
+ERROR tests/test_api.py::test_update_task - NameError: name 'make_server' is ...
+ERROR tests/test_api.py::test_delete_task - NameError: name 'make_server' is ...
+4 failed, 17 passed, 6 errors in 0.23s

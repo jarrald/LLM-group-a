@@ -1,0 +1,24 @@
+[run runA_v5] config=C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\config\endpoints.yaml  control=apply
+[run runA_v5] endpoint alpha: http://localhost:11434
+[run runA_v5] endpoint beta: http://localhost:11435
+[run runA_v5] routing: architect->alpha:architect:latest, techlead->alpha:techlead:latest, coder->beta:coder:latest, tester->beta:tester:latest, docs->alpha:docs:latest, deploy->beta:deploy:latest
+
+=== workflow events ===
+ - architect -> docs/architecture.md, ADR-0001, api/openapi.yaml
+ - techlead -> 4 tickets
+ - coders -> 4 files in 4 dependency-ordered batch(es): ['src/taskflow/__main__.py', 'src/taskflow/api.py', 'src/taskflow/service.py', 'src/taskflow/store.py']
+ - tester -> 3 test files: ['tests/test_api.py', 'tests/test_service.py', 'tests/test_store.py']
+ - pytest: rc=1 passed=6 failed=1 errors=0
+ - repair round 1: rewrote 4 files
+ - pytest: rc=1 passed=6 failed=1 errors=0
+ - repair round 2: rewrote 4 files
+ - pytest: rc=1 passed=6 failed=1 errors=0
+ - repair round 3: rewrote 4 files
+ - pytest: rc=1 passed=6 failed=1 errors=0
+ - docs -> 3 files: ['README.md', 'docs/api-usage.md', 'docs/runbook.md']
+ - deploy -> 3 files; validation OK
+ - quality -> reports/quality_report.md
+ - apply: +0 files, ~15 changed, applied=True commit rc=0
+
+tests: passed=6 failed=1 errors=0
+run artifacts: C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_v5

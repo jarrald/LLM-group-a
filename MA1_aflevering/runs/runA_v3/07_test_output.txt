@@ -1,0 +1,168 @@
+FFF......                                                                [100%]
+================================== FAILURES ===================================
+________________________________ test_healthz _________________________________
+
+server = 'http://localhost:64329'
+
+    def test_healthz(server):
+>       response = urllib.request.urlopen(f"{server}/healthz")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python314\Lib\urllib\request.py:187: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:487: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:504: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+C:\Python314\Lib\urllib\request.py:464: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:1349: in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:1324: in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+C:\Python314\Lib\http\client.py:1478: in getresponse
+    response.begin()
+C:\Python314\Lib\http\client.py:343: in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <http.client.HTTPResponse object at 0x00000273B0DFC520>
+
+    def _read_status(self):
+        line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+        if len(line) > _MAXLINE:
+            raise LineTooLong("status line")
+        if self.debuglevel > 0:
+            print("reply:", repr(line))
+        if not line:
+            # Presumably, the server closed the connection before
+            # sending a valid response.
+>           raise RemoteDisconnected("Remote end closed connection without"
+                                     " response")
+E           http.client.RemoteDisconnected: Remote end closed connection without response
+
+C:\Python314\Lib\http\client.py:312: RemoteDisconnected
+---------------------------- Captured stderr call -----------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 64332)
+Traceback (most recent call last):
+  File "C:\Python314\Lib\socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_v3\staged\src\taskflow\api.py", line 9, in __init__
+    self.service = TaskService(TaskStore())
+                               ^^^^^^^^^
+NameError: name 'TaskStore' is not defined
+----------------------------------------
+_________________________________ test_tasks __________________________________
+
+server = 'http://localhost:64329'
+
+    def test_tasks(server):
+        # Test POST /tasks
+>       response = urllib.request.urlopen(f"{server}/tasks", data=json.dumps({"title": "Task 1"}).encode())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python314\Lib\urllib\request.py:187: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:487: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:504: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+C:\Python314\Lib\urllib\request.py:464: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:1349: in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\urllib\request.py:1324: in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+C:\Python314\Lib\http\client.py:1478: in getresponse
+    response.begin()
+C:\Python314\Lib\http\client.py:343: in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <http.client.HTTPResponse object at 0x00000273B0DE3AC0>
+
+    def _read_status(self):
+        line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+        if len(line) > _MAXLINE:
+            raise LineTooLong("status line")
+        if self.debuglevel > 0:
+            print("reply:", repr(line))
+        if not line:
+            # Presumably, the server closed the connection before
+            # sending a valid response.
+>           raise RemoteDisconnected("Remote end closed connection without"
+                                     " response")
+E           http.client.RemoteDisconnected: Remote end closed connection without response
+
+C:\Python314\Lib\http\client.py:312: RemoteDisconnected
+---------------------------- Captured stderr call -----------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 64335)
+Traceback (most recent call last):
+  File "C:\Python314\Lib\socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_v3\staged\src\taskflow\api.py", line 9, in __init__
+    self.service = TaskService(TaskStore())
+                               ^^^^^^^^^
+NameError: name 'TaskStore' is not defined
+----------------------------------------
+________________________________ test_service _________________________________
+
+    def test_service():
+        store = TaskStore()
+        service = TaskService(store)
+        task = service.create('Task 1')
+        assert task['id'] == 1
+        assert task['title'] == 'Task 1'
+        assert task['done'] == False
+        assert service.get(1)['title'] == 'Task 1'
+        assert service.update(1, 'Task 2', True)['title'] == 'Task 2'
+>       assert service.delete(1) == True
+               ^^^^^^^^^^^^^^^^^
+
+tests\test_service.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <taskflow.service.TaskService object at 0x00000273B10546E0>, id = 1
+
+    def delete(self, id):
+>       if id in self.tasks:
+                 ^^^^^^^^^^
+E       AttributeError: 'TaskService' object has no attribute 'tasks'
+
+src\taskflow\service.py:32: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/test_api.py::test_healthz - http.client.RemoteDisconnected: Remo...
+FAILED tests/test_api.py::test_tasks - http.client.RemoteDisconnected: Remote...
+FAILED tests/test_service.py::test_service - AttributeError: 'TaskService' ob...

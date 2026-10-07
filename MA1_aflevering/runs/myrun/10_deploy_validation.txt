@@ -1,0 +1,27 @@
+127.0.0.1 - - [06/Oct/2026 12:35:33] "GET /healthz HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 12:35:33] "GET /tasks HTTP/1.1" 404 -
+Traceback (most recent call last):
+  File "C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\myrun\staged\deploy\validate_deploy.py", line 42, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\myrun\staged\deploy\validate_deploy.py", line 33, in main
+    if check_healthz(healthz_url) and check_tasks(tasks_url):
+                                      ~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\myrun\staged\deploy\validate_deploy.py", line 23, in check_tasks
+    response = urllib.request.urlopen(url)
+  File "C:\Python314\Lib\urllib\request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\urllib\request.py", line 493, in open
+    response = meth(req, response)
+  File "C:\Python314\Lib\urllib\request.py", line 602, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "C:\Python314\Lib\urllib\request.py", line 531, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Python314\Lib\urllib\request.py", line 464, in _call_chain
+    result = func(*args)
+  File "C:\Python314\Lib\urllib\request.py", line 611, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 404: Not Found

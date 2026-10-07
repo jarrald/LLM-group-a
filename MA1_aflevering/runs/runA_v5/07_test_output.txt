@@ -1,0 +1,15 @@
+.F.....                                                                  [100%]
+================================== FAILURES ===================================
+_________________________________ test_tasks __________________________________
+
+server = 'http://localhost:62338'
+
+    def test_tasks(server):
+>       response = urllib.request.urlopen(f"{server}/tasks", data=json.dumps({"title": "Task 1"}).encode(), method='POST', headers={'Content-Type': 'application/json'})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: urlopen() got an unexpected keyword argument 'method'
+
+tests\test_api.py:21: TypeError
+=========================== short test summary info ===========================
+FAILED tests/test_api.py::test_tasks - TypeError: urlopen() got an unexpected...
+1 failed, 6 passed in 2.60s

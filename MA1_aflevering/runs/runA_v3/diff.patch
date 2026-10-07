@@ -1,0 +1,1159 @@
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,6 +1,8 @@
+ FROM python:3.12-slim
++
+ WORKDIR /app
++
+ COPY src /app/src
+-RUN python -m pip install --no-cache-dir -r requirements.txt
++
+ CMD ["python", "-m", "taskflow"]
+ EXPOSE 8080
+--- a/README.md
++++ b/README.md
+@@ -1,28 +1,26 @@
+-## TaskFlow API
++**TaskFlow API** is a tiny, dependency-free task/todo REST API built using Python 3's standard library (`http.server` and `json`). It provides a simple way to manage tasks with CRUD operations.
+ 
+-TaskFlow API is a tiny, dependency-free task/todo REST API in pure Python 3 standard library (http.server + json). No third-party runtime dependencies.
++## Installation
+ 
+-### Installation
++No installation required. Simply clone the repository and run the server.
+ 
+-No installation required. Just clone the repository and run the server.
++## Running the Server
+ 
+-### Running the Server
+-
+-To start the server, run:
++To start the server, use the following command:
+ 
+ ```sh
+ python -m taskflow
+ ```
+ 
+-The server will start on port 8080 by default. You can specify a different port using the `PORT` environment variable:
++By default, the server runs on port 8080. You can specify a different port using the `PORT` environment variable:
+ 
+ ```sh
+ PORT=8081 python -m taskflow
+ ```
+ 
+-### Running Tests
++## Running Tests
+ 
+-To run tests, use the following command:
++To run the tests, use the following command:
+ 
+ ```sh
+ python -m unittest discover -s tests
+--- a/api/openapi.yaml
++++ b/api/openapi.yaml
+@@ -19,7 +19,7 @@
+                 items:
+                   $ref: '#/components/schemas/Task'
+     post:
+-      summary: Create task
++      summary: Create a new task
+       requestBody:
+         required: true
+         content:
+@@ -35,13 +35,13 @@
+                   minLength: 1
+       responses:
+         '201':
+-          description: Created task
++          description: Task created
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/Task'
+         '400':
+-          description: Invalid title
++          description: Invalid request
+           content:
+             application/json:
+               schema:
+@@ -49,8 +49,26 @@
+                 properties:
+                   error:
+                     type: string
++  /tasks/{id}:
++    get:
++      summary: Get a task by ID
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: integer
++      responses:
++        '200':
++          description: Task found
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/Task'
++        '404':
++          description: Task not found
+     patch:
+-      summary: Update task
++      summary: Update a task
+       parameters:
+         - in: path
+           name: id
+@@ -72,13 +90,13 @@
+                   type: boolean
+       responses:
+         '200':
+-          description: Updated task
++          description: Task updated
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/Task'
+         '400':
+-          description: Invalid title
++          description: Invalid request
+           content:
+             application/json:
+               schema:
+@@ -88,15 +106,8 @@
+                     type: string
+         '404':
+           description: Task not found
+-          content:
+-            application/json:
+-              schema:
+-                type: object
+-                properties:
+-                  error:
+-                    type: string
+     delete:
+-      summary: Delete task
++      summary: Delete a task
+       parameters:
+         - in: path
+           name: id
+@@ -108,104 +119,6 @@
+           description: Task deleted
+         '404':
+           description: Task not found
+-          content:
+-            application/json:
+-              schema:
+-                type: object
+-                properties:
+-                  error:
+-                    type: string
+-  /tasks/{id}:
+-    get:
+-      summary: Get task
+-      parameters:
+-        - in: path
+-          name: id
+-          required: true
+-          schema:
+-            type: integer
+-      responses:
+-        '200':
+-          description: Task
+-          content:
+-            application/json:
+-              schema:
+-                $ref: '#/components/schemas/Task'
+-        '404':
+-          description: Task not found
+-          content:
+-            application/json:
+-              schema:
+-                type: object
+-                properties:
+-                  error:
+-                    type: string
+-    patch:
+-      summary: Update task
+-      parameters:
+-        - in: path
+-          name: id
+-          required: true
+-          schema:
+-            type: integer
+-      requestBody:
+-        required: true
+-        content:
+-          application/json:
+-            schema:
+-              type: object
+-              properties:
+-                title:
+-                  type: string
+-                  maxLength: 100
+-                  minLength: 1
+-                done:
+-                  type: boolean
+-      responses:
+-        '200':
+-          description: Updated task
+-          content:
+-            application/json:
+-              schema:
+-              $ref: '#/components/schemas/Task'
+-        '400':
+-          description: Invalid title
+-          content:
+-            application/json:
+-              schema:
+-                type: object
+-                properties:
+-                  error:
+-                    type: string
+-        '404':
+-          description: Task not found
+-          content:
+-            application/json:
+-              schema:
+-                type: object
+-                properties:
+-                  error:
+-                    type: string
+-    delete:
+-      summary: Delete task
+-      parameters:
+-        - in: path
+-          name: id
+-          required: true
+-          schema:
+-            type: integer
+-      responses:
+-        '204':
+-          description: Task deleted
+-        '404':
+-          description: Task not found
+-          content:
+-            application/json:
+-              schema:
+-                type: object
+-                properties:
+-                  error:
+-                    type: string
+   /healthz:
+     get:
+       summary: Health check
+@@ -220,7 +133,6 @@
+                   status:
+                     type: string
+                     default: ok
+-
+ components:
+   schemas:
+     Task:
+--- a/deploy/validate_deploy.py
++++ b/deploy/validate_deploy.py
+@@ -15,23 +15,27 @@
+     thread.start()
+     return server, thread
+ 
+-def poll_url(url, expected_code):
+-    for _ in range(5):
+-        try:
+-            response = urllib.request.urlopen(url)
+-            if response.getcode() == expected_code:
+-                return True
+-        except urllib.error.URLError:
+-            pass
+-        time.sleep(1)
+-    return False
++def check_healthz(port):
++    url = f'http://127.0.0.1:{port}/healthz'
++    response = urllib.request.urlopen(url)
++    return response.status == 200
+ 
+-if __name__ == "__main__":
++def check_tasks(port):
++    url = f'http://127.0.0.1:{port}/tasks'
++    response = urllib.request.urlopen(url)
++    return response.status == 200
++
++def validate_deploy():
+     port = find_free_port()
+     server, thread = run_server(port)
+-    if poll_url(f'http://127.0.0.1:{port}/healthz', 200) and poll_url(f'http://127.0.0.1:{port}/tasks', 200):
+-        print('DEPLOY OK')
+-        sys.exit(0)
+-    else:
+-        print('DEPLOY FAILED')
+-        sys.exit(1)
++    start_time = time.time()
++    while time.time() - start_time < 5:
++        if check_healthz(port) and check_tasks(port):
++            print('DEPLOY OK')
++            sys.exit(0)
++        time.sleep(0.1)
++    print('DEPLOY FAILED')
++    sys.exit(1)
++
++if __name__ == '__main__':
++    validate_deploy()
+--- a/docs/adr/0001-adr-stdlib-http-server.md
++++ b/docs/adr/0001-adr-stdlib-http-server.md
+@@ -1,24 +1,22 @@
+-# ADR-0001: Implementing the TaskFlow API with the Python Standard Library
++# ADR-0001: TaskFlow API Implementation with Python Standard Library
+ 
+ ## Status
+ Accepted
+ 
+ ## Context
+-The TaskFlow API is a tiny, dependency-free task/todo REST API implemented in pure Python 3 standard library. The goal is to provide a simple and lightweight API for managing tasks, with a focus on ease of use and deployment.
++The TaskFlow API is a tiny, dependency-free task/todo REST API built using the Python 3 standard library. The project requires a simple and lightweight implementation that can be easily containerized for deployment.
+ 
+ ## Decision
+-We have decided to implement the TaskFlow API using the Python standard library's `http.server` module instead of a web framework. This decision is based on the following reasons:
++We have decided to implement the TaskFlow API using the Python standard library (http.server) instead of a web framework. This decision is based on the following reasons:
+ 
+-*   The requirement to be dependency-free and use only the Python standard library.
+-*   The simplicity and ease of use of the `http.server` module, which aligns with the overall design goals of the TaskFlow API.
+-*   The ability to containerize the API for deployment, which is a key requirement.
++*   The project requires a dependency-free implementation, and using a web framework would introduce additional dependencies.
++*   The Python standard library provides a simple and lightweight HTTP server that meets the project's requirements.
++*   Using http.server allows us to keep the implementation simple and focused on the business logic, without the overhead of a web framework.
+ 
+ ## Consequences
+-By implementing the TaskFlow API with the Python standard library's `http.server` module, we have the following consequences:
+ 
+-*   The API will be lightweight and easy to deploy, with minimal dependencies.
+-*   The implementation will be simple and easy to understand, aligning with the overall design goals of the TaskFlow API.
+-*   Containerization will be a straightforward process, making deployment easier and more efficient.
+-*   The API will not have the features and complexity of a full-fledged web framework, which may limit its scalability and flexibility in certain scenarios.
++*   The implementation will be dependent on the Python standard library, which may limit its portability to other languages or platforms.
++*   The use of http.server may not provide the same level of performance and scalability as a dedicated web framework.
++*   The implementation will be simpler and more lightweight, making it easier to maintain and deploy.
+ 
+-Overall, this decision aligns with the requirements and design goals of the TaskFlow API, and we believe it will result in a simple, lightweight, and easy-to-deploy API that meets the needs of its users.
++By choosing to implement the TaskFlow API using the Python standard library, we have achieved a lightweight and dependency-free implementation that meets the project's requirements. This decision will allow us to focus on the business logic and provide a simple and efficient API for task management.
+--- a/docs/api-usage.md
++++ b/docs/api-usage.md
+@@ -1,16 +1,16 @@
+-## API Usage
++## Endpoints
+ 
+-### Endpoints
++### GET /tasks
+ 
+-#### GET /tasks
++**Description**: Retrieve a list of all tasks.
+ 
+-**Example:**
++**Example**:
+ 
+ ```sh
+ curl -X GET http://localhost:8080/tasks
+ ```
+ 
+-**Response:**
++**Response**:
+ 
+ ```json
+ [
+@@ -27,15 +27,17 @@
+ ]
+ ```
+ 
+-#### POST /tasks
++### POST /tasks
+ 
+-**Example:**
++**Description**: Create a new task.
++
++**Example**:
+ 
+ ```sh
+ curl -X POST http://localhost:8080/tasks -H "Content-Type: application/json" -d '{"title": "New Task"}'
+ ```
+ 
+-**Response:**
++**Response**:
+ 
+ ```json
+ {
+@@ -45,15 +47,17 @@
+ }
+ ```
+ 
+-#### GET /tasks/<id>
++### GET /tasks/<id>
+ 
+-**Example:**
++**Description**: Retrieve a single task by ID.
++
++**Example**:
+ 
+ ```sh
+ curl -X GET http://localhost:8080/tasks/1
+ ```
+ 
+-**Response:**
++**Response**:
+ 
+ ```json
+ {
+@@ -63,15 +67,17 @@
+ }
+ ```
+ 
+-#### PATCH /tasks/<id>
++### PATCH /tasks/<id>
+ 
+-**Example:**
++**Description**: Update a task by ID.
++
++**Example**:
+ 
+ ```sh
+ curl -X PATCH http://localhost:8080/tasks/1 -H "Content-Type: application/json" -d '{"title": "Updated Task", "done": true}'
+ ```
+ 
+-**Response:**
++**Response**:
+ 
+ ```json
+ {
+@@ -81,28 +87,32 @@
+ }
+ ```
+ 
+-#### DELETE /tasks/<id>
++### DELETE /tasks/<id>
+ 
+-**Example:**
++**Description**: Delete a task by ID.
++
++**Example**:
+ 
+ ```sh
+ curl -X DELETE http://localhost:8080/tasks/1
+ ```
+ 
+-**Response:**
++**Response**:
+ 
+ ```sh
+ ```
+ 
+-#### GET /healthz
++### GET /healthz
+ 
+-**Example:**
++**Description**: Check the health of the API.
++
++**Example**:
+ 
+ ```sh
+ curl -X GET http://localhost:8080/healthz
+ ```
+ 
+-**Response:**
++**Response**:
+ 
+ ```json
+ {
+--- a/docs/architecture.md
++++ b/docs/architecture.md
+@@ -14,29 +14,29 @@
+ 
+ | Method | Path | Response |
+ | --- | --- | --- |
+-| GET | `/tasks` | 200: `[{"id": int, "title": str, "done": bool}, ...]` |
+-| POST | `/tasks` | 201: `{"id": int, "title": str, "done": bool}` or 400: `{"error": str}` |
+-| GET | `/tasks/<id>` | 200: `{"id": int, "title": str, "done": bool}` or 404: `{"error": str}` |
+-| PATCH | `/tasks/<id>` | 200: `{"id": int, "title": str, "done": bool}` or 400: `{"error": str}` or 404: `{"error": str}` |
+-| DELETE | `/tasks/<id>` | 204 or 404: `{"error": str}` |
+-| GET | `/healthz` | 200: `{"status": "ok"}` |
++| GET | `/tasks` | 200 [Task,...] |
++| POST | `/tasks` | 201 Task | 400 {"error"} |
++| GET | `/tasks/<id>` | 200 Task | 404 |
++| PATCH | `/tasks/<id>` | 200 Task | 400 | 404 |
++| DELETE | `/tasks/<id>` | 204 | 404 |
++| GET | `/healthz` | 200 {"status":"ok"} |
+ 
+ ### JSON Shapes
+ 
+-* `Task`: `{"id": int, "title": str, "done": bool}`
+-* `Error`: `{"error": str}`
++* `Task`: {"id": int, "title": str, "done": bool}
++* `Error`: {"error": str}
+ 
+ ## Deployment Topology
+ 
+-* Single process
+-* Uses standard library `http.server`
+-* Listens on port 8080 (or PORT env var)
++* Single process deployment
++* Uses Python 3 standard library (http.server)
++* Default port: 8080 (can be overridden by PORT env var)
+ * Can be containerized for deployment
+ 
+ ## Constraints and Risks
+ 
+-* No third-party dependencies
+-* In-memory storage only
++* No third-party runtime dependencies
++* In-memory store: data loss on restart
+ * Validation and business rules are implemented in `taskflow/service.py`
+-* Server startup and configuration are handled in `taskflow/__main__.py`
+-* Containerization is recommended for deployment
++* HTTP handler and server setup in `taskflow/api.py`
++* Server startup and configuration in `taskflow/__main__.py`
+--- a/docs/runbook.md
++++ b/docs/runbook.md
+@@ -1,8 +1,6 @@
+-## Runbook
++## Starting the Server
+ 
+-### Starting the Server
+-
+-To start the server, run:
++To start the server, use the following command:
+ 
+ ```sh
+ python -m taskflow
+@@ -14,23 +12,23 @@
+ PORT=8081 python -m taskflow
+ ```
+ 
+-### Stopping the Server
++## Stopping the Server
+ 
+-To stop the server, simply interrupt the process (e.g., press `Ctrl+C`).
++To stop the server, press `Ctrl+C` in the terminal where the server is running.
+ 
+-### Environment Variables
++## Environment Variables
+ 
+-- `PORT`: Specifies the port on which the server will listen. Default is 8080.
++- `PORT`: Specifies the port on which the server should run. Default is 8080.
+ 
+-### Health Check
++## Health Check
+ 
+-To check the health of the server, use:
++To check the health of the API, use the following endpoint:
+ 
+ ```sh
+ curl -X GET http://localhost:8080/healthz
+ ```
+ 
+-**Expected Response:**
++**Response**:
+ 
+ ```json
+ {
+@@ -38,10 +36,10 @@
+ }
+ ```
+ 
+-### Common Failures
++## Common Failures
+ 
+ - **400 Bad Request**: Invalid request body or parameters.
+-- **404 Not Found**: Resource not found.
++- **404 Not Found**: Task not found for the given ID.
+ - **500 Internal Server Error**: Internal server error.
+ 
+-These documents provide a comprehensive guide for using and deploying the TaskFlow API.
++These documents provide a comprehensive guide to using and deploying the TaskFlow API.
+--- a/reports/quality_report.md
++++ b/reports/quality_report.md
+@@ -1,6 +1,6 @@
+ # Quality Report - TaskFlow API
+ 
+-Run id: `runA_v2`  |  control mode: `apply`
++Run id: `runA_v3`  |  control mode: `apply`
+ 
+ ## Test results
+ - pytest exit code: 1
+@@ -8,93 +8,80 @@
+ - repair rounds used: 2
+ 
+ ```text
+-get():
++esponse object at 0x00000273B0DE3AC0>
++
++    def _read_status(self):
++        line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
++        if len(line) > _MAXLINE:
++            raise LineTooLong("status line")
++        if self.debuglevel > 0:
++            print("reply:", repr(line))
++        if not line:
++            # Presumably, the server closed the connection before
++            # sending a valid response.
++>           raise RemoteDisconnected("Remote end closed connection without"
++                                     " response")
++E           http.client.RemoteDisconnected: Remote end closed connection without response
++
++C:\Python314\Lib\http\client.py:312: RemoteDisconnected
++---------------------------- Captured stderr call -----------------------------
++----------------------------------------
++Exception occurred during processing of request from ('127.0.0.1', 64335)
++Traceback (most recent call last):
++  File "C:\Python314\Lib\socketserver.py", line 318, in _handle_request_noblock
++    self.process_request(request, client_address)
++    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Python314\Lib\socketserver.py", line 349, in process_request
++    self.finish_request(request, client_address)
++    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Python314\Lib\socketserver.py", line 362, in finish_request
++    self.RequestHandlerClass(request, client_address, self)
++    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\novij\Desktop\Pba Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_v3\staged\src\taskflow\api.py", line 9, in __init__
++    self.service = TaskService(TaskStore())
++                               ^^^^^^^^^
++NameError: name 'TaskStore' is not defined
++----------------------------------------
++________________________________ test_service _________________________________
++
++    def test_service():
+         store = TaskStore()
+         service = TaskService(store)
+-        assert service.get(1) is None
+->       service.create('Task 1')
++        task = service.create('Task 1')
++        assert task['id'] == 1
++        assert task['title'] == 'Task 1'
++        assert task['done'] == False
++        assert service.get(1)['title'] == 'Task 1'
++        assert service.update(1, 'Task 2', True)['title'] == 'Task 2'
++>       assert service.delete(1) == True
++               ^^^^^^^^^^^^^^^^^
+ 
+-tests\test_service.py:35: 
+-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+-src\taskflow\service.py:11: in create
+-    return self.store.create(task)
+-           ^^^^^^^^^^^^^^^^^^^^^^^
++tests\test_service.py:14: 
+ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+ 
+-self = <taskflow.store.TaskStore object at 0x00000149C5A44D60>
+-title = {'id': 1, 'title': 'Task 1', 'done': False}
++self = <taskflow.service.TaskService object at 0x00000273B10546E0>, id = 1
+ 
+-    def create(self, title):
+->       if not title.strip() or len(title) > 100:
+-               ^^^^^^^^^^^
+-E       AttributeError: 'dict' object has no attribute 'strip'
++    def delete(self, id):
++>       if id in self.tasks:
++                 ^^^^^^^^^^
++E       AttributeError: 'TaskService' object has no attribute 'tasks'
+ 
+-src\taskflow\store.py:7: AttributeError
+-_________________________________ test_update _________________________________
+-
+-    def test_update():
+-        store = TaskStore()
+-        service = TaskService(store)
+-        assert service.update(1, 'Updated Task') is None
+->       service.create('Task 1')
+-
+-tests\test_service.py:42: 
+-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+-src\taskflow\service.py:11: in create
+-    return self.store.create(task)
+-           ^^^^^^^^^^^^^^^^^^^^^^^
+-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+-
+-self = <taskflow.store.TaskStore object at 0x00000149C5A45350>
+-title = {'id': 1, 'title': 'Task 1', 'done': False}
+-
+-    def create(self, title):
+->       if not title.strip() or len(title) > 100:
+-               ^^^^^^^^^^^
+-E       AttributeError: 'dict' object has no attribute 'strip'
+-
+-src\taskflow\store.py:7: AttributeError
+-_________________________________ test_delete _________________________________
+-
+-    def test_delete():
+-        store = TaskStore()
+-        service = TaskService(store)
+-        assert service.delete(1) == False
+->       service.create('Task 1')
+-
+-tests\test_service.py:49: 
+-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+-src\taskflow\service.py:11: in create
+-    return self.store.create(task)
+-           ^^^^^^^^^^^^^^^^^^^^^^^
+-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+-
+-self = <taskflow.store.TaskStore object at 0x00000149C5AD7650>
+-title = {'id': 1, 'title': 'Task 1', 'done': False}
+-
+-    def create(self, title):
+->       if not title.strip() or len(title) > 100:
+-               ^^^^^^^^^^^
+-E       AttributeError: 'dict' object has no attribute 'strip'
+-
+-src\taskflow\store.py:7: AttributeError
++src\taskflow\service.py:32: AttributeError
+ =========================== short test summary info ===========================
+-FAILED tests/test_service.py::test_create - AttributeError: 'dict' object has...
+-FAILED tests/test_service.py::test_list - AttributeError: 'dict' object has n...
+-FAILED tests/test_service.py::test_get - AttributeError: 'dict' object has no...
+-FAILED tests/test_service.py::test_update - AttributeError: 'dict' object has...
+-FAILED tests/test_service.py::test_delete - AttributeError: 'dict' object has...
++FAILED tests/test_api.py::test_healthz - http.client.RemoteDisconnected: Remo...
++FAILED tests/test_api.py::test_tasks - http.client.RemoteDisconnected: Remote...
++FAILED tests/test_service.py::test_service - AttributeError: 'TaskService' ob...
+ 
+ ```
+ 
+ ## Static checks (py_compile)
+-- files checked: 10  syntax failures: 0
++- files checked: 11  syntax failures: 0
+ 
+ ## Deployment validation
+ - deploy/validate_deploy.py exit code 1 -> FAILED
+ 
+ ```text
+- Softwareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_v2\staged\deploy\validate_deploy.py", line 21, in poll_url
++wareudvikling\2. Semester\LLMs for udviklere\project\Test\runs\runA_v3\staged\deploy\validate_deploy.py", line 20, in check_healthz
+     response = urllib.request.urlopen(url)
+   File "C:\Python314\Lib\urllib\request.py", line 187, in urlopen
+     return opener.open(url, data, timeout)
+@@ -127,25 +114,25 @@
+ ## Model calls (endpoint routing evidence)
+ | role | endpoint | model | seconds | ok |
+ |---|---|---|---|---|
+-| architect | http://localhost:11434 | architect:latest | 16.0 | True |
+-| architect | http://localhost:11434 | architect:latest | 9.5 | True |
+-| architect | http://localhost:11434 | architect:latest | 19.3 | True |
+-| techlead | http://localhost:11434 | techlead:latest | 8.2 | True |
+-| coder | http://localhost:11435 | coder:latest | 43.8 | True |
+-| coder | http://localhost:11435 | coder:latest | 10.3 | True |
+-| coder | http://localhost:11434 | coder:latest | 60.8 | True |
+-| coder | http://localhost:11434 | coder:latest | 64.4 | True |
+-| tester | http://localhost:11435 | tester:latest | 73.8 | True |
+-| coder | http://localhost:11434 | coder:latest | 41.7 | True |
+-| coder | http://localhost:11435 | coder:latest | 53.9 | True |
+-| coder | http://localhost:11435 | coder:latest | 19.2 | True |
+-| coder | http://localhost:11434 | coder:latest | 71.9 | True |
+-| coder | http://localhost:11435 | coder:latest | 37.8 | True |
+-| coder | http://localhost:11435 | coder:latest | 10.5 | True |
+-| coder | http://localhost:11434 | coder:latest | 53.6 | True |
+-| coder | http://localhost:11434 | coder:latest | 57.4 | True |
+-| docs | http://localhost:11434 | docs:latest | 14.3 | True |
+-| deploy | http://localhost:11435 | deploy:latest | 10.0 | True |
++| architect | http://localhost:11434 | architect:latest | 20.7 | True |
++| architect | http://localhost:11434 | architect:latest | 13.6 | True |
++| architect | http://localhost:11434 | architect:latest | 23.9 | True |
++| techlead | http://localhost:11434 | techlead:latest | 17.3 | True |
++| coder | http://localhost:11434 | coder:latest | 16.5 | True |
++| coder | http://localhost:11434 | coder:latest | 4.1 | True |
++| coder | http://localhost:11434 | coder:latest | 13.3 | True |
++| coder | http://localhost:11434 | coder:latest | 3.7 | True |
++| tester | http://localhost:11435 | tester:latest | 96.0 | True |
++| coder | http://localhost:11434 | coder:latest | 11.4 | True |
++| coder | http://localhost:11434 | coder:latest | 6.4 | True |
++| coder | http://localhost:11434 | coder:latest | 13.9 | True |
++| coder | http://localhost:11434 | coder:latest | 13.9 | True |
++| coder | http://localhost:11434 | coder:latest | 6.0 | True |
++| coder | http://localhost:11434 | coder:latest | 6.1 | True |
++| coder | http://localhost:11434 | coder:latest | 13.5 | True |
++| coder | http://localhost:11434 | coder:latest | 13.6 | True |
++| docs | http://localhost:11434 | docs:latest | 15.6 | True |
++| deploy | http://localhost:11435 | deploy:latest | 15.2 | True |
+ 
+ ## Known limitations / risks
+ - 7B-class local models occasionally omit a required file; the pipeline records which artifacts were produced instead of silently dropping them.
+--- a/src/taskflow/__main__.py
++++ b/src/taskflow/__main__.py
+@@ -1,7 +1,11 @@
++from http.server import make_server
+ import os
+-from http.server import HTTPServer
+-from taskflow.api import make_server
+ 
+-PORT = int(os.getenv('PORT', 8080))
+-server = make_server('localhost', PORT)
+-server.serve_forever()
++def main():
++    port = int(os.getenv('PORT', 8080))
++    server = make_server('localhost', port)
++    print(f"Starting server on port {port}")
++    server.serve_forever()
++
++if __name__ == "__main__":
++    main()
+--- a/src/taskflow/api.py
++++ b/src/taskflow/api.py
+@@ -1,7 +1,8 @@
+-import json
+ from http.server import BaseHTTPRequestHandler, HTTPServer
+ from urllib.parse import urlparse, parse_qs
+ from taskflow.service import TaskService
++import json
++import os
+ 
+ class TaskHandler(BaseHTTPRequestHandler):
+     def __init__(self, *args, **kwargs):
+@@ -24,14 +25,16 @@
+                 self.end_headers()
+                 self.wfile.write(json.dumps(task).encode())
+             else:
+-                self.send_error(404, 'Task not found')
++                self.send_response(404)
++                self.end_headers()
+         elif self.path == '/healthz':
+             self.send_response(200)
+             self.send_header('Content-type', 'application/json')
+             self.end_headers()
+-            self.wfile.write(json.dumps({'status': 'ok'}).encode())
++            self.wfile.write(json.dumps({"status": "ok"}).encode())
+         else:
+-            self.send_error(404, 'Not Found')
++            self.send_response(404)
++            self.end_headers()
+ 
+     def do_POST(self):
+         if self.path == '/tasks':
+@@ -39,16 +42,20 @@
+             post_data = self.rfile.read(content_length)
+             data = json.loads(post_data.decode())
+             title = data.get('title')
+-            if not title or not title.strip() or len(title) > 100:
+-                self.send_error(400, 'Invalid title')
+-            else:
++            if title:
+                 task = self.service.create(title)
+                 self.send_response(201)
+                 self.send_header('Content-type', 'application/json')
+                 self.end_headers()
+                 self.wfile.write(json.dumps(task).encode())
++            else:
++                self.send_response(400)
++                self.send_header('Content-type', 'application/json')
++                self.end_headers()
++                self.wfile.write(json.dumps({"error": "Invalid title"}).encode())
+         else:
+-            self.send_error(404, 'Not Found')
++            self.send_response(404)
++            self.end_headers()
+ 
+     def do_PATCH(self):
+         if self.path.startswith('/tasks/'):
+@@ -65,19 +72,26 @@
+                 self.end_headers()
+                 self.wfile.write(json.dumps(task).encode())
+             else:
+-                self.send_error(404, 'Task not found')
++                self.send_response(404)
++                self.end_headers()
+         else:
+-            self.send_error(404, 'Not Found')
++            self.send_response(404)
++            self.end_headers()
+ 
+     def do_DELETE(self):
+         if self.path.startswith('/tasks/'):
+             task_id = int(self.path.split('/')[-1])
+             if self.service.delete(task_id):
+                 self.send_response(204)
++                self.end_headers()
+             else:
+-                self.send_error(404, 'Task not found')
++                self.send_response(404)
++                self.end_headers()
+         else:
+-            self.send_error(404, 'Not Found')
++            self.send_response(404)
++            self.end_headers()
+ 
+ def make_server(host: str, port: int):
+-    return HTTPServer((host, port), TaskHandler)
++    server_address = (host, port)
++    httpd = HTTPServer(server_address, TaskHandler)
++    return httpd
+--- a/src/taskflow/service.py
++++ b/src/taskflow/service.py
+@@ -1,38 +1,35 @@
+ from taskflow.store import TaskStore
+ 
+ class TaskService:
+-    def __init__(self, store: TaskStore):
++    def __init__(self, store):
+         self.store = store
+ 
+-    def create(self, title: str) -> dict:
++    def create(self, title):
+         if not title.strip() or len(title) > 100:
+             raise ValueError("Invalid title")
+-        task = {"id": self._next_id(), "title": title, "done": False}
+-        return self.store.create(task)
++        task = {"id": self.store.next_id, "title": title, "done": False}
++        self.store.tasks[self.store.next_id] = task
++        self.store.next_id += 1
++        return task
+ 
+-    def list(self) -> list:
+-        return self.store.list()
++    def list(self):
++        return list(self.store.tasks.values())
+ 
+-    def get(self, id: int) -> dict:
+-        return self.store.get(id)
++    def get(self, id):
++        return self.store.tasks.get(id)
+ 
+-    def update(self, id: int, title: str = None, done: bool = None) -> dict:
+-        task = self.store.get(id)
+-        if task is None:
++    def update(self, id, title=None, done=None):
++        task = self.store.tasks.get(id)
++        if not task:
+             return None
+         if title is not None:
+-            if not title.strip() or len(title) > 100:
+-                raise ValueError("Invalid title")
+             task["title"] = title
+         if done is not None:
+             task["done"] = done
+-        return self.store.update(id, task)
++        return task
+ 
+-    def delete(self, id: int) -> bool:
+-        return self.store.delete(id)
+-
+-    def _next_id(self) -> int:
+-        tasks = self.store.list()
+-        if not tasks:
+-            return 1
+-        return max(task["id"] for task in tasks) + 1
++    def delete(self, id):
++        if id in self.tasks:
++            del self.tasks[id]
++            return True
++        return False
+--- a/src/taskflow/store.py
++++ b/src/taskflow/store.py
+@@ -1,35 +1,34 @@
+ class TaskStore:
+     def __init__(self):
+-        self.tasks = []
++        self.tasks = {}
+         self.next_id = 1
+ 
+     def create(self, title):
+         if not title.strip() or len(title) > 100:
+             raise ValueError("Invalid title")
+         task = {"id": self.next_id, "title": title, "done": False}
+-        self.tasks.append(task)
++        self.tasks[self.next_id] = task
+         self.next_id += 1
+         return task
+ 
+     def list(self):
+-        return self.tasks
++        return list(self.tasks.values())
+ 
+     def get(self, id):
+-        return next((task for task in self.tasks if task["id"] == id), None)
++        return self.tasks.get(id)
+ 
+     def update(self, id, title=None, done=None):
+-        task = self.get(id)
+-        if task:
+-            if title is not None:
+-                task["title"] = title
+-            if done is not None:
+-                task["done"] = done
+-            return task
+-        return None
++        task = self.tasks.get(id)
++        if not task:
++            return None
++        if title is not None:
++            task["title"] = title
++        if done is not None:
++            task["done"] = done
++        return task
+ 
+     def delete(self, id):
+-        task = self.get(id)
+-        if task:
+-            self.tasks.remove(task)
++        if id in self.tasks:
++            del self.tasks[id]
+             return True
+         return False
+--- a/tests/test_api.py
++++ b/tests/test_api.py
+@@ -0,0 +1,52 @@
++import pytest
++import threading
++import urllib.request
++import json
++from taskflow.api import make_server, TaskHandler
++
++@pytest.fixture(scope='module')
++def server():
++    server = make_server('127.0.0.1', 0)
++    threading.Thread(target=server.serve_forever).start()
++    yield f"http://localhost:{server.server_port}"
++    server.shutdown()
++
++def test_healthz(server):
++    response = urllib.request.urlopen(f"{server}/healthz")
++    assert response.status == 200
++    assert json.loads(response.read()) == {"status": "ok"}
++
++def test_tasks(server):
++    # Test POST /tasks
++    response = urllib.request.urlopen(f"{server}/tasks", data=json.dumps({"title": "Task 1"}).encode())
++    assert response.status == 201
++    task = json.loads(response.read())
++    assert task['id'] == 1
++    assert task['title'] == 'Task 1'
++    assert task['done'] == False
++
++    # Test GET /tasks
++    response = urllib.request.urlopen(f"{server}/tasks")
++    assert response.status == 200
++    tasks = json.loads(response.read())
++    assert len(tasks) == 1
++    assert tasks[0]['id'] == 1
++    assert tasks[0]['title'] == 'Task 1'
++    assert tasks[0]['done'] == False
++
++    # Test GET /tasks/<id>
++    response = urllib.request.urlopen(f"{server}/tasks/{task['id']}")
++    assert response.status == 200
++    assert json.loads(response.read()) == task
++
++    # Test PATCH /tasks/<id>
++    response = urllib.request.urlopen(f"{server}/tasks/{task['id']}", data=json.dumps({"title": "Task 2", "done": True}).encode(), method='PATCH')
++    assert response.status == 200
++    task = json.loads(response.read())
++    assert task['id'] == 1
++    assert task['title'] == 'Task 2'
++    assert task['done'] == True
++
++    # Test DELETE /tasks/<id>
++    response = urllib.request.urlopen(f"{server}/tasks/{task['id']}", method='DELETE')
++    assert response.status == 204
+--- a/tests/test_service.py
++++ b/tests/test_service.py
+@@ -2,50 +2,14 @@
+ from taskflow.service import TaskService
+ from taskflow.store import TaskStore
+ 
+-def test_create():
++def test_service():
+     store = TaskStore()
+     service = TaskService(store)
+-    task = service.create('Test Task')
++    task = service.create('Task 1')
+     assert task['id'] == 1
+-    assert task['title'] == 'Test Task'
++    assert task['title'] == 'Task 1'
+     assert task['done'] == False
+-
+-def test_create_invalid_title():
+-    store = TaskStore()
+-    service = TaskService(store)
+-    with pytest.raises(ValueError):
+-        service.create('')
+-    with pytest.raises(ValueError):
+-        service.create(' ')
+-    with pytest.raises(ValueError):
+-        service.create('a' * 101)
+-
+-def test_list():
+-    store = TaskStore()
+-    service = TaskService(store)
+-    assert service.list() == []
+-    service.create('Task 1')
+-    service.create('Task 2')
+-    assert len(service.list()) == 2
+-
+-def test_get():
+-    store = TaskStore()
+-    service = TaskService(store)
+-    assert service.get(1) is None
+-    service.create('Task 1')
+     assert service.get(1)['title'] == 'Task 1'
+-
+-def test_update():
+-    store = TaskStore()
+-    service = TaskService(store)
+-    assert service.update(1, 'Updated Task') is None
+-    service.create('Task 1')
+-    assert service.update(1, 'Updated Task')['title'] == 'Updated Task'
+-
+-def test_delete():
+-    store = TaskStore()
+-    service = TaskService(store)
+-    assert service.delete(1) == False
+-    service.create('Task 1')
++    assert service.update(1, 'Task 2', True)['title'] == 'Task 2'
+     assert service.delete(1) == True
+-    assert service.get(1) is None
++    assert len(service.list()) == 0
+--- a/tests/test_store.py
++++ b/tests/test_store.py
+@@ -3,9 +3,9 @@
+ 
+ def test_create():
+     store = TaskStore()
+-    task = store.create('Test Task')
++    task = store.create('Task 1')
+     assert task['id'] == 1
+-    assert task['title'] == 'Test Task'
++    assert task['title'] == 'Task 1'
+     assert task['done'] == False
+ 
+ def test_create_invalid_title():
+@@ -19,26 +19,31 @@
+ 
+ def test_list():
+     store = TaskStore()
+-    assert store.list() == []
+     store.create('Task 1')
+     store.create('Task 2')
+     assert len(store.list()) == 2
+ 
+ def test_get():
+     store = TaskStore()
+-    assert store.get(1) is None
+     store.create('Task 1')
+-    assert store.get(1)['title'] == 'Task 1'
++    task = store.get(1)
++    assert task['id'] == 1
++    assert task['title'] == 'Task 1'
++    assert task['done'] == False
++    assert store.get(2) == None
+ 
+ def test_update():
+     store = TaskStore()
+-    assert store.update(1, 'Updated Task') is None
+     store.create('Task 1')
+-    assert store.update(1, 'Updated Task')['title'] == 'Updated Task'
++    task = store.update(1, 'Task 2', True)
++    assert task['id'] == 1
++    assert task['title'] == 'Task 2'
++    assert task['done'] == True
++    assert store.update(2, 'Task 3', False) == None
+ 
+ def test_delete():
+     store = TaskStore()
+-    assert store.delete(1) == False
+     store.create('Task 1')
+     assert store.delete(1) == True
+-    assert store.get(1) is None
++    assert store.delete(1) == False
++    assert len(store.list()) == 0

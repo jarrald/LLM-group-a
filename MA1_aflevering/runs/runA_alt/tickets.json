@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "title": "Implement In-memory CRUD operations for tasks",
+    "scope": "src/taskflow/store.py",
+    "acceptance_criteria": [
+      "The store.py file exists and contains a TaskStore class",
+      "The TaskStore class has the exact methods: __init__, create, list, get, update, delete",
+      "The create method assigns sequential IDs and raises ValueError on invalid title",
+      "The delete method returns True if removed else False"
+    ],
+    "depends_on": []
+  },
+  {
+    "id": 2,
+    "title": "Implement validation and business rules for tasks",
+    "scope": "src/taskflow/service.py",
+    "acceptance_criteria": [
+      "The service.py file exists and contains a TaskService class",
+      "The TaskService class is constructed as TaskService(store)",
+      "The TaskService class delegates to the store with exact calls: create, list, get, update, delete",
+      "The TaskService class never accesses the store's tasks or next_id directly"
+    ],
+    "depends_on": [
+      1
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Implement HTTP handler and server creation",
+    "scope": "src/taskflow/api.py",
+    "acceptance_criteria": [
+      "The api.py file exists and contains a make_server function",
+      "The make_server function creates an HTTP server with the correct Content-Type and Content-Length headers",
+      "The make_server function uses the shared instance of TaskService",
+      "The handler uses the shared instance of TaskService to delegate to the store"
+    ],
+    "depends_on": [
+      1
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Implement server startup and management",
+    "scope": "src/taskflow/__main__.py",
+    "acceptance_criteria": [
+      "The __main__.py file exists and reads the PORT env var (default 8080)",
+      "The __main__.py file builds the server with make_server and calls serve_forever",
+      "The server listens on the correct port and responds to HTTP requests"
+    ],
+    "depends_on": [
+      1
+    ]
+  }
+]

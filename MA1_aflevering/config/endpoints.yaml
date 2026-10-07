@@ -1,0 +1,37 @@
+# =============================================================================
+# Multi-LLM workflow routing configuration (Candidate A - LangGraph)
+# -----------------------------------------------------------------------------
+# This file is the SINGLE place where endpoints and role->model bindings are
+# declared. Switching an endpoint or re-binding a role to a different server
+# is a one-line change here -- no code changes, no manual rewiring.
+# =============================================================================
+
+endpoints:
+  alpha:
+    base_url: "http://localhost:11434"
+    description: "Ollama server A (primary host)"
+  beta:
+    base_url: "http://localhost:11435"
+    description: "Ollama server B (secondary host)"
+
+defaults:
+  temperature: 0.2
+  num_ctx: 8192
+  num_predict: 1400
+  request_timeout_s: 900
+  max_repair_rounds: 3
+
+# Role -> (endpoint, model). Roles are bound to *different* endpoints on
+# purpose so that the workflow exercises both local servers concurrently.
+roles:
+  architect:  { endpoint: alpha, model: "architect:latest" }
+  techlead:   { endpoint: alpha, model: "techlead:latest" }
+  coder:      { endpoint: beta,  model: "coder:latest" }
+  tester:     { endpoint: beta,  model: "tester:latest" }
+  docs:       { endpoint: alpha, model: "docs:latest" }
+  deploy:     { endpoint: beta,  model: "deploy:latest" }
+
+# Coding worker pool: N > 2 workers, each round-robins across these endpoints.
+worker_pool:
+  endpoints: [alpha, beta]
+  max_workers: 3

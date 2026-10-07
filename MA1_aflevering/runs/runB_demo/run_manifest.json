@@ -1,0 +1,41 @@
+{
+  "run_id": "runB_demo",
+  "config": "C:\\Users\\novij\\Desktop\\Pba Softwareudvikling\\2. Semester\\LLMs for udviklere\\project\\Test\\config\\endpoints.yaml",
+  "roles": {
+    "architect": {
+      "endpoint": "alpha",
+      "model": "architect:latest"
+    },
+    "techlead": {
+      "endpoint": "alpha",
+      "model": "techlead:latest"
+    },
+    "coder": {
+      "endpoint": "beta",
+      "model": "coder:latest"
+    },
+    "tester": {
+      "endpoint": "beta",
+      "model": "tester:latest"
+    },
+    "docs": {
+      "endpoint": "alpha",
+      "model": "docs:latest"
+    },
+    "deploy": {
+      "endpoint": "beta",
+      "model": "deploy:latest"
+    }
+  },
+  "artifacts": [
+    "Dockerfile",
+    "README.md",
+    "deploy/validate_deploy.py",
+    "src/taskflow/__main__.py",
+    "src/taskflow/api.py",
+    "src/taskflow/service.py",
+    "src/taskflow/store.py",
+    "tests/test_service.py",
+    "tests/test_store.py"
+  ]
+}

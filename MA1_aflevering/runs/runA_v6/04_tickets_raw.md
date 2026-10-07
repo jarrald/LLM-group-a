@@ -1,0 +1,47 @@
+```json
+[
+  {
+    "id": 1,
+    "title": "Implement in-memory task storage",
+    "scope": "src/taskflow/store.py",
+    "acceptance_criteria": [
+      "Implement TaskStore class with exact methods: __init__, create, list, get, update, delete",
+      "create() raises ValueError on empty/whitespace/too-long title and assigns next sequential int id",
+      "delete() returns True if removed else False"
+    ],
+    "depends_on": []
+  },
+  {
+    "id": 2,
+    "title": "Implement task validation and business rules",
+    "scope": "src/taskflow/service.py",
+    "acceptance_criteria": [
+      "Implement TaskService class with exact methods: create, list, get, update, delete",
+      "TaskService delegates to TaskStore with exact calls: create, list, get, update, delete",
+      "TaskService never accesses TaskStore.tasks or TaskStore.next_id directly"
+    ],
+    "depends_on": [1]
+  },
+  {
+    "id": 3,
+    "title": "Implement HTTP handler and server creation",
+    "scope": "src/taskflow/api.py",
+    "acceptance_criteria": [
+      "Implement make_server() function that creates an HTTP server",
+      "HTTP handler uses shared TaskService instance",
+      "Request bodies are JSON (json.loads); EVERY response body is produced with json.dumps"
+    ],
+    "depends_on": [2]
+  },
+  {
+    "id": 4,
+    "title": "Implement server startup and management",
+    "scope": "src/taskflow/__main__.py",
+    "acceptance_criteria": [
+      "Reads the PORT env var (default 8080), builds the server with make_server and calls serve_forever()",
+      "Server starts on the specified port"
+    ],
+    "depends_on": [3]
+  }
+]
+```
