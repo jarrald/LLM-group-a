@@ -12,6 +12,7 @@ really feeds the answer (Phase 2 exit criterion, ticket SG-024).
 from __future__ import annotations
 
 import argparse
+import sys
 
 from app.adapters.chroma_client import get_chroma_client, get_course_collection
 from app.adapters.embedder import OllamaEmbedder
@@ -22,6 +23,8 @@ SNIPPET_CHARS = 220
 
 
 def main(argv: list[str] | None = None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # Windows consoles default to cp1252
     parser = argparse.ArgumentParser(description="Query the indexed course material.")
     parser.add_argument("query", help="the question to search for")
     parser.add_argument("--top-k", type=int, default=None, help="number of chunks (default: STUDYGRAPH_TOP_K)")

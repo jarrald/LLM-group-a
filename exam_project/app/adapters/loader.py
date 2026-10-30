@@ -1,15 +1,20 @@
 """Load lecture Markdown from the course material directory.
 
-Layout (ADR-013):
+Layout (ADR-020): the RAG input is every ``*.md`` inside a ``week<N>`` directory under the
+configured root, so a week may contain one or several documents. Raw material (original PDFs,
+notebooks, ``source/``) is never indexed.
 
 ```text
 docs/RAG/llm_for_developers/
-├── source/week1/              # original PDFs and exercise files (git-ignored)
-└── week1/week1_complete_rag.md
+├── source/week1/…                     # originals (git-ignored binaries)
+└── llm_friendly/
+    ├── week1/week1_complete_rag.md
+    ├── week2/week2_prompt_engineering_rag.md
+    └── week3/week3_overview.md, week3_hallucinations.md, …
 ```
 
-The Markdown is the authoritative RAG input. Metadata is derived from the path and the
-first ``#`` heading — the course files are never modified.
+Metadata is derived from the path and the first ``#`` heading — the course files are never
+modified.
 """
 
 from __future__ import annotations
@@ -21,13 +26,14 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-_WEEK_DIRECTORY = re.compile(r"^week(\d+)$")
+_WEEK_DIRECTORY = re.compile(r"^week(\d+)$", re.IGNORECASE)
 _H1 = re.compile(r"^#\s+(?P<title>.+?)\s*$")
+_RAW_MATERIAL_DIRECTORY = "source"
 
 
 @dataclass(frozen=True, slots=True)
 class LectureDocument:
-    """One lecture's Markdown, ready to be chunked."""
+    """One lecture document, ready to be chunked."""
 
     doc_id: str
     doc_name: str
@@ -46,13 +52,28 @@ def read_lecture_title(text: str, fallback: str) -> str:
     return fallback
 
 
-def load_lecture(path: Path, course_id: str) -> LectureDocument:
-    """Load a single ``week<N>_complete_rag.md`` file."""
-    lecture = int(_WEEK_DIRECTORY.match(path.parent.name).group(1))  # type: ignore[union-attr]
+def week_number(path: Path, root: Path) -> int | None:
+    """Return the week number of ``path``, taken from a ``week<N>`` directory below ``root``."""
+    try:
+        relative = path.relative_to(root)
+    except ValueError:
+        return None
+    for part in relative.parts[:-1]:
+        match = _WEEK_DIRECTORY.match(part)
+        if match:
+            return int(match.group(1))
+    return None
+
+
+def load_lecture(path: Path, course_id: str, root: Path) -> LectureDocument:
+    """Load a single Markdown lecture that lives inside a ``week<N>`` directory."""
+    lecture = week_number(path, root)
+    if lecture is None:
+        raise ValueError(f"{path} is not inside a week<N> directory below {root}")
+
     text = path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
-    doc_id = f"week-{lecture}"
     return LectureDocument(
-        doc_id=doc_id,
+        doc_id=path.stem,
         doc_name=read_lecture_title(text, fallback=f"Week {lecture}"),
         lecture=lecture,
         course_id=course_id,
@@ -62,19 +83,20 @@ def load_lecture(path: Path, course_id: str) -> LectureDocument:
 
 
 def discover_lectures(directory: Path, course_id: str) -> list[LectureDocument]:
-    """Find every ``week<N>/week<N>_complete_rag.md`` under ``directory``, ordered by week."""
+    """Find every Markdown lecture under ``directory``, ordered by week and file name."""
     if not directory.is_dir():
         raise FileNotFoundError(f"course material directory not found: {directory}")
 
     documents: list[LectureDocument] = []
-    for week_directory in sorted(directory.iterdir()):
-        if not week_directory.is_dir() or not _WEEK_DIRECTORY.match(week_directory.name):
+    for path in sorted(directory.rglob("*.md")):
+        relative_parts = [part.lower() for part in path.relative_to(directory).parts]
+        if _RAW_MATERIAL_DIRECTORY in relative_parts:
+            logger.debug("skipping raw material: %s", path)
             continue
-        markdown_path = week_directory / f"{week_directory.name}_complete_rag.md"
-        if not markdown_path.is_file():
-            logger.warning("skipping %s: %s not found", week_directory.name, markdown_path.name)
+        if week_number(path, directory) is None:
+            logger.debug("skipping %s: not inside a week<N> directory", path)
             continue
-        documents.append(load_lecture(markdown_path, course_id))
+        documents.append(load_lecture(path, course_id, directory))
 
-    documents.sort(key=lambda document: document.lecture)
+    documents.sort(key=lambda document: (document.lecture, document.doc_id))
     return documents

@@ -12,6 +12,7 @@ instead of duplicating them.
 from __future__ import annotations
 
 import argparse
+import sys
 import time
 
 from app.adapters.chroma_client import collection_metadata, get_chroma_client
@@ -38,6 +39,8 @@ def build_metadata(chunk: Chunk) -> dict[str, str | int]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # Windows consoles default to cp1252
     parser = argparse.ArgumentParser(description="Index the course material into Chroma.")
     parser.add_argument("--recreate", action="store_true", help="delete and rebuild the collection")
     parser.add_argument("--max-chars", type=int, default=DEFAULT_MAX_CHARS, help=f"target chunk size (default {DEFAULT_MAX_CHARS})")
@@ -51,7 +54,7 @@ def main(argv: list[str] | None = None) -> int:
 
     documents = discover_lectures(config.course_material_dir, config.course_id)
     if not documents:
-        print("FAIL  no week<N>/week<N>_complete_rag.md documents found")
+        print(f"FAIL  no Markdown found inside a week<N> directory under {config.course_material_dir}")
         return 1
 
     chunks = [chunk for document in documents for chunk in chunk_document(document, max_chars=arguments.max_chars, overlap=arguments.overlap)]

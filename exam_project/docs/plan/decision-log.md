@@ -255,7 +255,36 @@ Format: context → decision → consequences. Keep entries short; link to code 
   rows read back with `None` for the new field. At this size a schema-history table is
   unnecessary.
 
+## ADR-020 — Index every `week<N>/*.md`, not one fixed file per week
+
+- **Status:** Accepted (2026-10-30) — supersedes the *layout* part of ADR-013
+- **Context:** The course material was reorganised into
+  `docs/RAG/llm_for_developers/llm_friendly/week<N>/`, and a week can hold several documents
+  (week 3 has six: overview, ambiguity, gradient descent/embeddings, hallucinations, prompt
+  injection, literature review). The previous loader expected exactly
+  `week<N>/week<N>_complete_rag.md` one level below the root, so it found **nothing** and
+  ingestion failed for anyone cloning the repository.
+- **Decision:** discovery is recursive and layout-tolerant: every `*.md` below the configured
+  root that sits inside a `week<N>` directory is a lecture document. Anything under a
+  `source/` directory is ignored (raw PDFs/notebooks). `doc_id` is the file stem
+  (`week3_hallucinations`), `lecture` comes from the directory, `doc_name` from the first `#`.
+- **Consequences:** 8 documents → **153 chunks** (was 57 from week 1 alone). Adding a week is
+  a file drop plus `ingest.py`. Chunk ids changed with the new `doc_id`, so the index was
+  rebuilt with `--recreate`. The literature-review assignment file is indexed too — a
+  conscious choice, reversible by curating the folder.
+
 ---
+
+## Template for new entries
+
+```markdown
+## ADR-0NN — <short title>
+
+- **Status:** Proposed | Accepted | Superseded by ADR-0NN | Rejected
+- **Context:** What forces the decision (constraints, evidence, requirements).
+- **Decision:** What we do, precisely enough to implement.
+- **Consequences:** What becomes easier, what becomes harder, what must be updated.
+```
 
 
 ```markdown

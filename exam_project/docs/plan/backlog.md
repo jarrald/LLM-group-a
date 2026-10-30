@@ -34,7 +34,7 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 | SG-022 | P0 | `app/adapters/loader.py` + `chunker.py` — heading-aware chunks + metadata + stable ids | Done | SG-021 | Deterministic ids and counts across runs (tests) |
 | SG-023 | P0 | `scripts/ingest.py` — idempotent indexing with embedding metadata | Done | SG-022, SG-003 | Two consecutive runs: 57 chunks both times, no duplicates |
 | SG-024 | P1 | Validate the index with sample queries and `chroma browse` | Done | SG-023 | `scripts/search.py` returns the expected Week 1 sections with distances |
-| SG-025 | P1 | Convert later weeks to `week<N>/week<N>_complete_rag.md` as they are released | Todo | SG-010 | Each new week follows the ADR-013 layout and re-indexes without code changes |
+| SG-025 | P1 | Add later weeks as `llm_friendly/week<N>/*.md` | Done | SG-010 | Weeks 1–3 present (8 documents); discovered without code changes (ADR-020) |
 
 ## Phase 3 — Domain model & persistence
 
@@ -76,6 +76,7 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 | SG-064 | P1 | Mode badge + sources expander | Done | SG-062 | 📚/🧠 badge per conversation; sources only when retrieval delivered chunks |
 | SG-065 | P1 | Empty / retrieval-empty / error states | Done (partly) | SG-062 | Empty conversation hint, retrieval notice and LLM error path done; stopping **Chroma** mid-session still to verify by hand |
 | SG-066 | P1 | `AppTest` coverage for chat + buddies pages | Done | SG-061, SG-062 | 4 tests, offline, fake adapters |
+| SG-067 | P1 | `scripts/doctor.py` — one-command prerequisite check for teammates | Done | SG-060 | Verifies interpreter, prompts, material, models, Chroma and index; prints a fix hint per failure (both paths verified) |
 
 ## Phase 7 — RAG vs non-RAG evaluation
 

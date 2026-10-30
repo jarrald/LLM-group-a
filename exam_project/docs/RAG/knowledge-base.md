@@ -9,19 +9,29 @@ Everything here is planned; nothing has been executed yet (see
 
 ```text
 docs/RAG/llm_for_developers/
-├── source/week1/              # originals as provided: Week1.pdf, notebook, csv, txt, png
-└── week1/
-    └── week1_complete_rag.md  # RAG input, committed (27 KB)
+├── source/week1/…                 # originals: PDFs, notebooks, csv, txt, png (git-ignored)
+└── llm_friendly/
+    ├── week1/week1_complete_rag.md
+    ├── week2/week2_prompt_engineering_rag.md
+    └── week3/week3_overview.md, week3_ambiguity_semantic_drift.md,
+        week3_gradient_descent_and_embeddings.md, week3_hallucinations.md,
+        week3_prompt_injection_security.md,
+        week3_literature_review_assignment_and_resources.md
 ```
 
-- One directory per lecture: `docs/RAG/llm_for_developers/week<N>/week<N>_complete_rag.md`.
+- One directory per lecture, one or more Markdown documents inside it:
+  `docs/RAG/llm_for_developers/llm_friendly/week<N>/*.md` (ADR-020).
 - The Markdown is the authoritative RAG input and is **committed**, so the index can be
-  rebuilt without the original slides. Large sources (`*.pdf`, `*.png`) stay git-ignored.
-- The course files are **not modified** to add front matter: metadata is derived from the
-  path and the document header — `doc_id` = `week-<N>`, `lecture` = `<N>`,
-  `doc_name` = the first `#` heading. This keeps the material untouched and re-convertable.
-- Week 1 exists today: sections use `## 1. …` / `### …` headings, prose paragraphs and
-  bullet lists, which suits heading-first chunking.
+  rebuilt without the original slides. Large sources (`source/**`, `*.pdf`, `*.png`) are
+  git-ignored and never indexed.
+- The course files are **not modified**: metadata is derived from the path and the document
+  header — `doc_id` = the file stem (`week3_hallucinations`), `lecture` = `<N>` from the
+  directory, `doc_name` = the first `#` heading.
+- Current material: **weeks 1–3, 8 documents, ~76 KB of Markdown** → **153 chunks**. Week 3
+  ships as six files (overview, ambiguity/semantic drift, gradient descent & embeddings,
+  hallucinations, prompt injection, literature review).
+- Sections use `## N. …` / `### …` headings, prose and bullet lists, which suits
+  heading-first chunking.
 
 - **Slides or pages that could not be converted faithfully stay out of the index** rather
   than being invented. If page numbers are unavailable, the `page` metadata field is
@@ -51,8 +61,8 @@ Strategy (to be validated against the real slides in SG-022):
   and never split inside a fenced code block or a table.
 - Drop chunks under **80** characters unless they clearly carry meaning (e.g. a short definition).
 
-Implemented in `app/adapters/chunker.py` (`CHUNKER_VERSION = "1"`). Measured on Week 1:
-27 KB Markdown → **57 chunks**.
+Implemented in `app/adapters/chunker.py` (`CHUNKER_VERSION = "1"`). Measured on the current
+material: **8 documents (weeks 1–3, ~76 KB) → 153 chunks**, embedded in 1.5–2.6 s.
 - Every chunk inherits `course_id`, `doc_id`, `doc_name`, `lecture`, `page` (when known)
   plus `chunk_index` and `text_hash`.
 
@@ -73,9 +83,9 @@ the topic, and the overlap carries context across slide boundaries.
 | `index_version` | str | `v1`, bumped when the chunker changes |
 
 Chunk **id** is deterministic: `f"{doc_id}:{chunk_index:04d}:{text_hash[:12]}"`, e.g.
-`week-1:0017:47dbf22f4bc8`. This makes re-indexing idempotent — the same content always lands
-on the same id (ADR-015). Chroma stores no `chunk_id` metadata field because the record id
-*is* the chunk id.
+`week3_prompt_injection_security:0007:1a2b3c4d5e6f`. This makes re-indexing idempotent — the
+same content always lands on the same id (ADR-015). Chroma stores no `chunk_id` metadata field
+because the record id *is* the chunk id.
 
 ## 5. Collection, embeddings and versioning
 
@@ -107,17 +117,19 @@ uv run python .\scripts\ingest.py
 chroma browse llms_for_devs_v1 --local
 ```
 
-Checklist (run 2026-10-30 against `llms_for_devs_v1`):
+Checklist (run 2026-10-30 against `llms_for_devs_v1`, weeks 1–3):
 
-- [x] Chunk count is reported and stable across two runs — **57** both times.
-- [x] Spot-check: chunk text reads correctly and metadata points at the right lecture
-      (e.g. `week-1:0017:47dbf22f4bc8`, section `3. Model fitting, overfitting, and outliers > Overfitting`).
+- [x] Chunk count is reported and stable across two runs — **153** both times (idempotent).
+- [x] A fresh collection built from a clean run (`STUDYGRAPH_COLLECTION=repro_check_v1`)
+      also produced 153 chunks, so the index is reproducible from the repository alone.
+- [x] Spot-check: chunk text reads correctly and metadata points at the right document
+      (e.g. `week3_prompt_injection_security` → section `1. What is prompt injection?`).
 - [x] Sample queries return the expected sections:
-      `"What is overfitting and how do you detect it?"` → Overfitting (0.528), Outliers (0.854),
-      In-class exercise 1.2 (0.914); `"What is overfitting, and how does the course suggest spotting it?"`
-      → Overfitting (0.416) as the top hit.
+      `"What is prompt injection and how can it be defended against?"` → prompt injection 0.417,
+      direct injection 0.483, defensive design 0.494; `"How does gradient descent reduce loss?"`
+      → gradient descent 0.334, week-3 overview 0.385; `"What is overfitting…?"` → Overfitting 0.42.
 - [ ] An off-topic query must return low-relevance results so that `empty` handling can be
-      exercised — not yet recorded.
+      exercised — still to record (belongs to the Phase 7 question set).
 
 ## 8. Open items
 

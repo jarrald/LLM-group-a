@@ -32,16 +32,17 @@ Full rationale, versions, runtime topology and the decisions still open:
 
 ## Running it locally
 
-Three local processes: **Ollama**, the **Chroma server**, and the app.
+Prerequisites: **Python 3.12** (handled by `uv`), **Ollama** running, and PowerShell on
+Windows. Three local processes: Ollama, the Chroma server, and the app.
 
 ```powershell
-# 1. once: environment + models
+# 1. once: environment + models (~2.3 GB download)
 uv sync
 ollama pull llama3.2:3b
 ollama pull nomic-embed-text
 
 # 2. terminal 1: vector store (keep it running)
-chroma run --path .\data\chroma
+uv run chroma run --path .\data\chroma
 
 # 3. once, and after adding course material: index the lectures
 uv run python .\scripts\ingest.py
@@ -54,14 +55,51 @@ Open <http://localhost:8501>. Pages: **Chat** (start a conversation from a Buddy
 Task per message, read the sources), **Buddies** (create/edit the three T's and the course
 material), **About** (models, index size, data locations).
 
-Useful CLI equivalents:
+**Check your setup in one command:**
 
 ```powershell
-uv run python .\scripts\smoke_llm.py                 # are the models installed and how fast?
-uv run python .\scripts\search.py "What is overfitting?" --top-k 3
-uv run python .\scripts\ask.py --compare "What is overfitting?"   # RAG vs non-RAG side by side
-uv run pytest -q                                     # 90 tests, no live services needed
+uv run python .\scripts\doctor.py
 ```
+
+It verifies the interpreter, prompt templates, course material, both Ollama models, the Chroma
+server and the index, and prints the exact command to fix anything that is missing.
+
+### Course material
+
+The RAG input is every Markdown file inside a `week<N>` directory:
+
+```text
+docs/RAG/llm_for_developers/
+├── source/…                         # original PDFs and notebooks (git-ignored)
+└── llm_friendly/
+    ├── week1/week1_complete_rag.md
+    ├── week2/week2_prompt_engineering_rag.md
+    └── week3/week3_overview.md, week3_hallucinations.md, …
+```
+
+Add a new lecture by dropping `week<N>/*.md` in there and re-running `ingest.py` (the run is
+idempotent — chunk ids are deterministic, so nothing is duplicated).
+
+### Useful CLI equivalents
+
+```powershell
+uv run python .\scripts\smoke_llm.py                 # are the models installed, and how fast?
+uv run python .\scripts\search.py "What is prompt injection?" --top-k 3
+uv run python .\scripts\ask.py --compare "What is overfitting?"   # RAG vs non-RAG side by side
+uv run pytest -q                                     # 95 tests, no live services needed
+```
+
+### Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `FAIL no Markdown found inside a week<N> directory` | no `.md` under any `week<N>` directory | put the files under `docs/RAG/llm_for_developers/llm_friendly/week<N>/` |
+| `Collection … is not available` / `0 chunks` | the material was never indexed | `uv run python .\scripts\ingest.py` |
+| `Cannot reach the Chroma server` | server not running | `uv run chroma run --path .\data\chroma` in its own terminal |
+| `chroma: command not found` | the CLI lives in `.venv\Scripts` | use `uv run chroma …` (never a bare `chroma`) |
+| `Cannot reach the model …` in the chat | Ollama stopped or model missing | start Ollama, `uv run python .\scripts\smoke_llm.py` |
+| `STUDYGRAPH_EMBEDDING_DIM` mismatch | different embedding model than the index | set the dimension, then `uv run python .\scripts\ingest.py --recreate` |
+| Answers say "retrieval failed" | Chroma down, or collection missing | see the two rows above |
 
 Local data lives in `data/` (`studygraph.db`, `chroma/`) and is git-ignored. Delete
 `data/studygraph.db` to start with a fresh database and the seeded Buddy pair.

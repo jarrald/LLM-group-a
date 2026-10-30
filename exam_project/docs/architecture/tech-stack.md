@@ -102,8 +102,8 @@ in our own code, no `sentence-transformers`/`torch`.
 | Project install | `studygraph==0.1.0` installed **editable** via hatchling, so `import app` works from any entry point |
 | Installed runtime packages | streamlit 1.66.1, chromadb 1.5.9, langgraph 1.2.18, ollama 0.6.3 |
 | Ollama | 0.35.1, `http://127.0.0.1:11434`; models `llama3.2:3b` (2.0 GB), `nomic-embed-text` (274 MB) |
-| Chroma | server running on `http://localhost:8000`, data at `data/chroma`, collection `llms_for_devs_v1` (57 chunks) |
-| Verification | `uv run pytest` 90 passed · `ruff check .` clean · `mypy app` clean (33 files) |
+| Chroma | server running on `http://localhost:8000`, data at `data/chroma`, collection `llms_for_devs_v1` (**153 chunks**, weeks 1–3) |
+| Verification | `uv run pytest` 95 passed · `ruff check .` clean · `mypy app` clean (33 files) · `scripts/doctor.py` all green |
 
 ## 7. UI structure (implemented)
 

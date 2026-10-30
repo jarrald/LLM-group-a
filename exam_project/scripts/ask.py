@@ -14,6 +14,7 @@ course (RAG) and once without it. That is the RAG vs non-RAG demonstration.
 from __future__ import annotations
 
 import argparse
+import sys
 import tempfile
 from pathlib import Path
 
@@ -71,6 +72,8 @@ def report(result: TurnResult, *, show_prompt: bool) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # Windows consoles default to cp1252
     parser = argparse.ArgumentParser(description="Ask StudyGraph a question locally.")
     parser.add_argument("question", help="the question to ask")
     parser.add_argument("--compare", action="store_true", help="ask with and without course grounding")

@@ -25,13 +25,13 @@ evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging +
 | Environment (`uv`, deps) | **Done** — CPython 3.12, deps, project installed editable |
 | Domain model, snapshots, SQLite persistence | **Done** |
 | Prompt construction (three T's + Task, versioned templates) | **Done** |
-| Ingestion + retrieval (57 chunks, `ok/empty/failed/skipped`) | **Done** |
+| Ingestion + retrieval (**153 chunks**, 8 documents, `ok/empty/failed/skipped`) | **Done** |
 | LangGraph chat flow (batch + streaming) | **Done** |
 | Services (Buddy, Chat) + seeded default Buddy pair | **Done** |
 | **Streamlit UI: Chat, Buddies, About** | **Done** — streaming, mode badge, sources expander |
 | CLI tools (`smoke_llm`, `ingest`, `search`, `ask`) | **Done** |
 | Evaluation results | Templates + one exploratory run; the formal table is next |
-| Tests | **90 passing** (unit, integration, UI via `AppTest`) |
+| Tests | **95 passing** (unit, integration, UI via `AppTest`) |
 
 ## 3. Environment verified on 2026-10-30
 
@@ -39,10 +39,11 @@ evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging +
 |---|---|
 | Project interpreter | CPython **3.12** in `.venv` |
 | Installed packages | streamlit 1.66.1, chromadb 1.5.9, langgraph 1.2.18, ollama 0.6.3 |
-| `uv run pytest` | 90 passed |
+| `uv run pytest` | 95 passed |
 | `uv run ruff check .` / `uv run mypy app` | clean / clean (33 files) |
 | Ollama | `llama3.2:3b` (2.9 s short answer), `nomic-embed-text` (768 d) |
-| Chroma | `http://localhost:8000`, `llms_for_devs_v1`, 57 chunks |
+| Chroma | `http://localhost:8000`, `llms_for_devs_v1`, **153 chunks** (weeks 1–3, 8 documents) |
+| Doctor | `uv run python .\scripts\doctor.py` → all checks pass (also verified to fail loudly with a hint when the collection is missing) |
 | App | `uv run streamlit run app/main.py` → `http://localhost:8501`, dark theme |
 | Browser run | Buddy created with course → 📚 Course-grounded + `Sources (4)` (0.425/0.689/0.793/0.794); Buddy without course → 🧠 General, no sources |
 
@@ -61,9 +62,11 @@ per message (ADR-017), three pages (ADR-018), additive migrations (ADR-019).
 
 | Blocker | Impact | Next action |
 |---|---|---|
-| Week 2+ course material not yet available | Evaluation rests on a single lecture | Add each week as `week<N>/week<N>_complete_rag.md` and re-run `ingest.py` (R-02) |
+| Weeks 4+ not yet released | The evaluation covers weeks 1–3 only | Add each new week as `llm_friendly/week<N>/*.md` and re-run `ingest.py` (R-02) |
 
-Nothing else blocks progress.
+Nothing blocks progress. Reproducibility was verified on 2026-10-30: a clean run into a
+throw-away collection (`repro_check_v1`) produced the same 153 chunks from the repository
+alone, and `scripts/doctor.py` reports every prerequisite with a fix hint.
 
 ## 6. Next three actions
 
@@ -92,3 +95,4 @@ Nothing else blocks progress.
 | 2026-10-30 (2) | Design review + Phase 0 bootstrap | `docs/plan/design-review.md` with 12 findings (D-01…D-12); Phase 0 started: `pyproject.toml`, `.python-version`, `requirements.txt`, `app/{__init__,errors,config,main}.py`, `tests/{conftest,unit/test_config}.py`; `uv sync` on CPython 3.12; 10 tests pass; ruff and mypy clean; course material discovered and docs re-aligned; ADR-013/014 added. |
 | 2026-10-30 (3) | Phases 1–5: chunking, index, prompts, graph, services | Models verified (`llama3.2:3b` 2.9 s, `nomic-embed-text` 768-d); Chroma server up; loader + chunker + embedder + retriever + chroma client; `scripts/{smoke_llm,ingest,search,ask}.py`; 57 chunks indexed idempotently; retrieval verified (Overfitting section, distance 0.416); domain model + SQLite store; 4T prompt builder with grounding rules; LangGraph routing + Ollama client + Buddy/Chat services; **83 tests**, ruff and mypy clean; end-to-end `--compare` run recorded. |
 | 2026-10-30 (4) | Phase 6: Streamlit UI + decisions | ADR-017 (three T's, Task per message), ADR-018 (three pages), ADR-019 (additive migrations); FR-14 reworded; streaming through the same graph (state `on_token`); seeded Buddy pair (FR-14); `retrieval_top_k` persisted; pages `app/ui/{chat,buddies,about}_page.py` + `clients.py` + `components.py`; dark theme in `.streamlit/config.toml`; **90 tests** (incl. 4 AppTest), ruff/mypy clean; verified in the browser: grounded answer + `Sources (4)` and general answer without sources. |
+| 2026-10-30 (5) | Reproducibility repair after the material reorganisation | Loader made layout-tolerant (ADR-020): 8 documents → **153 chunks**, re-indexed and verified (prompt injection 0.42, gradient descent 0.33), idempotent; fresh-collection run reproduced 153 chunks; `scripts/doctor.py` added and verified (pass **and** failure path); README rewritten with `uv run chroma`, a first-run checklist and a troubleshooting table; **95 tests**, ruff/mypy clean. |
