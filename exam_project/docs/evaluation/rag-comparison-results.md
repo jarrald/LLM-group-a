@@ -73,6 +73,36 @@ differed. Example structure:
 > "<term>" and TBD. Neither answer was wrong, but only the RAG answer aligned with the
 > slides.
 
+## Appendix A — exploratory run (not the evaluation)
+
+Recorded 2026-10-30 to prove the pipeline end to end. It is **not** the evaluation of §3: it
+is a single question, not the 8–10 question set, and the answers are not rated.
+
+| Field | Value |
+|---|---|
+| Command | `uv run python .\scripts\ask.py --compare "What is overfitting, and how does the course suggest spotting it?"` |
+| Model / embeddings | `llama3.2:3b` / `nomic-embed-text` (768-d) |
+| Collection | `llms_for_devs_v1`, 57 chunks |
+| 4T configuration | Target = *Student familiar with the fundamentals*, Tone = *Friendly and conversational*, Traits = *Patient, Analytical*, Task = *Explain a concept* |
+| RAG arm retrieval | `ok`, 4 passages; top hits `week-1:0017` (0.416), `week-1:0018` (0.747), `week-1:0015` (0.809), `week-1:0016` (0.817) |
+| non-RAG arm retrieval | `skipped`, 0 passages |
+| Verbatim output | [prompt-examples.md](prompt-examples.md) |
+
+Observed difference (useful for the synopsis, but not a rating):
+
+- The grounded answer used the lecture's own material: the course's informal definition
+  ("too sensitive and wrong"), the course's diagnostic questions ("Is the model wrong?",
+  "Is the data wrong?", "Is a better model needed?"…) and referred to the in-class exercises.
+- The general answer was a correct but generic ML explanation (test set, large weights,
+  regularisation, early stopping) that never mentions the lecture and never claims to.
+- Both used the same prompt configuration, so the visible difference comes from retrieval.
+
+## Appendix B — planned off-topic probe
+
+Still to run: one question that the course material does not cover (e.g. a question about
+another course's topic) to confirm the `empty`/low-relevance path in the UI. Belongs in the
+evaluation question set as Q7/Q8.
+
 ## 5. Limitations to state in the synopsis
 
 - Small, hand-written question set and subjective ratings.

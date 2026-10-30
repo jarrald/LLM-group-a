@@ -85,13 +85,44 @@ in our own code, no `sentence-transformers`/`torch`.
 
 ## 5. Open items requiring sign-off
 
-| Item | Why it is still open | How it gets closed |
+| Item | Status | How it was closed |
 |---|---|---|
-| Chat model (size/quality vs. hardware) | No general chat model is pulled on the machine yet; only custom `tester`/`deploy`/`docs` models exist | Phase 0 spike: pull two candidates, time one answer, judge quality on 3 course questions |
-| Embedding model & dimension | `nomic-embed-text` proposed but not yet pulled or measured | Phase 1 spike: compare retrieval quality and speed of one or two embedding models |
-| Chunk size / overlap / `top_k` | Depends on the real slide structure | Phase 2, measured against real questions |
-| PDF → Markdown conversion tool | Depends on slide layout quality | Phase 1 spike on the real lecture PDFs |
-| Whether supplementary uploads are in V1 | Optional per requirements §5.2 | Decide after the core flow works |
+| Chat model | **Closed** — `llama3.2:3b`, 2.9 s/answer | ADR-007 |
+| Embedding model & dimension | **Closed** — `nomic-embed-text`, 768-d | ADR-007b |
+| Chunk size / overlap | **Closed** — 900 / 120, heading-first, 57 chunks for Week 1 | ADR-015 |
+| PDF → Markdown conversion tool | Open, but only needed if later weeks arrive as PDFs | ADR-008 |
+| `top_k` and a relevance threshold | Open — decision after the Phase 7 evaluation | decision log |
+| Whether supplementary uploads are in V1 | Open | decision after Phase 6 |
+
+## 6. Environment facts (verified 2026-10-30)
+
+| Fact | Value |
+|---|---|
+| Project interpreter | CPython **3.12** in `.venv` (uv-managed), pinned by `.python-version` |
+| Project install | `studygraph==0.1.0` installed **editable** via hatchling, so `import app` works from any entry point |
+| Installed runtime packages | streamlit 1.66.1, chromadb 1.5.9, langgraph 1.2.18, ollama 0.6.3 |
+| Ollama | 0.35.1, `http://127.0.0.1:11434`; models `llama3.2:3b` (2.0 GB), `nomic-embed-text` (274 MB) |
+| Chroma | server running on `http://localhost:8000`, data at `data/chroma`, collection `llms_for_devs_v1` (57 chunks) |
+| Verification | `uv run pytest` 90 passed · `ruff check .` clean · `mypy app` clean (33 files) |
+
+## 7. UI structure (implemented)
+
+```text
+app/main.py                 st.set_page_config + st.navigation (Chat | Buddies | About)
+app/ui/chat_page.py         conversation list + new conversation (sidebar), mode badge,
+                            per-message Task selector, streaming answer, sources expander
+app/ui/buddies_page.py      Buddy cards + create/edit form (Traits / Tone / Target / Course material)
+app/ui/about_page.py        models, index size, data locations
+app/ui/clients.py           build_services() + @st.cache_resource get_services()
+app/ui/components.py        shared CSS, mode pill, buddy card, retrieval notice, sources block
+.streamlit/config.toml      dark theme, purple accent (close to the mocks' look)
+```
+
+- Behaviour is docs-driven (ADR-017/ADR-018): three T's on the Buddy, Task per message,
+  course material chosen per Buddy, grounding always visible.
+- The look borrows from the mocks where it does not conflict: dark cards, sidebar navigation,
+  a buddy summary card and a "frozen configuration" panel.
+- Pages only call services (`BuddyService`, `ChatService`); no page touches Chroma, Ollama or SQL.
 
 ## 6. Environment facts (verified 2026-10-30)
 

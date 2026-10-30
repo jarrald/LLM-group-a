@@ -8,26 +8,20 @@ Everything here is planned; nothing has been executed yet (see
 ## 1. Source material
 
 ```text
-data/course_material/llms-for-developers/
-├── pdf/          # original lecture slides, git-ignored, not redistributed
-└── markdown/     # converted Markdown, committed (reproducible RAG source)
+docs/RAG/llm_for_developers/
+├── source/week1/              # originals as provided: Week1.pdf, notebook, csv, txt, png
+└── week1/
+    └── week1_complete_rag.md  # RAG input, committed (27 KB)
 ```
 
-- One Markdown file per source PDF, same base file name.
-- The Markdown is the authoritative RAG input. It is committed so anyone can rebuild the
-  index without the original slides.
-- Each Markdown file starts with a small front-matter block:
-
-```markdown
----
-doc_id: lecture-03-rag
-doc_name: "Lecture 3 — Retrieval-Augmented Generation"
-lecture: 3
-source_file: lecture-03.pdf
-converted_with: <tool> <version>
-converter_version: 1
----
-```
+- One directory per lecture: `docs/RAG/llm_for_developers/week<N>/week<N>_complete_rag.md`.
+- The Markdown is the authoritative RAG input and is **committed**, so the index can be
+  rebuilt without the original slides. Large sources (`*.pdf`, `*.png`) stay git-ignored.
+- The course files are **not modified** to add front matter: metadata is derived from the
+  path and the document header — `doc_id` = `week-<N>`, `lecture` = `<N>`,
+  `doc_name` = the first `#` heading. This keeps the material untouched and re-convertable.
+- Week 1 exists today: sections use `## 1. …` / `### …` headings, prose paragraphs and
+  bullet lists, which suits heading-first chunking.
 
 - **Slides or pages that could not be converted faithfully stay out of the index** rather
   than being invented. If page numbers are unavailable, the `page` metadata field is
@@ -39,9 +33,13 @@ converter_version: 1
 2. Check for: reading order, tables, code blocks, formula junk, duplicated headers/footers,
    slide numbers leaking into sentences.
 3. If acceptable, script it for all lectures; re-run must be deterministic.
-4. Record the tool + version in the front matter and in ADR-008.
+4. Record the tool + version here and in ADR-008.
 
-Commands are added here once the tool is chosen (`uv run python .\scripts\convert_pdfs.py`).
+Week 1 was converted outside this repository and is committed as
+`week1/week1_complete_rag.md`; the conversion tool is therefore not yet recorded. Keep that
+Markdown as the input and re-convert only if the text quality proves insufficient.
+
+Commands for later weeks are added here once the tool is chosen (`uv run python .\scripts\convert_pdfs.py`).
 
 ## 3. Chunking
 
@@ -49,9 +47,12 @@ Strategy (to be validated against the real slides in SG-022):
 
 - Split on Markdown headings first, so a heading stays with its content
   ([rag-pipeline.md](../architecture/rag-pipeline.md) §3).
-- Then split long sections into chunks of **~700–900 characters with ~120 overlap**, and
-  never split inside a fenced code block or a table.
-- Drop chunks under ~80 characters unless they clearly carry meaning (e.g. a short definition).
+- Then split long sections into chunks of **900 characters with 120 overlap** (ADR-015),
+  and never split inside a fenced code block or a table.
+- Drop chunks under **80** characters unless they clearly carry meaning (e.g. a short definition).
+
+Implemented in `app/adapters/chunker.py` (`CHUNKER_VERSION = "1"`). Measured on Week 1:
+27 KB Markdown → **57 chunks**.
 - Every chunk inherits `course_id`, `doc_id`, `doc_name`, `lecture`, `page` (when known)
   plus `chunk_index` and `text_hash`.
 
@@ -71,8 +72,10 @@ the topic, and the overlap carries context across slide boundaries.
 | `text_hash` | str | sha1 of the normalised chunk text |
 | `index_version` | str | `v1`, bumped when the chunker changes |
 
-Chunk **id** is deterministic: `f"{doc_id}:{page or 0}:{chunk_index}:{text_hash[:12]}"`.
-This makes re-indexing idempotent — the same content always lands on the same id.
+Chunk **id** is deterministic: `f"{doc_id}:{chunk_index:04d}:{text_hash[:12]}"`, e.g.
+`week-1:0017:47dbf22f4bc8`. This makes re-indexing idempotent — the same content always lands
+on the same id (ADR-015). Chroma stores no `chunk_id` metadata field because the record id
+*is* the chunk id.
 
 ## 5. Collection, embeddings and versioning
 
@@ -104,13 +107,17 @@ uv run python .\scripts\ingest.py
 chroma browse llms_for_devs_v1 --local
 ```
 
-Checklist:
+Checklist (run 2026-10-30 against `llms_for_devs_v1`):
 
-- [ ] Chunk count is reported and stable across two runs.
-- [ ] Spot-check 3 chunks: text reads correctly and metadata points at the right lecture.
-- [ ] Two sample queries return the expected lectures/slides.
-- [ ] A deliberately off-topic query returns low-relevance results (so `empty` handling can
-      be tested).
+- [x] Chunk count is reported and stable across two runs — **57** both times.
+- [x] Spot-check: chunk text reads correctly and metadata points at the right lecture
+      (e.g. `week-1:0017:47dbf22f4bc8`, section `3. Model fitting, overfitting, and outliers > Overfitting`).
+- [x] Sample queries return the expected sections:
+      `"What is overfitting and how do you detect it?"` → Overfitting (0.528), Outliers (0.854),
+      In-class exercise 1.2 (0.914); `"What is overfitting, and how does the course suggest spotting it?"`
+      → Overfitting (0.416) as the top hit.
+- [ ] An off-topic query must return low-relevance results so that `empty` handling can be
+      exercised — not yet recorded.
 
 ## 8. Open items
 

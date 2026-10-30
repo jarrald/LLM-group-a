@@ -13,6 +13,7 @@ what is decided, and what is true right now. The `docs/design`, `docs/architectu
 | [backlog.md](backlog.md) | Ticket list (`SG-xxx`) with priority, dependencies and state | update whenever a ticket moves |
 | [decision-log.md](decision-log.md) | Numbered technical decisions (`ADR-xxx`) with status and consequences | add an entry for every technical choice |
 | [risks.md](risks.md) | Risk register with impact, mitigation and owner | review at every phase boundary |
+| [design-review.md](design-review.md) | Review of the draw.io mocks vs. the docs: 12 findings (D-01 … D-12) and 5 decisions to settle | when the mocks or the screen set change |
 | [../architecture/tech-stack.md](../architecture/tech-stack.md) | Chosen stack, versions, runtime topology, open items | when a library/model/port changes |
 | [../RAG/knowledge-base.md](../RAG/knowledge-base.md) | How course material is prepared, chunked, indexed and retrieved | when the pipeline changes |
 | [../evaluation/rag-comparison-results.md](../evaluation/rag-comparison-results.md) | RAG vs. non-RAG evaluation template and results | after each evaluation run |

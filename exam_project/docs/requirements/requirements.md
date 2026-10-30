@@ -223,7 +223,8 @@ The prompt construction logic shall remain independent of whether RAG is enabled
 
 The system shall provide a default Buddy or equivalent default configuration so users can start chatting without first creating a Buddy.
 
-The default configuration should use sensible values for Task, Tone, Traits, and Target.
+The default configuration should use sensible values for Tone, Traits, and Target. Task is
+not part of the Buddy: it is chosen per message (FR-09) and defaults to the first preset.
 
 ### FR-15: Course-Specific RAG
 

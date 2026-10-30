@@ -13,11 +13,14 @@ data/*.db-shm
 data/*.sqlite3
 
 # --- Lecture source slides: binary, large, not redistributable.
-# The converted Markdown under data/course_material/**/markdown/ IS committed,
-# because the assignment requires reproducible RAG source material. ---
+# The converted Markdown under docs/RAG/**/week*/ IS committed, because the assignment
+# requires reproducible RAG source material. ---
 data/course_material/**/*.pdf
 data/course_material/**/*.pptx
 data/course_material/**/*.docx
+docs/RAG/**/*.pdf
+docs/RAG/**/*.png
+docs/RAG/**/*.pyc
 
 # --- Uploaded/experimental documents ---
 data/uploads/

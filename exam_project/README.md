@@ -30,7 +30,42 @@ The project explores how locally running language models and Retrieval-Augmented
 Full rationale, versions, runtime topology and the decisions still open:
 [`docs/architecture/tech-stack.md`](docs/architecture/tech-stack.md).
 
-## Project Documentation
+## Running it locally
+
+Three local processes: **Ollama**, the **Chroma server**, and the app.
+
+```powershell
+# 1. once: environment + models
+uv sync
+ollama pull llama3.2:3b
+ollama pull nomic-embed-text
+
+# 2. terminal 1: vector store (keep it running)
+chroma run --path .\data\chroma
+
+# 3. once, and after adding course material: index the lectures
+uv run python .\scripts\ingest.py
+
+# 4. terminal 2: the app
+uv run streamlit run app/main.py
+```
+
+Open <http://localhost:8501>. Pages: **Chat** (start a conversation from a Buddy, choose the
+Task per message, read the sources), **Buddies** (create/edit the three T's and the course
+material), **About** (models, index size, data locations).
+
+Useful CLI equivalents:
+
+```powershell
+uv run python .\scripts\smoke_llm.py                 # are the models installed and how fast?
+uv run python .\scripts\search.py "What is overfitting?" --top-k 3
+uv run python .\scripts\ask.py --compare "What is overfitting?"   # RAG vs non-RAG side by side
+uv run pytest -q                                     # 90 tests, no live services needed
+```
+
+Local data lives in `data/` (`studygraph.db`, `chroma/`) and is git-ignored. Delete
+`data/studygraph.db` to start with a fresh database and the seeded Buddy pair.
+
 
 Additional documentation is maintained in the [`docs/`](docs/) directory:
 
