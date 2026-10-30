@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" pages="5">
   <diagram name="conceptual diagram" id="HaKrB55tvubC8nFWTcw9">
-    <mxGraphModel dx="3679" dy="2011" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1226" dy="670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -64,7 +64,7 @@
         <mxCell id="LnahfK2M6uW5vSomlGzr-22" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=none;fontSize=30;" value="📚" vertex="1">
           <mxGeometry height="65" width="65" x="880" y="285" as="geometry" />
         </mxCell>
-        <mxCell id="LnahfK2M6uW5vSomlGzr-23" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#1D4ED8;" value="2. TASKS" vertex="1">
+        <mxCell id="LnahfK2M6uW5vSomlGzr-23" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#1D4ED8;" value="2.&amp;nbsp;Area of expertise" vertex="1">
           <mxGeometry height="35" width="300" x="965" y="285" as="geometry" />
         </mxCell>
         <mxCell id="LnahfK2M6uW5vSomlGzr-24" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=14;fontColor=#64748B;" value="Choose what your AI buddy should help you accomplish." vertex="1">
@@ -214,7 +214,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="02 - My Study Sessions" id="TWY8rFyanyFppR4-PvXi">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1440" pageHeight="950" math="0" shadow="0">
+    <mxGraphModel dx="1689" dy="923" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1440" pageHeight="950" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -264,7 +264,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="03 - My Progress and Test Cards" id="zyrtAi_REafGOkopsOY0">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1440" pageHeight="950" math="0" shadow="0">
+    <mxGraphModel dx="1689" dy="923" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1440" pageHeight="950" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />

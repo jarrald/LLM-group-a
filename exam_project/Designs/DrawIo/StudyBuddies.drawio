@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" pages="5">
   <diagram name="conceptual diagram" id="HaKrB55tvubC8nFWTcw9">
-    <mxGraphModel dx="3679" dy="2011" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1226" dy="670" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -64,7 +64,7 @@
         <mxCell id="LnahfK2M6uW5vSomlGzr-22" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=none;fontSize=30;" value="📚" vertex="1">
           <mxGeometry height="65" width="65" x="880" y="285" as="geometry" />
         </mxCell>
-        <mxCell id="LnahfK2M6uW5vSomlGzr-23" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#1D4ED8;" value="2. TASKS" vertex="1">
+        <mxCell id="LnahfK2M6uW5vSomlGzr-23" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#1D4ED8;" value="2.&amp;nbsp;Area of expertise" vertex="1">
           <mxGeometry height="35" width="300" x="965" y="285" as="geometry" />
         </mxCell>
         <mxCell id="LnahfK2M6uW5vSomlGzr-24" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=14;fontColor=#64748B;" value="Choose what your AI buddy should help you accomplish." vertex="1">
@@ -341,7 +341,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="XR74XmvHY0_M6Pfl3v13" name="Side-5">
-    <mxGraphModel dx="1776" dy="971" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1451" dy="793" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -402,7 +402,7 @@
         <mxCell id="XiuRZuskg-SfvpL3jPGQ-20" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#382D50;strokeColor=#A99AFF;strokeWidth=2;fontColor=#E1D4FF;fontStyle=1;fontSize=15;" value="🧠  TRAITS&#xa;Personality" vertex="1">
           <mxGeometry height="75" width="260" x="280" y="360" as="geometry" />
         </mxCell>
-        <mxCell id="XiuRZuskg-SfvpL3jPGQ-21" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#91C9FF;fontStyle=1;fontSize=15;" value="📚  TASKS&#xa;What it does" vertex="1">
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-21" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#91C9FF;fontStyle=1;fontSize=15;" value="📚 AREA OF EXPERTISE&#xa;What it does" vertex="1">
           <mxGeometry height="75" width="260" x="550" y="360" as="geometry" />
         </mxCell>
         <mxCell id="XiuRZuskg-SfvpL3jPGQ-22" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#F5A8D1;fontStyle=1;fontSize=15;" value="💬  TONES&#xa;How it speaks" vertex="1">
