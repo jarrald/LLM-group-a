@@ -1,0 +1,63 @@
+# .clineignore — files Cline must NOT auto-load into context for exam_project.
+# Same syntax as .gitignore, matched relative to this workspace root.
+# Not a security boundary: an explicit @mention or a shell command can still reach
+# these files. Use it to keep the context window small.
+
+# --- Python bytecode & caches ---
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- Virtual environments ---
+.venv/
+venv/
+
+# --- Chroma vector store: binary SQLite + HNSW files, never useful as text ---
+data/chroma/
+data/uploads/
+
+# --- Local SQLite application data ---
+*.db
+*.db-wal
+*.db-shm
+*.sqlite3
+
+# --- Lecture source slides (use the converted Markdown instead) ---
+data/course_material/**/*.pdf
+data/course_material/**/*.pptx
+*.pdf
+*.pptx
+*.docx
+*.xlsx
+
+# --- Images, archives, logs ---
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.zip
+*.log
+
+# --- Secrets ---
+.env
+.streamlit/secrets.toml
+
+# --- Model / embedding caches ---
+.cache/
+models/
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

@@ -18,20 +18,37 @@ The project explores how locally running language models and Retrieval-Augmented
 
 ## Technology
 
-- **Python** — Primary programming language
-- **LangChain** — LLM application and retrieval framework
+| Concern | Choice |
+|---|---|
+| Language | Python 3.12 (managed with `uv`) |
+| Interface | Streamlit |
+| Orchestration | LangGraph |
+| Vector store | ChromaDB (local server) + ChromaUI for inspection |
+| Local LLM | Ollama (chat + embedding models) |
+| Application data | SQLite |
 
-Additional technologies and implementation details will be decided during the design and architecture phases.
+Full rationale, versions, runtime topology and the decisions still open:
+[`docs/architecture/tech-stack.md`](docs/architecture/tech-stack.md).
 
 ## Project Documentation
 
 Additional documentation is maintained in the [`docs/`](docs/) directory:
 
-- **Design:** Product goals, user needs, scope, and design decisions.
-- **Architecture:** System components, data flow, and RAG implementation.
-- **Requirements:** Functional and non-functional requirements.
-- **Synopsis:** Project overview, implementation, evaluation, and reflection.
+- **Plan & tracking:** [`docs/plan/`](docs/plan/) — current status, implementation plan,
+  backlog, decision log, risks. Start with [`status.md`](docs/plan/status.md).
+- **Design:** [`docs/design/`](docs/design/) — product goals, user needs, scope, and design decisions.
+- **Architecture:** [`docs/architecture/`](docs/architecture/) — system components, data flow,
+  stack, and RAG implementation.
+- **Requirements:** [`docs/requirements/`](docs/requirements/) — functional and non-functional requirements.
+- **Knowledge base:** [`docs/RAG/`](docs/RAG/) — how course material is prepared, chunked and indexed.
+- **Evaluation:** [`docs/evaluation/`](docs/evaluation/) — RAG vs. non-RAG comparison and the
+  linear regression vs. LLM + RAG experiment.
 
 ## Project Status
 
-StudyGraph is an educational software prototype exploring local LLMs and Retrieval-Augmented Generation for course-specific study assistance.
+StudyGraph is an educational software prototype exploring local LLMs and Retrieval-Augmented
+Generation for course-specific study assistance.
+
+Current state: requirements, design, architecture, stack and plan are documented; the
+application is **not implemented yet** (Phase 0 of the implementation plan). See
+[`docs/plan/status.md`](docs/plan/status.md) for the live status, blockers and next steps.

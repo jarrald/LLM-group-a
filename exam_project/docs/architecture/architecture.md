@@ -206,6 +206,11 @@ The application should not silently treat a retrieval failure as a successful RA
 
 ## 8. Open Architecture Decisions
 
+> **Status (2026-10-30):** most of these are now resolved. See
+> [tech-stack.md](tech-stack.md) for the chosen stack and
+> [../plan/decision-log.md](../plan/decision-log.md) for the rationale and the items that
+> are still open (chat model, embedding model, chunking, threshold).
+
 The following decisions remain open:
 
 - Local LLM runtime and model.

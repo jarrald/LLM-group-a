@@ -417,6 +417,11 @@ The initial prototype will be considered functionally complete when:
 
 ## 7. Open Design Decisions
 
+> **Status (2026-10-30):** the technology-level decisions are resolved in
+> [`../architecture/tech-stack.md`](../architecture/tech-stack.md) and
+> [`../plan/decision-log.md`](../plan/decision-log.md). The items below are kept as the
+> original requirement record.
+
 The following decisions remain open and will be addressed during the design and architecture phases:
 
 - Which persistence technology to use for Buddies, conversations, messages, and snapshots.
