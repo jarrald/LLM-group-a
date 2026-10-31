@@ -35,6 +35,7 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 | SG-023 | P0 | `scripts/ingest.py` — idempotent indexing with embedding metadata | Done | SG-022, SG-003 | Two consecutive runs: 57 chunks both times, no duplicates |
 | SG-024 | P1 | Validate the index with sample queries and `chroma browse` | Done | SG-023 | `scripts/search.py` returns the expected Week 1 sections with distances |
 | SG-025 | P1 | Add later weeks as `llm_friendly/week<N>/*.md` | Done | SG-010 | Weeks 1–3 present (8 documents); discovered without code changes (ADR-020) |
+| SG-026 | P1 | Konvertér alle uploadede uger og kontrollér kildedækning | Done | SG-025 | 73 kilder, 346 PDF-sider, 85 dokumenter og 1.659 chunks; uge 1, 2, 3, 4, 6, 8, 9, 10; genkørbart script, manifest og offline kontrol (ADR-021) |
 
 ## Phase 3 — Domain model & persistence
 

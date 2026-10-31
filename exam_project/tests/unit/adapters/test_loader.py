@@ -87,6 +87,13 @@ def test_discover_lectures_excludes_raw_material(tmp_path: Path) -> None:
     assert [document.doc_id for document in documents] == ["week1_complete_rag"]
 
 
+def test_discover_lectures_excludes_copied_environments(tmp_path: Path) -> None:
+    write_document(tmp_path, "llm_friendly/week6/week6_notes.md", "# Uge seks\n\nKursusmateriale.\n")
+    write_document(tmp_path, "llm_friendly/week6/.venv/README.md", "# Ikke kursusmateriale\n")
+
+    assert [document.doc_id for document in discover_lectures(tmp_path, COURSE_ID)] == ["week6_notes"]
+
+
 def test_discover_lectures_ignores_markdown_outside_week_directories(tmp_path: Path) -> None:
     write_document(tmp_path, "llm_friendly/week1/week1_complete_rag.md", "# Week one\n\nbody\n")
     write_document(tmp_path, "llm_friendly/README.md", "# Not a lecture\n\nbody\n")

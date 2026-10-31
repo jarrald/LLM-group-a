@@ -1,0 +1,314 @@
+{
+  "date": "2026-10-31",
+  "collection": "llms_for_devs_v1",
+  "count": 1659,
+  "checks": [
+    {
+      "expected_week": 4,
+      "query": "Ollama OpenWebUI API endpoints and HTTP error codes 401 404",
+      "ok": true,
+      "hits": [
+        {
+          "doc_id": "week4_source_local_ai_week_4_pdf",
+          "week": 4,
+          "section": "Side 10",
+          "distance": 0.52276194
+        },
+        {
+          "doc_id": "week4_source_local_ai_week_4_pdf",
+          "week": 4,
+          "section": "Side 5",
+          "distance": 0.57961607
+        },
+        {
+          "doc_id": "week4_source_local_ai_week_4_pdf",
+          "week": 4,
+          "section": "Side 11",
+          "distance": 0.609499
+        },
+        {
+          "doc_id": "week4_source_local_ai_week_4_pdf",
+          "week": 4,
+          "section": "Side 1",
+          "distance": 0.61895156
+        },
+        {
+          "doc_id": "week4_source_local_ai_week_4_pdf",
+          "week": 4,
+          "section": "Side 8",
+          "distance": 0.6516109
+        },
+        {
+          "doc_id": "week6_source_local_rag_pdf",
+          "week": 6,
+          "section": "Side 15",
+          "distance": 0.69306934
+        }
+      ]
+    },
+    {
+      "expected_week": 6,
+      "query": "Custom RAG CLI Flask web OpenWebUI Knowledge retrieval responsibility",
+      "ok": true,
+      "hits": [
+        {
+          "doc_id": "week6_source_openwebui_demo_readme_md",
+          "week": 6,
+          "section": "Week 10 - Tiny website using OpenWebUI API > Goal",
+          "distance": 0.46305153
+        },
+        {
+          "doc_id": "week6_source_local_rag_pdf",
+          "week": 6,
+          "section": "Side 16",
+          "distance": 0.50030124
+        },
+        {
+          "doc_id": "week6_source_local_rag_pdf",
+          "week": 6,
+          "section": "Side 13",
+          "distance": 0.5067012
+        },
+        {
+          "doc_id": "week6_source_local_rag_pdf",
+          "week": 6,
+          "section": "Side 14",
+          "distance": 0.54731476
+        },
+        {
+          "doc_id": "week6_source_local_rag_pdf",
+          "week": 6,
+          "section": "Side 2",
+          "distance": 0.5782732
+        },
+        {
+          "doc_id": "week6_overview",
+          "week": 6,
+          "section": "Tre pakker og placering af ansvar",
+          "distance": 0.5877207
+        }
+      ]
+    },
+    {
+      "expected_week": 8,
+      "query": "Course classification LLM Agent versus Agentic LLM workflow control",
+      "ok": true,
+      "hits": [
+        {
+          "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
+          "week": 8,
+          "section": "Side 2",
+          "distance": 0.31788406
+        },
+        {
+          "doc_id": "week10_source_calculator_orchestration_readme_md",
+          "week": 10,
+          "section": "Agent orchestration: Calculator development > Course terminology",
+          "distance": 0.3801979
+        },
+        {
+          "doc_id": "week10_source_agent_orchestration_lesson_1_pdf",
+          "week": 10,
+          "section": "Side 3",
+          "distance": 0.457435
+        },
+        {
+          "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
+          "week": 8,
+          "section": "Side 4",
+          "distance": 0.4628399
+        },
+        {
+          "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
+          "week": 8,
+          "section": "Side 13",
+          "distance": 0.5107566
+        },
+        {
+          "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
+          "week": 8,
+          "section": "Side 3",
+          "distance": 0.56075054
+        }
+      ]
+    },
+    {
+      "expected_week": 9,
+      "query": "Hvad viser CNN-animationen med tre tegn og tre softmax-outputhoveder?",
+      "ok": true,
+      "hits": [
+        {
+          "doc_id": "week9_overview",
+          "week": 9,
+          "section": "Ikke-lineære modeller og neurale netværk",
+          "distance": 0.33435756
+        },
+        {
+          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
+          "week": 9,
+          "section": "Videoens indhold",
+          "distance": 0.35297215
+        },
+        {
+          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
+          "week": 9,
+          "section": "Videoens indhold",
+          "distance": 0.5116216
+        },
+        {
+          "doc_id": "week9_source_gradient_descent_fit_mp4",
+          "week": 9,
+          "section": "Videoens indhold",
+          "distance": 0.52829826
+        },
+        {
+          "doc_id": "week9_source_kfold_fit_evolution_dual_init_mp4",
+          "week": 9,
+          "section": "Videoens indhold",
+          "distance": 0.5736376
+        },
+        {
+          "doc_id": "week9_overview",
+          "week": 9,
+          "section": "Gradient descent og initialisering",
+          "distance": 0.611825
+        }
+      ]
+    },
+    {
+      "expected_week": 10,
+      "query": "Coder Reviewer orchestrator maximum three feedback returns four coding attempts",
+      "ok": true,
+      "hits": [
+        {
+          "doc_id": "week10_source_agent_orchestration_lesson_1_pdf",
+          "week": 10,
+          "section": "Side 4",
+          "distance": 0.5067644
+        },
+        {
+          "doc_id": "week10_source_calculator_orchestration_readme_md",
+          "week": 10,
+          "section": "Agent orchestration: Calculator development > Architecture and outcome",
+          "distance": 0.52855694
+        },
+        {
+          "doc_id": "week10_source_agent_orchestration_lesson_1_pdf",
+          "week": 10,
+          "section": "Side 9",
+          "distance": 0.56666195
+        },
+        {
+          "doc_id": "week10_source_calculator_orchestration_docs_architecture_orchestration_drawio",
+          "week": 10,
+          "section": "Diagram — Bounded coder and reviewer orchestration",
+          "distance": 0.60227096
+        },
+        {
+          "doc_id": "week10_source_calculator_orchestration_docs_architecture_orchestration_drawio",
+          "week": 10,
+          "section": "Diagram — Bounded coder and reviewer orchestration",
+          "distance": 0.6582849
+        },
+        {
+          "doc_id": "week10_source_calculator_orchestration_readme_md",
+          "week": 10,
+          "section": "Agent orchestration: Calculator development > Architecture and outcome",
+          "distance": 0.66752934
+        }
+      ]
+    }
+  ],
+  "overlapping_topic_probe": {
+    "result": {
+      "expected_week": 9,
+      "query": "BMI gradient descent training validation loss K fold dual initialization",
+      "ok": false,
+      "hits": [
+        {
+          "doc_id": "week3_source_exercise_3_1_ipynb",
+          "week": 3,
+          "section": "Celle 8 — markdown > 3. Standardization",
+          "distance": 0.65174013
+        },
+        {
+          "doc_id": "week3_source_week3_pdf",
+          "week": 3,
+          "section": "Side 22",
+          "distance": 0.66229707
+        },
+        {
+          "doc_id": "week3_source_exercise_3_1_ipynb",
+          "week": 3,
+          "section": "Celle 12 — markdown > 5. Training cycle",
+          "distance": 0.66957307
+        },
+        {
+          "doc_id": "week3_source_week3_pdf",
+          "week": 3,
+          "section": "Side 24",
+          "distance": 0.66957736
+        },
+        {
+          "doc_id": "week3_source_exercise_3_1_ipynb",
+          "week": 3,
+          "section": "Celle 1 — markdown > Simple Linear Regression via Gradient Descent",
+          "distance": 0.6698518
+        },
+        {
+          "doc_id": "week3_gradient_descent_and_embeddings",
+          "week": 3,
+          "section": "4. Gradient descent",
+          "distance": 0.6933409
+        }
+      ]
+    },
+    "interpretation": "Gradient descent og validering findes i både uge 3 og 9. Den brede søgning finder relevante uge 3-noter; uge 9 verificeres derfor særskilt med CNN-animationens indhold. Ingen filterændring er foretaget."
+  },
+  "cross_language_probe": {
+    "result": {
+      "expected_week": 9,
+      "query": "CNN three letters mixed scripts convolution feature maps three softmax heads",
+      "ok": false,
+      "hits": [
+        {
+          "doc_id": "week3_source_hallucinations1_pdf",
+          "week": 3,
+          "section": "Side 21",
+          "distance": 0.80171186
+        },
+        {
+          "doc_id": "week3_source_injection2_pdf",
+          "week": 3,
+          "section": "Side 3",
+          "distance": 0.80175555
+        },
+        {
+          "doc_id": "week3_source_ambiguity1_pdf",
+          "week": 3,
+          "section": "Side 13",
+          "distance": 0.8018724
+        },
+        {
+          "doc_id": "week3_source_injection1_pdf",
+          "week": 3,
+          "section": "Side 30",
+          "distance": 0.8084228
+        },
+        {
+          "doc_id": "week1_complete_rag",
+          "week": 1,
+          "section": "2. Machine learning foundations > Relationship between AI, ML, and LLMs",
+          "distance": 0.81500727
+        },
+        {
+          "doc_id": "week1_complete_rag",
+          "week": 1,
+          "section": "1. Machine Learning 0.0.1 — Hand-held training data",
+          "distance": 0.81652945
+        }
+      ]
+    },
+    "interpretation": "Den engelske CNN-forespørgsel finder ikke de danske videobeskrivelser blandt de seks første resultater. Dansk spørgsmål finder uge 9 som første resultat. Tværsproglig retrieval skal vurderes i fase 7; ingen algoritme eller filtrering er ændret for at bestå prøven."
+  }
+}

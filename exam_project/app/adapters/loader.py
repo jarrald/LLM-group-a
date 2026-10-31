@@ -20,6 +20,7 @@ modified.
 from __future__ import annotations
 
 import logging
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -88,15 +89,17 @@ def discover_lectures(directory: Path, course_id: str) -> list[LectureDocument]:
         raise FileNotFoundError(f"course material directory not found: {directory}")
 
     documents: list[LectureDocument] = []
-    for path in sorted(directory.rglob("*.md")):
-        relative_parts = [part.lower() for part in path.relative_to(directory).parts]
-        if _RAW_MATERIAL_DIRECTORY in relative_parts:
-            logger.debug("skipping raw material: %s", path)
-            continue
-        if week_number(path, directory) is None:
-            logger.debug("skipping %s: not inside a week<N> directory", path)
-            continue
-        documents.append(load_lecture(path, course_id, directory))
+    for folder, directories, files in os.walk(directory):
+        # Råmateriale og kopierede miljøer gennemløbes slet ikke.
+        directories[:] = sorted(name for name in directories if name.lower() not in {_RAW_MATERIAL_DIRECTORY, ".venv", "venv", "__pycache__", "node_modules", ".git"})
+        for name in sorted(files):
+            if not name.lower().endswith(".md"):
+                continue
+            path = Path(folder) / name
+            if week_number(path, directory) is None:
+                logger.debug("skipping %s: not inside a week<N> directory", path)
+                continue
+            documents.append(load_lecture(path, course_id, directory))
 
     documents.sort(key=lambda document: (document.lecture, document.doc_id))
     return documents
