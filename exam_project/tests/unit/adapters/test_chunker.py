@@ -113,6 +113,26 @@ def test_chunk_document_drops_heading_only_stubs(tmp_path: Path) -> None:
     assert all("## Contents" != chunk.text.strip() for chunk in chunks)
 
 
+def test_chunk_document_does_not_interpret_python_comments_as_markdown_headings(tmp_path: Path) -> None:
+    text = "## Kodeeksempel\n\n```python\n# Kildekommentar\nvalue = 42\n\n## Endnu en kommentar\nprint(value)\n```\n"
+
+    chunks = chunk_document(make_document(tmp_path / "week6.md", text))
+
+    assert len(chunks) == 1
+    assert chunks[0].section == "Kodeeksempel"
+    assert "# Kildekommentar" in chunks[0].text
+    assert chunks[0].text.count("```") == 2
+
+
+def test_chunk_document_preserves_nested_fence_examples(tmp_path: Path) -> None:
+    text = "## Markdown-eksempel\n\n````markdown\n# En overskrift som data\n\n```python\nprint('Dette er referencekode')\n```\n````\n"
+
+    chunks = chunk_document(make_document(tmp_path / "week6.md", text), max_chars=100)
+
+    assert len(chunks) == 1
+    assert chunks[0].text == text.strip()
+
+
 def test_chunk_document_retains_all_substantive_text(tmp_path: Path) -> None:
     document = make_document(tmp_path / "week1.md", SIMPLE)
 

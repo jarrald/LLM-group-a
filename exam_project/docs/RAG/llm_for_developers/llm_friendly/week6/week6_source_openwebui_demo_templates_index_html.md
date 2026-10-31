@@ -1,0 +1,88 @@
+<!-- studygraph:converted-source:v1 -->
+# Uge 6 — index (html)
+
+Kilde: [week6/openwebui_demo/templates/index.html](../../source/week6/openwebui_demo/templates/index.html).
+
+Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+
+### Kildelinjer 1–45
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Week 10 - OpenWebUI Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f7fc;
+        color: #1c2028;
+        margin: 0;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 860px;
+        margin: 0 auto;
+        background: white;
+        border: 1px solid #d8e0ef;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 24px rgba(18,34,64,0.08);
+      }
+      h1 { margin-top: 0; color: #122240; }
+      .meta {
+        font-size: 0.95rem;
+        color: #5a6370;
+        margin-bottom: 1rem;
+      }
+      textarea {
+        width: 100%;
+        min-height: 140px;
+        border-radius: 12px;
+        border: 1px solid #cfd8ea;
+        padding: 0.9rem;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+      button {
+        margin-top: 1rem;
+        background: #3668c9;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+```
+
+### Kildelinjer 46–72
+
+```html
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.6; cursor: wait; }
+      .output {
+        margin-top: 1.25rem;
+        background: #f9fbff;
+        border: 1px solid #d8e0ef;
+        border-radius: 12px;
+        padding: 1rem;
+        white-space: pre-wrap;
+      }
+      .label { font-weight: bold; color: #122240; margin-bottom: 0.4rem; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Tiny OpenWebUI API Demo</h1>
+      <div class="meta">Configured model: <strong>{{ model_name }}</strong></div>
+      <label for="message" class="label">Ask a question</label>
+      <textarea id="message" placeholder="Ask something that can use the model or attached Knowledge."></textarea>
+      <button id="sendBtn">Send</button>
+      <div class="output" id="output">The model response will appear here.</div>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+```

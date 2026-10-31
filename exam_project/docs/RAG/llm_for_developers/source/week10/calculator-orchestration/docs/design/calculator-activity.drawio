@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="24.7.17">
+  <diagram id="calculator-activity.drawio" name="Console calculation activity">
+    <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="Start console" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="430" y="20" width="250" height="50" />
+        </mxCell>
+        <mxCell id="read" value="Read first number, operator,&#10;second number and parse numbers" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="380" y="110" width="350" height="70" />
+        </mxCell>
+        <mxCell id="valid" value="Parsing&#10;succeeded?" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rhombus;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="450" y="220" width="210" height="110" />
+        </mxCell>
+        <mxCell id="calc" value="Calculator.calculate" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="430" y="380" width="250" height="60" />
+        </mxCell>
+        <mxCell id="ok" value="Calculation&#10;succeeded?" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rhombus;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="450" y="480" width="210" height="110" />
+        </mxCell>
+        <mxCell id="result" value="Print Result&#10;Exit 0" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="430" y="670" width="250" height="70" />
+        </mxCell>
+        <mxCell id="invalid" value="Print Error: Invalid number&#10;Exit 1" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="780" y="240" width="320" height="80" />
+        </mxCell>
+        <mxCell id="error" value="Print Error: domain message&#10;Exit 1" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="780" y="500" width="320" height="80" />
+        </mxCell>
+        <mxCell id="edge0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="start" target="read">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="read" target="valid">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge2" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="valid" target="calc">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge3" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="valid" target="invalid">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="calc" target="ok">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge5" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="ok" target="result">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge6" value="ValueError" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="ok" target="error">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

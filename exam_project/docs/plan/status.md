@@ -1,6 +1,6 @@
 # StudyGraph — Project Status
 
-**Last updated:** 2026-10-30 (session 4) · **Branch:** `mandatory-1` ·
+**Last updated:** 2026-10-31 (session 6) · **Branch:** `mandatory-1` ·
 **Current phase:** 6 of 9 complete (0–6) — evaluation next
 
 This is the file to read first in a new session. It must always reflect reality, not intent.
@@ -12,7 +12,7 @@ same services the CLI uses: a Buddy is created with the three T's (Traits, Tone,
 optional course material, a conversation freezes that configuration, the Task is chosen per
 message, answers stream token by token, and a course-grounded answer lists the retrieved
 chunks with their distances while a general answer says so explicitly. Verified in the browser
-on 2026-10-30. 90 tests pass; ruff and mypy are clean. What remains: the formal RAG
+on 2026-10-30. 103 tests pass; ruff and mypy are clean. What remains: the formal RAG
 evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging + synopsis
 (Phase 9).
 
@@ -25,13 +25,13 @@ evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging +
 | Environment (`uv`, deps) | **Done** — CPython 3.12, deps, project installed editable |
 | Domain model, snapshots, SQLite persistence | **Done** |
 | Prompt construction (three T's + Task, versioned templates) | **Done** |
-| Ingestion + retrieval (**153 chunks**, 8 documents, `ok/empty/failed/skipped`) | **Done** |
+| Kildemateriale og chunking (**1.659 chunks**, 85 dokumenter) | **Done** — 73 kilder dækket, uge 1, 2, 3, 4, 6, 8, 9, 10 (ADR-021) |
 | LangGraph chat flow (batch + streaming) | **Done** |
 | Services (Buddy, Chat) + seeded default Buddy pair | **Done** |
 | **Streamlit UI: Chat, Buddies, About** | **Done** — streaming, mode badge, sources expander |
 | CLI tools (`smoke_llm`, `ingest`, `search`, `ask`) | **Done** |
 | Evaluation results | Templates + one exploratory run; the formal table is next |
-| Tests | **95 passing** (unit, integration, UI via `AppTest`) |
+| Tests | **103 passing** (unit, integration, UI via `AppTest`) |
 
 ## 3. Environment verified on 2026-10-30
 
@@ -47,11 +47,20 @@ evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging +
 | App | `uv run streamlit run app/main.py` → `http://localhost:8501`, dark theme |
 | Browser run | Buddy created with course → 📚 Course-grounded + `Sources (4)` (0.425/0.689/0.793/0.794); Buddy without course → 🧠 General, no sources |
 
+Aktuel materialekontrol 2026-10-31: `uv run --group conversion python .\scripts\check_course_material.py --verify-pdfs`
+gav 0 fejl. `uv run python .\scripts\ingest.py --recreate` genopbyggede `llms_for_devs_v1`
+med **1.659 chunks**, embeddingmodel `nomic-embed-text` og chunker-version 2. Embedding på
+denne maskines CPU tog **569,1 sekunder**. Tabellen ovenfor er historisk miljøevidens fra 2026-10-30.
+`doctor.py` melder alle kontroller OK med 85 dokumenter og 1.659 indekserede chunks.
+Konkrete søgeprøver og begrænsninger er gemt i
+`docs/RAG/llm_for_developers/llm_friendly/retrieval-check.json`; især tværsproglig
+søgning mellem engelske spørgsmål og danske medienoter kræver vurdering i fase 7.
+
 ## 4. Open decisions
 
 | Decision | ADR | Blocking |
 |---|---|---|
-| PDF → Markdown tool | ADR-008 (Proposed) — only needed if later weeks arrive as PDFs | later weeks |
+| PDF → Markdown tool | Lukket med ADR-021: PyMuPDF og valgfri OCR | — |
 | Relevance threshold / final `top_k` | — to be added after Phase 7 | evaluation only |
 | Supplementary uploads in V1? | — to be added | Phase 9 |
 
@@ -62,7 +71,7 @@ per message (ADR-017), three pages (ADR-018), additive migrations (ADR-019).
 
 | Blocker | Impact | Next action |
 |---|---|---|
-| Weeks 4+ not yet released | The evaluation covers weeks 1–3 only | Add each new week as `llm_friendly/week<N>/*.md` and re-run `ingest.py` (R-02) |
+| Uge 5 og 7 er ikke leveret | Korpusset dækker de otte uploadede uger | Tilføj materialet, hvis det bliver tilgængeligt; nuværende evaluering kan fortsætte. |
 
 Nothing blocks progress. Reproducibility was verified on 2026-10-30: a clean run into a
 throw-away collection (`repro_check_v1`) produced the same 153 chunks from the repository
@@ -96,3 +105,4 @@ alone, and `scripts/doctor.py` reports every prerequisite with a fix hint.
 | 2026-10-30 (3) | Phases 1–5: chunking, index, prompts, graph, services | Models verified (`llama3.2:3b` 2.9 s, `nomic-embed-text` 768-d); Chroma server up; loader + chunker + embedder + retriever + chroma client; `scripts/{smoke_llm,ingest,search,ask}.py`; 57 chunks indexed idempotently; retrieval verified (Overfitting section, distance 0.416); domain model + SQLite store; 4T prompt builder with grounding rules; LangGraph routing + Ollama client + Buddy/Chat services; **83 tests**, ruff and mypy clean; end-to-end `--compare` run recorded. |
 | 2026-10-30 (4) | Phase 6: Streamlit UI + decisions | ADR-017 (three T's, Task per message), ADR-018 (three pages), ADR-019 (additive migrations); FR-14 reworded; streaming through the same graph (state `on_token`); seeded Buddy pair (FR-14); `retrieval_top_k` persisted; pages `app/ui/{chat,buddies,about}_page.py` + `clients.py` + `components.py`; dark theme in `.streamlit/config.toml`; **90 tests** (incl. 4 AppTest), ruff/mypy clean; verified in the browser: grounded answer + `Sources (4)` and general answer without sources. |
 | 2026-10-30 (5) | Reproducibility repair after the material reorganisation | Loader made layout-tolerant (ADR-020): 8 documents → **153 chunks**, re-indexed and verified (prompt injection 0.42, gradient descent 0.33), idempotent; fresh-collection run reproduced 153 chunks; `scripts/doctor.py` added and verified (pass **and** failure path); README rewritten with `uv run chroma`, a first-run checklist and a troubleshooting table; **95 tests**, ruff/mypy clean. |
+| 2026-10-31 (6) | Konvertering af hele det uploadede kursusmateriale | SG-026 / ADR-021: 73 kilder, 15 PDF'er og 346 sider, 85 dokumenter og 1.659 chunks. Nye oversigter for uge 4, 6, 8, 9 og 10; eksisterende noter bevaret. Genkørbart konverteringsscript, manifest, mediebeskrivelser og kontrol af tekstbevarelse. Loaderen springer råmiljøer over; chunker-version 2 bevarer kodeblokke. 103 tests består, ruff er ren, mypy er ren i 35 kildefiler. |

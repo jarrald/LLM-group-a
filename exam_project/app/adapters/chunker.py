@@ -17,7 +17,7 @@ from dataclasses import dataclass
 
 from app.adapters.loader import LectureDocument
 
-CHUNKER_VERSION = "1"
+CHUNKER_VERSION = "2"
 DEFAULT_MAX_CHARS = 900
 DEFAULT_OVERLAP_CHARS = 120
 MIN_CHUNK_CHARS = 80
@@ -54,6 +54,7 @@ def _blocks(text: str) -> list[_Block]:
     stack: list[tuple[int, str]] = []
     heading_line = ""
     body_lines: list[str] = []
+    active_fence = ""
 
     def flush() -> None:
         body = "\n".join(body_lines).strip()
@@ -61,6 +62,18 @@ def _blocks(text: str) -> list[_Block]:
         blocks.append(_Block(section=section, heading_line=heading_line, body=body))
 
     for line in text.split("\n"):
+        fence_match = re.match(r"^\s*(`{3,}|~{3,})", line)
+        if fence_match:
+            marks = fence_match.group(1)
+            if not active_fence:
+                active_fence = marks
+            elif marks[0] == active_fence[0] and len(marks) >= len(active_fence):
+                active_fence = ""
+            body_lines.append(line)
+            continue
+        if active_fence:
+            body_lines.append(line)
+            continue
         match = _HEADING.match(line)
         if match:
             flush()
@@ -81,11 +94,16 @@ def _paragraphs(text: str) -> list[str]:
     """Split on blank lines, but never inside a fenced code block."""
     paragraphs: list[str] = []
     current: list[str] = []
-    in_fence = False
+    active_fence = ""
     for line in text.split("\n"):
-        if line.strip().startswith(_FENCE):
-            in_fence = not in_fence
-        if not in_fence and not line.strip() and current:
+        fence_match = re.match(r"^\s*(`{3,}|~{3,})", line)
+        if fence_match:
+            marks = fence_match.group(1)
+            if not active_fence:
+                active_fence = marks
+            elif marks[0] == active_fence[0] and len(marks) >= len(active_fence):
+                active_fence = ""
+        if not active_fence and not line.strip() and current:
             paragraphs.append("\n".join(current).strip())
             current = []
         else:
@@ -139,7 +157,7 @@ def _split_body(body: str, budget: int, overlap: int) -> list[str]:
             if current:
                 pieces.append(current)
                 current = ""
-            if _FENCE in paragraph:
+            if re.search(r"(?m)^\s*(?:`{3,}|~{3,})", paragraph):
                 pieces.append(paragraph)  # a code block is kept whole, even if oversized
             else:
                 pieces.extend(_split_long_text(paragraph, budget, overlap))
