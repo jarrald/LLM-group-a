@@ -1,0 +1,489 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" pages="5">
+  <diagram name="conceptual diagram" id="HaKrB55tvubC8nFWTcw9">
+    <mxGraphModel dx="3679" dy="2011" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LnahfK2M6uW5vSomlGzr-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F7FC;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="950" width="1400" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#172554;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="950" width="250" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-3" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#FFFFFF;" value="✦  STUDY BUDDY" vertex="1">
+          <mxGeometry height="50" width="200" x="45" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-4" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#93A4C7;" value="WORKSPACE" vertex="1">
+          <mxGeometry height="25" width="170" x="45" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#334477;strokeColor=none;fontColor=#FFFFFF;fontSize=15;" value="⌂   Dashboard" vertex="1">
+          <mxGeometry height="48" width="220" x="35" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-6" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="✦   My AI Buddy" vertex="1">
+          <mxGeometry height="45" width="220" x="35" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-7" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="▤   My Study Sessions" vertex="1">
+          <mxGeometry height="45" width="220" x="35" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-8" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="◎   My Progress / Test Cards" vertex="1">
+          <mxGeometry height="45" width="220" x="35" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-9" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="⚙   Settings" vertex="1">
+          <mxGeometry height="45" width="220" x="35" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-11" parent="1" style="text;html=1;align=left;fontSize=29;fontStyle=1;fontColor=#172554;" value="Welcome! 👋" vertex="1">
+          <mxGeometry height="45" width="550" x="310" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-12" parent="1" style="text;html=1;align=left;fontSize=15;fontColor=#64748B;" value="Let&#39;s build your perfect AI study buddy." vertex="1">
+          <mxGeometry height="30" width="600" x="310" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-14" parent="1" style="text;html=1;align=left;fontSize=23;fontStyle=1;fontColor=#172554;" value="Customize your AI Buddy" vertex="1">
+          <mxGeometry height="40" width="600" x="310" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-15" parent="1" style="text;html=1;align=left;fontSize=14;fontColor=#64748B;" value="Choose from the 4 Ts to create a study companion that works your way." vertex="1">
+          <mxGeometry height="30" width="850" x="310" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DCE4F2;strokeWidth=1;shadow=1;" value="" vertex="1">
+          <mxGeometry height="220" width="510" x="310" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-17" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=none;fontSize=30;" value="🧠" vertex="1">
+          <mxGeometry height="65" width="65" x="340" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-18" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#5B21B6;" value="1. TRAITS" vertex="1">
+          <mxGeometry height="35" width="300" x="425" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-19" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=14;fontColor=#64748B;" value="Define your AI buddy&#39;s personality and characteristics." vertex="1">
+          <mxGeometry height="45" width="350" x="425" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F3FF;strokeColor=none;fontColor=#5B21B6;fontSize=13;align=left;spacingLeft=15;" value="Friendly  •  Patient  •  Motivating&#xa;Creative  •  Analytical  •  Curious" vertex="1">
+          <mxGeometry height="55" width="440" x="340" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DCE4F2;strokeWidth=1;shadow=1;" value="" vertex="1">
+          <mxGeometry height="220" width="510" x="850" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-22" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=none;fontSize=30;" value="📚" vertex="1">
+          <mxGeometry height="65" width="65" x="880" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-23" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#1D4ED8;" value="2. TASKS" vertex="1">
+          <mxGeometry height="35" width="300" x="965" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-24" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=14;fontColor=#64748B;" value="Choose what your AI buddy should help you accomplish." vertex="1">
+          <mxGeometry height="45" width="350" x="965" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-25" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=none;fontColor=#1D4ED8;fontSize=13;align=left;spacingLeft=15;" value="Explain topics  •  Summarize notes&#xa;Create quizzes  •  Solve problems" vertex="1">
+          <mxGeometry height="55" width="440" x="880" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-26" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DCE4F2;strokeWidth=1;shadow=1;" value="" vertex="1">
+          <mxGeometry height="220" width="510" x="310" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-27" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FCE7F3;strokeColor=none;fontSize=30;" value="💬" vertex="1">
+          <mxGeometry height="65" width="65" x="340" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-28" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#BE185D;" value="3. TONES" vertex="1">
+          <mxGeometry height="35" width="300" x="425" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-29" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=14;fontColor=#64748B;" value="Select the communication style you prefer." vertex="1">
+          <mxGeometry height="45" width="350" x="425" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-30" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F8;strokeColor=none;fontColor=#BE185D;fontSize=13;align=left;spacingLeft=15;" value="Casual  •  Professional  •  Encouraging&#xa;Funny  •  Simple  •  Academic" vertex="1">
+          <mxGeometry height="55" width="440" x="340" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-31" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DCE4F2;strokeWidth=1;shadow=1;" value="" vertex="1">
+          <mxGeometry height="220" width="510" x="850" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-32" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=none;fontSize=30;" value="🎯" vertex="1">
+          <mxGeometry height="65" width="65" x="880" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-33" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#15803D;" value="4. TARGETS" vertex="1">
+          <mxGeometry height="35" width="300" x="965" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-34" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=14;fontColor=#64748B;" value="Set your learning goals and desired outcomes." vertex="1">
+          <mxGeometry height="45" width="350" x="965" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-35" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=none;fontColor=#15803D;fontSize=13;align=left;spacingLeft=15;" value="Exam preparation  •  Better grades&#xa;Daily learning  •  Skill development" vertex="1">
+          <mxGeometry height="55" width="440" x="880" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-36" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EDFF;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="145" width="1050" x="310" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-37" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#172554;" value="Ready to create your study buddy?" vertex="1">
+          <mxGeometry height="35" width="550" x="340" y="795" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-38" parent="1" style="text;html=1;align=left;fontSize=14;fontColor=#64748B;" value="Review your choices and generate your personalized AI study companion." vertex="1">
+          <mxGeometry height="30" width="650" x="340" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-39" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4F46E5;strokeColor=none;fontColor=#FFFFFF;fontSize=16;fontStyle=1;" value="Create My AI Buddy  →" vertex="1">
+          <mxGeometry height="55" width="240" x="1080" y="815" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-41" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F7FC;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="950" width="1400" x="35" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-42" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#172554;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="950" width="250" x="35" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-43" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#FFFFFF;" value="✦  STUDY BUDDY" vertex="1">
+          <mxGeometry height="50" width="200" x="60" y="1125" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-44" parent="1" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#93A4C7;" value="WORKSPACE" vertex="1">
+          <mxGeometry height="25" width="170" x="60" y="1225" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-45" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=15;fillColor=#334477;strokeColor=none;fontColor=#FFFFFF;fontSize=15;" value="⌂   Dashboard" vertex="1">
+          <mxGeometry height="48" width="220" x="50" y="1260" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-46" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="✦   My AI Buddy" vertex="1">
+          <mxGeometry height="45" width="220" x="50" y="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-47" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="▤   My Study Sessions" vertex="1">
+          <mxGeometry height="45" width="220" x="50" y="1370" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-48" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="◎   My Progress / Test Cards" vertex="1">
+          <mxGeometry height="45" width="220" x="50" y="1420" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-49" parent="1" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=15;fontColor=#D5DDF0;fontSize=15;" value="⚙   Settings" vertex="1">
+          <mxGeometry height="45" width="220" x="50" y="1480" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-51" parent="1" style="text;html=1;align=left;fontSize=29;fontStyle=1;fontColor=#172554;" value="Chat with your buddy" vertex="1">
+          <mxGeometry height="45" width="550" x="325" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-56" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DCE4F2;strokeWidth=1;shadow=1;" value="&lt;font style=&quot;font-size: 34px;&quot;&gt;&amp;lt;Conversation&amp;gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="640" width="1035" x="325" y="1190" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-76" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#E8EDFF,#121212);strokeColor=none;shadow=1;" value="" vertex="1">
+          <mxGeometry height="145" width="1050" x="325" y="1850" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-77" parent="1" style="text;html=1;align=left;fontSize=21;fontStyle=1;fontColor=#172554;strokeColor=light-dark(transparent,#232A36);" value="Enter question to study buddy..." vertex="1">
+          <mxGeometry height="35" width="550" x="355" y="1905" as="geometry" />
+        </mxCell>
+        <mxCell id="LnahfK2M6uW5vSomlGzr-79" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4F46E5;strokeColor=none;fontColor=#FFFFFF;fontSize=16;fontStyle=1;" value="&lt;div&gt;Send&lt;/div&gt;" vertex="1">
+          <mxGeometry height="55" width="240" x="1095" y="1895" as="geometry" />
+        </mxCell>
+        <mxCell id="o_fuvFiePsBZ7eWYRhAe-1" parent="1" style="rounded=1;fillColor=#4F46E5;strokeColor=#383943;fontColor=#FFFFFF;fontSize=13" value="Select buddy ▾" vertex="1">
+          <mxGeometry height="45" width="170" x="1115" y="1130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="01 - My Study Buddy" id="Ua-nHkmLcnw4rFAkJok0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1440" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" parent="1" style="rounded=1;fillColor=#17181E;strokeColor=none" value="" vertex="1">
+          <mxGeometry height="900" width="1400" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="side" parent="1" style="rounded=1;fillColor=#C4D0F5;strokeColor=none" value="" vertex="1">
+          <mxGeometry height="900" width="245" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="logo" parent="1" style="text;fontSize=20;fontStyle=1;fontColor=#111827" value="✦ STUDY BUDDY" vertex="1">
+          <mxGeometry height="35" width="190" x="35" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="nav" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=14;fontColor=#172554;spacing=5" value="WORKSPACE&#xa;&#xa;⌂  Dashboard&#xa;&#xa;✦  My Study Buddy&#xa;&#xa;▤  My Study Sessions&#xa;&#xa;◎  My Progress / Test Cards&#xa;&#xa;⚙  Settings" vertex="1">
+          <mxGeometry height="300" width="200" x="35" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="heading" parent="1" style="text;fontSize=30;fontStyle=1;fontColor=#FFFFFF" value="My Study Buddies ✦" vertex="1">
+          <mxGeometry height="45" width="600" x="295" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="sub" parent="1" style="text;fontSize=14;fontColor=#A5A9BA" value="Create, manage and personalize your AI study companions." vertex="1">
+          <mxGeometry height="30" width="700" x="295" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="create" parent="1" style="rounded=1;fillColor=#A99AFF;strokeColor=none;fontColor=#17181E;fontSize=15;fontStyle=1" value="+ Create New Buddy" vertex="1">
+          <mxGeometry height="48" width="215" x="1150" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="search" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#383943;fontColor=#A5A9BA;fontSize=14;align=left;spacingLeft=15" value="⌕ Search your buddies..." vertex="1">
+          <mxGeometry height="45" width="400" x="295" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="filter" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#383943;fontColor=#FFFFFF;fontSize=13" value="All buddies ▾" vertex="1">
+          <mxGeometry height="45" width="170" x="715" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="c1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202127;strokeColor=#55506E;fontColor=#FFFFFF;fontSize=15;spacing=12;align=left" value="🧠&#xa;ALEX&#xa;Friendly study companion&#xa;&#xa;Traits: Friendly, Patient&#xa;Tasks: Explain, Quiz, Summarize&#xa;Tone: Casual&#xa;Target: Exam preparation&#xa;&#xa;[ Customize ]     [ Chat → ]" vertex="1">
+          <mxGeometry height="290" width="330" x="295" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202127;strokeColor=#55506E;fontColor=#FFFFFF;fontSize=15;spacing=12;align=left" value="📚&lt;br&gt;PROFESSOR and ALEX&lt;br&gt;Academic assistant&lt;br&gt;&lt;br&gt;Traits: Analytical, Precise&lt;br&gt;Tasks: Explain, Analyze, Solve&lt;br&gt;Tone: Professional&lt;br&gt;Target: Deep understanding&lt;br&gt;&lt;br&gt;[ Customize ]     [ Chat → ]" vertex="1">
+          <mxGeometry height="290" width="330" x="650" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202127;strokeColor=#55506E;fontColor=#FFFFFF;fontSize=15;spacing=12;align=left" value="🎯&#xa;EXAM COACH&#xa;Focused on exam success&#xa;&#xa;Traits: Motivating, Direct&#xa;Tasks: Test, Quiz, Review&#xa;Tone: Encouraging&#xa;Target: Exam preparation&#xa;&#xa;[ Customize ]     [ Chat → ]" vertex="1">
+          <mxGeometry height="290" width="330" x="1005" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="customTitle" parent="1" style="text;fontSize=22;fontStyle=1;fontColor=#FFFFFF" value="Buddy customization preview" vertex="1">
+          <mxGeometry height="35" width="500" x="295" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="custom" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202127;strokeColor=#55506E;fontColor=#FFFFFF;fontSize=15;spacing=15;align=left" value="TRAITS        TASKS        TONES        TARGETS&#xa;&#xa;Personality   What to do   Communication   Learning goals&#xa;&#xa;Additional options: Name, avatar, subject expertise, response length, difficulty level, language and memory preferences.&#xa;&#xa;[ Cancel ]                                      [ Save Changes ]" vertex="1">
+          <mxGeometry height="290" width="1040" x="280" y="600" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="02 - My Study Sessions" id="TWY8rFyanyFppR4-PvXi">
+    <mxGraphModel dx="1689" dy="923" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1440" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" parent="1" style="rounded=1;fillColor=#17181E;strokeColor=none" value="" vertex="1">
+          <mxGeometry height="900" width="1400" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="side" parent="1" style="rounded=1;fillColor=#C4D0F5;strokeColor=none" value="" vertex="1">
+          <mxGeometry height="900" width="245" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="logo" parent="1" style="text;fontSize=20;fontStyle=1;fontColor=#111827" value="✦ STUDY BUDDY" vertex="1">
+          <mxGeometry height="35" width="190" x="35" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="nav" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=14;fontColor=#172554;spacing=5" value="WORKSPACE&#xa;&#xa;⌂  Dashboard&#xa;&#xa;✦  My Study Buddy&#xa;&#xa;▤  My Study Sessions&#xa;&#xa;◎  My Progress / Test Cards&#xa;&#xa;⚙  Settings" vertex="1">
+          <mxGeometry height="300" width="200" x="35" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="heading" parent="1" style="text;fontSize=30;fontStyle=1;fontColor=#FFFFFF" value="My Study Sessions" vertex="1">
+          <mxGeometry height="45" width="600" x="295" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="sub" parent="1" style="text;fontSize=14;fontColor=#A5A9BA" value="Revisit your conversations and continue where you left off." vertex="1">
+          <mxGeometry height="30" width="700" x="295" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="search" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#383943;fontColor=#A5A9BA;fontSize=14;align=left;spacingLeft=15" value="⌕ Search conversations, topics or keywords..." vertex="1">
+          <mxGeometry height="45" width="530" x="295" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="filter1" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#383943;fontColor=#FFFFFF;fontSize=13" value="All buddies ▾" vertex="1">
+          <mxGeometry height="45" width="170" x="845" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="filter2" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#383943;fontColor=#FFFFFF;fontSize=13" value="All dates ▾" vertex="1">
+          <mxGeometry height="45" width="160" x="1035" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="label" parent="1" style="text;fontSize=12;fontStyle=1;fontColor=#A5A9BA" value="RECENT CONVERSATIONS" vertex="1">
+          <mxGeometry height="25" width="300" x="295" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202127;strokeColor=#393A43;fontColor=#FFFFFF;fontSize=14;spacing=12;align=left" value="🧠   Understanding Cellular Biology&#xa;       Alex • Biology • Today, 10:30 AM&#xa;&#xa;       You: Can you explain how mitochondria work?&#xa;       Alex: Of course! Think of mitochondria as the cell&#39;s power stations...&#xa;&#xa;       [ Open conversation → ]" vertex="1">
+          <mxGeometry height="135" width="1040" x="295" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202127;strokeColor=#393A43;fontColor=#FFFFFF;fontSize=14;spacing=12;align=left" value="📚   Calculus: Derivatives and Limits&#xa;       Professor • Mathematics • Yesterday, 4:15 PM&#xa;&#xa;       You: Why do we need derivatives?&#xa;       Professor: A derivative describes the instantaneous rate of change...&#xa;&#xa;       [ Open conversation → ]" vertex="1">
+          <mxGeometry height="135" width="1040" x="295" y="415" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202127;strokeColor=#393A43;fontColor=#FFFFFF;fontSize=14;spacing=12;align=left" value="🎯   Preparing for History Exam&#xa;       Exam Coach • History • 28 October 2026&#xa;&#xa;       You: Test me on the French Revolution.&#xa;       Exam Coach: Let&#39;s start with a question about the Estates-General...&#xa;&#xa;       [ Open conversation → ]" vertex="1">
+          <mxGeometry height="135" width="1040" x="295" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="note" parent="1" style="rounded=1;fillColor=#29243A;strokeColor=#51436B;fontColor=#DCCAFF;fontSize=14;align=left;spacingLeft=20" value="Sessions are saved locally on this device. Each conversation remains associated with the buddy that created it." vertex="1">
+          <mxGeometry height="70" width="1040" x="295" y="740" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="03 - My Progress and Test Cards" id="zyrtAi_REafGOkopsOY0">
+    <mxGraphModel dx="1689" dy="923" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1440" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" parent="1" style="rounded=1;fillColor=#17181E;strokeColor=none" value="" vertex="1">
+          <mxGeometry height="900" width="1400" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="side" parent="1" style="rounded=1;fillColor=#C4D0F5;strokeColor=none" value="" vertex="1">
+          <mxGeometry height="900" width="245" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="logo" parent="1" style="text;fontSize=20;fontStyle=1;fontColor=#111827" value="✦ STUDY BUDDY" vertex="1">
+          <mxGeometry height="35" width="190" x="35" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="nav" parent="1" style="text;html=1;whiteSpace=wrap;fontSize=14;fontColor=#172554;spacing=5" value="WORKSPACE&#xa;&#xa;⌂  Dashboard&#xa;&#xa;✦  My Study Buddy&#xa;&#xa;▤  My Study Sessions&#xa;&#xa;◎  My Progress / Test Cards&#xa;&#xa;⚙  Settings" vertex="1">
+          <mxGeometry height="300" width="200" x="35" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="heading" parent="1" style="text;fontSize=29;fontStyle=1;fontColor=#FFFFFF" value="My Progress &amp; Test Cards" vertex="1">
+          <mxGeometry height="45" width="700" x="295" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="sub" parent="1" style="text;fontSize=14;fontColor=#A5A9BA" value="Practice what you&#39;ve learned and track your improvement." vertex="1">
+          <mxGeometry height="30" width="650" x="295" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="stat1" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#393943;fontColor=#FFFFFF;fontSize=16;align=left;spacingLeft=20;spacingTop=15" value="TOTAL QUESTIONS&#xa;128" vertex="1">
+          <mxGeometry height="90" width="245" x="295" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="stat2" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#393943;fontColor=#8DE6A9;fontSize=16;align=left;spacingLeft=20;spacingTop=15" value="CORRECT ANSWERS&#xa;94" vertex="1">
+          <mxGeometry height="90" width="245" x="560" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="stat3" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#393943;fontColor=#DCCAFF;fontSize=16;align=left;spacingLeft=20;spacingTop=15" value="ACCURACY&#xa;73%" vertex="1">
+          <mxGeometry height="90" width="245" x="825" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="stat4" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#393943;fontColor=#91C9FF;fontSize=16;align=left;spacingLeft=20;spacingTop=15" value="TO REVIEW&#xa;12" vertex="1">
+          <mxGeometry height="90" width="245" x="1090" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="chart" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#202127;strokeColor=#393A43;fontColor=#DCCAFF;fontSize=15;align=left;spacing=15" value="YOUR LEARNING PROGRESS&#xa;&#xa;Accuracy over recent practice sessions&#xa;&#xa;   ▂          ▃          ▅          ▆          ▇          █&#xa;  Week 1     Week 2     Week 3     Week 4     Week 5" vertex="1">
+          <mxGeometry height="175" width="475" x="295" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="subjects" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#202127;strokeColor=#393A43;fontColor=#FFFFFF;fontSize=15;align=left;spacing=15" value="PERFORMANCE BY SUBJECT&#xa;&#xa;Biology       █████████  85%&#xa;&#xa;Mathematics   ██████     65%&#xa;&#xa;History       ████████   75%" vertex="1">
+          <mxGeometry height="175" width="540" x="795" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="testtitle" parent="1" style="text;fontSize=22;fontStyle=1;fontColor=#FFFFFF" value="Test Cards" vertex="1">
+          <mxGeometry height="35" width="350" x="295" y="465" as="geometry" />
+        </mxCell>
+        <mxCell id="testdesc" parent="1" style="text;fontSize=13;fontColor=#A5A9BA" value="Answer questions generated by your AI buddies." vertex="1">
+          <mxGeometry height="25" width="450" x="295" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="buddy" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#393A43;fontColor=#FFFFFF;fontSize=12" value="All buddies ▾" vertex="1">
+          <mxGeometry height="38" width="140" x="1050" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="subject" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#393A43;fontColor=#FFFFFF;fontSize=12" value="All subjects ▾" vertex="1">
+          <mxGeometry height="38" width="135" x="1200" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="card" parent="1" style="rounded=1;fillColor=#202127;strokeColor=#55506E;strokeWidth=2" value="" vertex="1">
+          <mxGeometry height="330" width="1040" x="295" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="qnumber" parent="1" style="text;fontSize=12;fontStyle=1;fontColor=#BCAEFF" value="QUESTION 01 / 12" vertex="1">
+          <mxGeometry height="25" width="250" x="330" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="qbuddy" parent="1" style="text;fontSize=12;fontColor=#A5A9BA" value="Alex • Biology" vertex="1">
+          <mxGeometry height="25" width="200" x="1080" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="question" parent="1" style="text;whiteSpace=wrap;fontSize=23;fontStyle=1;fontColor=#FFFFFF;align=center" value="What is the main function of mitochondria&#xa;within a eukaryotic cell?" vertex="1">
+          <mxGeometry height="75" width="870" x="380" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="answer" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#15161B;strokeColor=#42434F;fontColor=#85899B;fontSize=14;align=left;verticalAlign=top;spacingLeft=15;spacingTop=12" value="Write your answer here..." vertex="1">
+          <mxGeometry height="85" width="920" x="355" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="skip" parent="1" style="rounded=1;fillColor=#30313B;strokeColor=none;fontColor=#D1D5E0;fontSize=13" value="Skip question" vertex="1">
+          <mxGeometry height="38" width="155" x="355" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="submit" parent="1" style="rounded=1;fillColor=#A99AFF;strokeColor=none;fontColor=#17181E;fontStyle=1;fontSize=14" value="Submit Answer →" vertex="1">
+          <mxGeometry height="38" width="175" x="1100" y="805" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="XR74XmvHY0_M6Pfl3v13" name="Side-5">
+    <mxGraphModel dx="1776" dy="971" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-1" parent="1" style="rounded=1;fillColor=#17181E;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="970" width="1400" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-2" parent="1" style="rounded=1;fillColor=#C4D0F5;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="970" width="235" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-3" parent="1" style="text;fontSize=20;fontStyle=1;fontColor=#111827;" value="✦ STUDY BUDDY" vertex="1">
+          <mxGeometry height="35" width="190" x="30" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-4" parent="1" style="text;fontSize=11;fontStyle=1;fontColor=#475569;" value="WORKSPACE" vertex="1">
+          <mxGeometry height="25" width="180" x="35" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-5" parent="1" style="text;fontSize=14;fontColor=#172554;" value="⌂   Dashboard" vertex="1">
+          <mxGeometry height="30" width="180" x="40" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-6" parent="1" style="rounded=1;fillColor=#A8B9E8;strokeColor=none;fontSize=14;fontColor=#172554;align=left;spacingLeft=12;" value="✦   My Study Buddy" vertex="1">
+          <mxGeometry height="42" width="205" x="25" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-7" parent="1" style="text;fontSize=14;fontColor=#172554;" value="▤   My Study Sessions" vertex="1">
+          <mxGeometry height="30" width="185" x="40" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-8" parent="1" style="text;fontSize=12;fontColor=#172554;" value="◎   My Progress / Test Cards" vertex="1">
+          <mxGeometry height="30" width="190" x="40" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-9" parent="1" style="text;fontSize=14;fontColor=#172554;" value="⚙   Settings" vertex="1">
+          <mxGeometry height="30" width="180" x="40" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-10" parent="1" style="text;fontSize=29;fontStyle=1;fontColor=#FFFFFF;" value="My Study Buddies ✦" vertex="1">
+          <mxGeometry height="45" width="600" x="280" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-11" parent="1" style="text;fontSize=14;fontColor=#A5A9BA;" value="Choose a buddy and personalize exactly how you want it to help you study." vertex="1">
+          <mxGeometry height="30" width="800" x="280" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-13" parent="1" style="text;fontSize=12;fontStyle=1;fontColor=#A5A9BA;" value="1. CHOOSE YOUR STUDY BUDDY" vertex="1">
+          <mxGeometry height="25" width="400" x="280" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-14" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#302941;strokeColor=#A99AFF;strokeWidth=2;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=15;" value="🧠  ALEX&#xa;      Friendly study buddy" vertex="1">
+          <mxGeometry height="70" width="240" x="280" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-15" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=15;" value="📚  PROFESSOR&#xa;      Academic assistant" vertex="1">
+          <mxGeometry height="70" width="240" x="535" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-16" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#FFFFFF;fontSize=14;align=left;spacingLeft=15;" value="🎯  EXAM COACH&#xa;      Exam preparation" vertex="1">
+          <mxGeometry height="70" width="240" x="790" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-17" parent="1" style="rounded=1;fillColor=#22242C;strokeColor=#41424D;fontColor=#BDB5E8;fontSize=14;" value="+ Add buddy" vertex="1">
+          <mxGeometry height="70" width="325" x="1045" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-18" parent="1" style="text;fontSize=19;fontStyle=1;fontColor=#FFFFFF;" value="2. CUSTOMIZE ALEX" vertex="1">
+          <mxGeometry height="35" width="500" x="280" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-19" parent="1" style="text;fontSize=13;fontColor=#A5A9BA;" value="Select each category below and choose your preferred options." vertex="1">
+          <mxGeometry height="25" width="700" x="280" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-20" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#382D50;strokeColor=#A99AFF;strokeWidth=2;fontColor=#E1D4FF;fontStyle=1;fontSize=15;" value="🧠  TRAITS&#xa;Personality" vertex="1">
+          <mxGeometry height="75" width="260" x="280" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-21" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#91C9FF;fontStyle=1;fontSize=15;" value="📚  TASKS&#xa;What it does" vertex="1">
+          <mxGeometry height="75" width="260" x="550" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-22" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#F5A8D1;fontStyle=1;fontSize=15;" value="💬  TONES&#xa;How it speaks" vertex="1">
+          <mxGeometry height="75" width="260" x="820" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-23" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#22242C;strokeColor=#41424D;fontColor=#8DE6A9;fontStyle=1;fontSize=15;" value="🎯  TARGETS&#xa;Learning goals" vertex="1">
+          <mxGeometry height="75" width="280" x="1090" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-24" parent="1" style="rounded=1;fillColor=#202127;strokeColor=#41424D;" value="" vertex="1">
+          <mxGeometry height="385" width="750" x="280" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-25" parent="1" style="text;fontSize=19;fontStyle=1;fontColor=#FFFFFF;" value="Choose Alex&#39;s personality traits" vertex="1">
+          <mxGeometry height="35" width="550" x="310" y="475" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-26" parent="1" style="text;fontSize=12;fontColor=#A5A9BA;" value="Select as many traits as you like. These define how your buddy behaves." vertex="1">
+          <mxGeometry height="25" width="650" x="310" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-27" parent="1" style="text;fontSize=11;fontStyle=1;fontColor=#A5A9BA;" value="YOUR SELECTED TRAITS" vertex="1">
+          <mxGeometry height="20" width="300" x="310" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-28" parent="1" style="rounded=1;fillColor=#4A3C65;strokeColor=#A99AFF;fontColor=#E9DCFF;fontSize=14;" value="✓ Friendly" vertex="1">
+          <mxGeometry height="42" width="145" x="310" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-29" parent="1" style="rounded=1;fillColor=#4A3C65;strokeColor=#A99AFF;fontColor=#E9DCFF;fontSize=14;" value="✓ Patient" vertex="1">
+          <mxGeometry height="42" width="145" x="470" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-30" parent="1" style="rounded=1;fillColor=#292A34;strokeColor=#515260;fontColor=#D1D5E0;fontSize=14;" value="+ Motivating" vertex="1">
+          <mxGeometry height="42" width="155" x="630" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-31" parent="1" style="rounded=1;fillColor=#292A34;strokeColor=#515260;fontColor=#D1D5E0;fontSize=14;" value="+ Creative" vertex="1">
+          <mxGeometry height="42" width="145" x="310" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-32" parent="1" style="rounded=1;fillColor=#292A34;strokeColor=#515260;fontColor=#D1D5E0;fontSize=14;" value="+ Analytical" vertex="1">
+          <mxGeometry height="42" width="145" x="470" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-33" parent="1" style="rounded=1;fillColor=#292A34;strokeColor=#515260;fontColor=#D1D5E0;fontSize=14;" value="+ Curious" vertex="1">
+          <mxGeometry height="42" width="155" x="630" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-34" parent="1" style="rounded=1;fillColor=#292A34;strokeColor=#515260;fontColor=#D1D5E0;fontSize=14;" value="+ Strict" vertex="1">
+          <mxGeometry height="42" width="145" x="310" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-35" parent="1" style="rounded=1;fillColor=#292A34;strokeColor=#515260;fontColor=#D1D5E0;fontSize=14;" value="+ Supportive" vertex="1">
+          <mxGeometry height="42" width="145" x="470" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-36" parent="1" style="rounded=1;fillColor=#292A34;strokeColor=#515260;fontColor=#D1D5E0;fontSize=14;" value="&lt;Write you own&gt;" vertex="1">
+          <mxGeometry height="42" width="155" x="630" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-37" parent="1" style="text;fontSize=12;fontColor=#A5A9BA;" value="You can combine multiple traits to create a unique personality." vertex="1">
+          <mxGeometry height="25" width="650" x="310" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-38" parent="1" style="rounded=1;fillColor=#24232F;strokeColor=#55476E;" value="" vertex="1">
+          <mxGeometry height="385" width="320" x="1050" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-39" parent="1" style="text;fontSize=12;fontStyle=1;fontColor=#BCAEFF;" value="BUDDY PREVIEW" vertex="1">
+          <mxGeometry height="25" width="250" x="1075" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-40" parent="1" style="ellipse;fillColor=#493A61;strokeColor=none;fontSize=35;" value="🧠" vertex="1">
+          <mxGeometry height="85" width="85" x="1160" y="525" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-41" parent="1" style="text;fontSize=23;fontStyle=1;fontColor=#FFFFFF;align=center;" value="Alex" vertex="1">
+          <mxGeometry height="35" width="250" x="1080" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-42" parent="1" style="text;fontSize=13;fontColor=#D1D5E0;align=center;" value="Friendly and patient&#xa;study companion" vertex="1">
+          <mxGeometry height="45" width="250" x="1080" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-43" parent="1" style="rounded=1;fillColor=#302A3E;strokeColor=none;fontColor=#E3D9F7;fontSize=12;align=left;spacing=10;" value="ACTIVE CONFIGURATION&#xa;&#xa;Traits: Friendly, Patient&#xa;Tasks: Explain, Quiz&#xa;Tone: Casual&#xa;Target: Exam preparation" vertex="1">
+          <mxGeometry height="105" width="270" x="1075" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-44" parent="1" style="text;fontSize=12;fontStyle=1;fontColor=#A5A9BA;" value="3. ADDITIONAL CUSTOMIZATION" vertex="1">
+          <mxGeometry height="25" width="350" x="280" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-45" parent="1" style="rounded=1;fillColor=#24252D;strokeColor=#41424D;fontColor=#D1D5E0;fontSize=12;align=left;spacingLeft=15;" value="Name: Alex     Avatar: 🧠     Subject: All subjects     Difficulty: Adaptive     Response length: Balanced" vertex="1">
+          <mxGeometry height="48" width="750" x="280" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-46" parent="1" style="rounded=1;fillColor=#30313B;strokeColor=none;fontColor=#D1D5E0;fontSize=13;" value="Reset" vertex="1">
+          <mxGeometry height="48" width="95" x="1050" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="XiuRZuskg-SfvpL3jPGQ-47" parent="1" style="rounded=1;fillColor=#A99AFF;strokeColor=none;fontColor=#17181E;fontSize=14;fontStyle=1;" value="Save Changes ✓" vertex="1">
+          <mxGeometry height="48" width="210" x="1160" y="890" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

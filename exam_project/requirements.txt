@@ -1,0 +1,9 @@
+# StudyGraph dependencies (direct only).
+# Canonical source: pyproject.toml + uv.lock. This file exists so the deliverable can be
+# installed without uv:  python -m venv .venv ; .\.venv\Scripts\Activate.ps1 ; python -m pip install -r requirements.txt
+# Python 3.12 is required (3.14 is the machine default and is NOT supported by this project).
+
+streamlit>=1.66,<2
+chromadb>=1.5,<2
+langgraph>=1.2,<2
+ollama>=0.6
