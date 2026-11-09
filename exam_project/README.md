@@ -114,6 +114,7 @@ uv run pytest -q                                     # 103 tests, no live servic
 | `chroma: command not found` | the CLI lives in `.venv\Scripts` | use `uv run chroma …` (never a bare `chroma`) |
 | `Cannot reach the model …` in the chat | Ollama stopped or model missing | start Ollama, `uv run python .\scripts\smoke_llm.py` |
 | `STUDYGRAPH_EMBEDDING_DIM` mismatch | different embedding model than the index | set the dimension, then `uv run python .\scripts\ingest.py --recreate` |
+| `ModuleNotFoundError: matplotlib` / `sklearn` in `regression/*.ipynb` | `uv sync` installs only what `pyproject.toml` declares, and prunes everything else | `uv sync`, then restart the kernel (ADR-021) |
 | Answers say "retrieval failed" | Chroma down, or collection missing | see the two rows above |
 
 Local data lives in `data/` (`studygraph.db`, `chroma/`) and is git-ignored. Delete

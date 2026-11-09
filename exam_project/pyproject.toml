@@ -27,6 +27,20 @@ dev = [
     "pytest>=8",
     "ruff>=0.6",
     "mypy>=1.11",
+    # The regression comparison (Phase 8) is developed in the same checkout, so the
+    # default `uv sync` also installs its dependencies (ADR-021).
+    { include-group = "regression" },
+    { include-group = "notebook" },
+]
+# Not used by the app; only by regression/*.ipynb (ADR-021).
+regression = [
+    "matplotlib>=3.8,<4",
+    "scikit-learn>=1.3,<2",
+    "pandas>=2.1",
+]
+# Kernel for Jupyter/VS Code notebooks. Declared so `uv sync` does not prune it (ADR-021).
+notebook = [
+    "ipykernel>=6",
 ]
 
 [tool.pytest.ini_options]
@@ -41,10 +55,18 @@ markers = [
 line-length = 240
 target-version = "py312"
 # Course material (docs/RAG) and the design exports are not our source code.
-extend-exclude = [".venv", "docs", "Designs", "data"]
+# regression/scikit-learn-main is a third-party checkout: lint it with upstream's rules,
+# not ours. regression/.chroma and regression/out are generated artifacts, and
+# regression/*.ipynb is a scratchpad that is edited live (ADR-021, ADR-022).
+extend-exclude = [".venv", "docs", "Designs", "data", "regression/scikit-learn-main", "regression/.chroma", "regression/out", "regression/*.ipynb"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+# A notebook imports names in one cell to use them in later ones, so "unused import"
+# and import ordering are not meaningful there (ADR-021).
+"**/*.ipynb" = ["F401", "I001"]
 
 [tool.mypy]
 python_version = "3.12"

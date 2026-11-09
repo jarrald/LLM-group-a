@@ -1,6 +1,6 @@
 # StudyGraph — Project Status
 
-**Last updated:** 2026-10-31 (session 6) · **Branch:** `mandatory-1` ·
+**Last updated:** 2026-11-08 (session 6) · **Branch:** `mandatory-1` ·
 **Current phase:** 6 of 9 complete (0–6) — evaluation next
 
 This is the file to read first in a new session. It must always reflect reality, not intent.
@@ -23,6 +23,7 @@ evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging +
 | Requirements, design, architecture docs | Done (`docs/requirements`, `docs/design`, `docs/architecture`) |
 | Tracking docs (`docs/plan`) | Done, incl. [design-review.md](design-review.md) + resolution log |
 | Environment (`uv`, deps) | **Done** — CPython 3.12, deps, project installed editable |
+| Regression/notebook extras | **Done** — `regression` + `notebook` dependency groups (matplotlib 3.11.2, scikit-learn 1.9.1, ipykernel 7.4.0) installed by a plain `uv sync` (ADR-021) |
 | Domain model, snapshots, SQLite persistence | **Done** |
 | Prompt construction (three T's + Task, versioned templates) | **Done** |
 | Kildemateriale og chunking (**1.659 chunks**, 85 dokumenter) | **Done** — 73 kilder dækket, uge 1, 2, 3, 4, 6, 8, 9, 10 (ADR-021) |
@@ -106,3 +107,5 @@ alone, and `scripts/doctor.py` reports every prerequisite with a fix hint.
 | 2026-10-30 (4) | Phase 6: Streamlit UI + decisions | ADR-017 (three T's, Task per message), ADR-018 (three pages), ADR-019 (additive migrations); FR-14 reworded; streaming through the same graph (state `on_token`); seeded Buddy pair (FR-14); `retrieval_top_k` persisted; pages `app/ui/{chat,buddies,about}_page.py` + `clients.py` + `components.py`; dark theme in `.streamlit/config.toml`; **90 tests** (incl. 4 AppTest), ruff/mypy clean; verified in the browser: grounded answer + `Sources (4)` and general answer without sources. |
 | 2026-10-30 (5) | Reproducibility repair after the material reorganisation | Loader made layout-tolerant (ADR-020): 8 documents → **153 chunks**, re-indexed and verified (prompt injection 0.42, gradient descent 0.33), idempotent; fresh-collection run reproduced 153 chunks; `scripts/doctor.py` added and verified (pass **and** failure path); README rewritten with `uv run chroma`, a first-run checklist and a troubleshooting table; **95 tests**, ruff/mypy clean. |
 | 2026-10-31 (6) | Konvertering af hele det uploadede kursusmateriale | SG-026 / ADR-021: 73 kilder, 15 PDF'er og 346 sider, 85 dokumenter og 1.659 chunks. Nye oversigter for uge 4, 6, 8, 9 og 10; eksisterende noter bevaret. Genkørbart konverteringsscript, manifest, mediebeskrivelser og kontrol af tekstbevarelse. Loaderen springer råmiljøer over; chunker-version 2 bevarer kodeblokke. 103 tests består, ruff er ren, mypy er ren i 35 kildefiler. |
+| 2026-11-08 (6) | Environment repair for the regression notebook | The `ModuleNotFoundError: matplotlib` in `regression/non-llm.ipynb` was a missing dependency, not an interpreter problem: the stray `./3.10/` venv (named `3.10`, actually CPython 3.12.12) was deleted; `pyproject.toml` gained `regression` and `notebook` dependency groups included by `dev` (ADR-021), so `uv sync` installs matplotlib 3.11.2, scikit-learn 1.9.1 and ipykernel 7.4.0 and no longer prunes the kernel; `regression/utils.py` (`save_fig`) added for the notebook's import; ruff ignores `F401`/`I001` for `*.ipynb`. Notebook executed end-to-end through a real Jupyter kernel: no errors. **95 tests** pass, ruff/mypy clean. |
+| 2026-11-08 (7) | Local-AI development test for the regression comparison (ADR-022) | Built, then deliberately reduced to two files: `regression/rag.py` (AST/heading chunking, 962-chunk index in `regression/.chroma`, retrieval, one Ollama call, writer) and `regression/chat.py` (paste a prompt → `.py`/`.ipynb` in `regression/out/`). Nothing imports from `app/`; no Chroma server. Verified with a real prompt: `qwen2.5-coder:7b` answered in 3.9 s (64 tok/s) and the generated notebook ran from its own folder (MSE 652.52, coef 21.38197 — same fit as a hand-written baseline). First sample without a dataset preview failed on invented column names, which is why the header is now injected. App suite unchanged (95 passed), ruff/mypy clean. |

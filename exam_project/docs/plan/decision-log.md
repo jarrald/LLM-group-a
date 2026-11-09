@@ -273,6 +273,57 @@ Format: context → decision → consequences. Keep entries short; link to code 
   rebuilt with `--recreate`. The literature-review assignment file is indexed too — a
   conscious choice, reversible by curating the folder.
 
+## ADR-021 — Regression and notebook dependencies live in `uv` dependency groups
+
+- **Status:** Accepted (2026-11-08)
+- **Context:** `regression/non-llm.ipynb` needs `matplotlib`, `scikit-learn` and a Jupyter
+  kernel, but `pyproject.toml` declared only the four app dependencies. `requirements.txt`
+  had been extended by hand with `matplotlib`/`scikit-learn`/`pandas`, yet `uv sync` reads
+  `pyproject.toml` only, so the packages were never installed in `.venv` — and every
+  `uv sync` silently *pruned* a manually installed `ipykernel`. That surfaced as
+  `ModuleNotFoundError: matplotlib` in the notebook, which was first mistaken for a Python
+  version problem. A stray `./3.10/` directory (a venv whose *name* was `3.10`, actually
+  CPython 3.12.12 — `uv venv 3.10` treats the argument as a path, not an interpreter
+  request) came from that misdiagnosis and was removed.
+- **Decision:** declare the extras in `[dependency-groups]` in `pyproject.toml`:
+  `regression = [matplotlib, scikit-learn, pandas]` and `notebook = [ipykernel]`. The `dev`
+  group includes both via `{ include-group = … }`, so a plain `uv sync` installs them and
+  the notebook runs after the documented setup. The `[project.dependencies]` list stays the
+  four app dependencies; the app still imports none of the extras. `requirements.txt`
+  mirrors the same split with a comment. Ruff ignores `F401`/`I001` for `*.ipynb` only.
+- **Consequences:** `uv sync` is the single source of truth again and no longer prunes the
+  kernel; the app's runtime dependency set is unchanged. Anyone running the notebook from a
+  terminal needs nothing beyond `uv sync`. Because `ipykernel` is now declared, the Jupyter
+  stack updates with the lockfile instead of drifting. Adding a further experiment library
+  means adding it to the `regression` group plus this log — not installing it by hand.
+
+## ADR-022 — The regression comparison runs as a self-contained package in `regression/`
+
+- **Status:** Accepted (2026-11-08)
+- **Context:** The assignment requires a *separate* comparison experiment (linear
+  regression vs. LLM + RAG, `docs/evaluation/regression-vs-rag.md`), and the question asked
+  of it is whether a local model is useful for real development work. It needs retrieval,
+  prompts and model calls — exactly what `app/` already has — but sharing that code would
+  couple an experiment to the StudyGraph application, its SQLite schema and its Chroma
+  server on port 8000. The user also requires the experiment to stay inside `regression/`.
+- **Decision:** implement the experiment as two small modules in `regression/`: `rag.py`
+  (config via `RAG_*` variables, AST/heading chunking, index build, retrieval, one Ollama
+  call, and writing the answer to a file) and `chat.py` (a loop that takes a pasted prompt
+  and returns a `.py`, or a `.ipynb` when a notebook was asked for). Retrieval uses an
+  in-process `PersistentClient` on `regression/.chroma` — no server, nothing shared with
+  `data/chroma` — and nothing imports from `app/`. Generated files go to `regression/out/`.
+  The first version of this experiment had ~1,300 lines (scoring harness, baseline arm,
+  task contracts, results table); it was cut back to ~400 because the only question being
+  asked is *"can I paste a prompt and get runnable code back?"* — the answer is read by
+  running the file, not by a scoring table. Ruff excludes the third-party corpus, the vector
+  store, the output folder and `*.ipynb`.
+- **Consequences:** the experiment is small enough to read in one sitting and can be deleted
+  without touching the app; it runs offline and needs no Chroma server. There is no recorded
+  measurement of code quality or timing any more — that is a deliberate trade of rigour for
+  simplicity, acceptable while the question is qualitative. If the experiment is ever used
+  for the assignment write-up, the numbers must be collected by a real run again, and
+  `docs/evaluation/` is the place for them.
+
 ---
 
 ## ADR-021 — Lokal kildekonvertering og kodebevarende chunking
