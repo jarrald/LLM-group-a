@@ -97,6 +97,7 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 | SG-083 | P1 | LLM predictions for the same held-out inputs (no code execution) | **Done** | SG-082, SG-002 | Predictions recorded verbatim with the retrieved context |
 | SG-084 | P1 | Comparison table + discussion (why they differ; when a trained model wins) | **Done** | SG-081, SG-083 | Table with actual values and both error measures |
 | SG-085 | P1 | Evaluate the 15 recorded coding runs + cloud runs | **Done** | — | `docs/evaluation/regression-experiment.md` with the run table, failure taxonomy and conclusion |
+| SG-086 | P2 | Map the six experiment types (manual / RAG / no-RAG / cloud × code / no code) and tag what is missing | **Done** | SG-084, SG-085 | `docs/evaluation/experiment-types.md` + `runs-overview.csv`; the single gap (cloud without code, #5) is stated explicitly |
 
 ## Phase 9 — Hardening, packaging, synopsis
 

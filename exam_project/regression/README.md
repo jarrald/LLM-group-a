@@ -95,7 +95,10 @@ Two more folders sit next to that archive:
 
 ## What the runs showed
 
-Short version of [`docs/evaluation/regression-experiment.md`](../docs/evaluation/regression-experiment.md):
+Short version of [`docs/evaluation/regression-experiment.md`](../docs/evaluation/regression-experiment.md);
+the six experiment types (manual, LLM + RAG, LLM without RAG, cloud — each with and without code
+generation) are mapped in
+[`docs/evaluation/experiment-types.md`](../docs/evaluation/experiment-types.md):
 
 | Measure | Result |
 |---|---|

@@ -7,7 +7,10 @@ regression and with cloud models used as development tools?
 
 This document is the evidence base for §"Results and reflection" of the synopsis. The
 assignment's *required* comparison exercise (same held-out inputs, one error measure per
-approach) is documented separately in [regression-vs-rag.md](regression-vs-rag.md).
+approach) is documented separately in [regression-vs-rag.md](regression-vs-rag.md), and the
+index of the six experiment types (manual / LLM+RAG / LLM no-RAG / cloud, each with and without
+code generation, and which of them were actually run) is
+[experiment-types.md](experiment-types.md).
 
 **Status:** done, every number below was produced by a run in `regression/runs/`.
 
