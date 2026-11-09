@@ -13,3 +13,8 @@ When commenting in the code, keep the content concise, straightforward and easy 
 
 Target:
 Make a python script or a jupyter notebook that accurately predicts house prices based on the other fields in the best way possible.
+
+# Notes
+Context window is 262.1k Tokens, perhaps it read the file and ran out prematurely.
+
+LLM used: Leanstral-1-5, Zero Knowledge European free model.
