@@ -1,0 +1,114 @@
+{
+  "created": "2026-11-09T20:57:44+00:00",
+  "model": "qwen2.5-coder:7b",
+  "embedding_model": "nomic-embed-text",
+  "options": {
+    "temperature": 0.0,
+    "num_ctx": 4096
+  },
+  "top_k": 3,
+  "reference_rows": 12,
+  "collection": "ice_cream_reference_v1",
+  "split": "70/15/15, random_state=42 (identical to non-llm.ipynb)",
+  "fitted_model": {
+    "slope": 21.258072,
+    "intercept": 49.813787
+  },
+  "mean_absolute_error": {
+    "linear_regression": 13.2759,
+    "llm_rag": 107.1488,
+    "llm_no_rag": 368.818
+  },
+  "cases": [
+    {
+      "case": 1,
+      "temperature": 0.267,
+      "actual_revenue": 32.5466,
+      "linear_regression": 55.4903,
+      "retrieved": [
+        {
+          "document": "0.98,55.39",
+          "distance": 0.4947
+        },
+        {
+          "document": "25.24,574.71",
+          "distance": 0.5297
+        },
+        {
+          "document": "27.19,642.35",
+          "distance": 0.5348
+        }
+      ],
+      "llm_rag": {
+        "answer": "55.39",
+        "value": 55.39,
+        "seconds": 0.16
+      },
+      "llm_no_rag": {
+        "answer": "100",
+        "value": 100.0,
+        "seconds": 0.1
+      }
+    },
+    {
+      "case": 2,
+      "temperature": 23.591,
+      "actual_revenue": 542.6081,
+      "linear_regression": 551.3136,
+      "retrieved": [
+        {
+          "document": "25.24,574.71",
+          "distance": 0.4891
+        },
+        {
+          "document": "0.98,55.39",
+          "distance": 0.4944
+        },
+        {
+          "document": "23.06,552.82",
+          "distance": 0.4979
+        }
+      ],
+      "llm_rag": {
+        "answer": "552.82",
+        "value": 552.82,
+        "seconds": 0.17
+      },
+      "llm_no_rag": {
+        "answer": "$1500",
+        "value": 1500.0,
+        "seconds": 0.13
+      }
+    },
+    {
+      "case": 3,
+      "temperature": 40.474,
+      "actual_revenue": 918.3912,
+      "linear_regression": 910.2128,
+      "retrieved": [
+        {
+          "document": "0.98,55.39",
+          "distance": 0.485
+        },
+        {
+          "document": "25.24,574.71",
+          "distance": 0.5106
+        },
+        {
+          "document": "21.28,526.70",
+          "distance": 0.5116
+        }
+      ],
+      "llm_rag": {
+        "answer": "630.00",
+        "value": 630.0,
+        "seconds": 0.16
+      },
+      "llm_no_rag": {
+        "answer": "$1000",
+        "value": 1000.0,
+        "seconds": 0.13
+      }
+    }
+  ]
+}

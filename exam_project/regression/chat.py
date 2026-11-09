@@ -4,7 +4,7 @@
     uv run python -m regression.chat --model llama3.2:3b --ask "make a script that ..."
 
 A prompt may span several lines: press Enter on an empty line to send it. The generated
-file is written to ``regression/out/`` (``.ipynb`` when you ask for a notebook).
+file is written to ``regression/runs/rag/cmd/<n>/`` (``.ipynb`` when you ask for a notebook).
 """
 
 from __future__ import annotations

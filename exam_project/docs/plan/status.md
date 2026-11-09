@@ -1,7 +1,8 @@
 # StudyGraph — Project Status
 
-**Last updated:** 2026-11-09 (session 10) · **Branch:** `regression` ·
-**Current phase:** 6 of 9 complete (0–6) — evaluation next
+**Last updated:** 2026-11-09 (session 12) · **Branch:** `regression` ·
+**Current phase:** 7 of 9 complete (0–6, 8) — the regression comparison is done, the RAG
+evaluation (Phase 7) is next
 
 This is the file to read first in a new session. It must always reflect reality, not intent.
 
@@ -13,8 +14,8 @@ optional course material, a conversation freezes that configuration, the Task is
 message, answers stream token by token, and a course-grounded answer lists the retrieved
 chunks with their distances while a general answer says so explicitly. Verified in the browser
 on 2026-10-30. 103 tests pass; ruff and mypy are clean. What remains: the formal RAG
-evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging + synopsis
-(Phase 9).
+evaluation (Phase 7) and packaging + synopsis (Phase 9). The linear-regression comparison
+(Phase 8) is finished and documented in `docs/evaluation/`.
 
 ## 2. What exists today
 
@@ -31,7 +32,7 @@ evaluation (Phase 7), the linear-regression comparison (Phase 8) and packaging +
 | Services (Buddy, Chat) + seeded default Buddy pair | **Done** |
 | **Streamlit UI: Chat, Buddies, About** | **Done** — streaming, mode badge, sources expander |
 | CLI tools (`smoke_llm`, `ingest`, `search`, `ask`) | **Done** |
-| Evaluation results | Templates + one exploratory run; the formal table is next |
+| Evaluation results | RAG comparison still a template; the regression experiment is **done** — `docs/evaluation/regression-experiment.md` + `regression-vs-rag.md`, backed by `regression/runs/` |
 | Tests | **103 passing** (unit, integration, UI via `AppTest`) |
 
 ## 3. Environment verified on 2026-10-30
@@ -87,11 +88,12 @@ alone, and `scripts/doctor.py` reports every prerequisite with a fix hint.
 1. **Phase 7 — evaluation** (`SG-070` … `SG-072`): 8–10 questions (including 2–3 the slides do
    not cover), answers from the app or `ask.py --compare`, ratings filled into
    `docs/evaluation/rag-comparison-results.md`.
-2. **Phase 8 — regression comparison** (`SG-080` … `SG-084`): `Salary_Data.csv`, sklearn
-   baseline, RAG collection from the reference split only, MAE table in
-   `docs/evaluation/regression-vs-rag.md`.
-3. **Phase 9 — packaging** (`SG-090` … `SG-094`): failure-mode pass, README polish, demo
-   rehearsal, synopsis (≤ 5 pages).
+2. **Phase 9 — packaging** (`SG-090` … `SG-094`): failure-mode pass, README polish, demo
+   rehearsal, synopsis (≤ 5 pages). The regression material for the synopsis is ready to quote:
+   §12 of `docs/evaluation/regression-experiment.md` is a 200-word draft and §7–§9 hold the
+   measured tables.
+3. **Rebuild the corpus index** (`uv run python .\scripts\ingest.py --recreate`) before the
+   Phase 7 questions are answered, so they come from the translated English material.
 
 ## 7. Resume checklist for a new session or agent
 
@@ -116,4 +118,6 @@ alone, and `scripts/doctor.py` reports every prerequisite with a fix hint.
 | 2026-11-09 (9) | Web page for the local RAG assistant + toolchain repair | `regression/web.py` (Streamlit): paste instructions, attach text files, pick 0-12 excerpts, stream the answer, download the file; `rag.ask` gained `extra_context` / `on_token` / `model`. Attached files are pasted into the prompt, never embedded. Verified in a browser: a 12,385-character CSV attached, answer in 4.1 s (65 tok/s), saved to `regression/out/`, generated script ran (coef 21.4436, MSE 623.10). Also repaired a corrupted committed `uv.lock` (a pymupdf wheel array was missing its closing bracket, so every `uv` command failed); regenerating it bumped streamlit 1.66 to 1.67 and pytest 8 to 9.2, and the suite is now **103 passed**, ruff/mypy clean. |
 | 2026-11-09 (10) | English-only documentation and corpus | Every project document is in English, and the RAG corpus is translated so the index is monolingual (ADR-023). Translated the generator's scaffolding in `scripts/convert_course_material.py` (`# Week N`, `Source:`, `## Page N`, `### Source lines`, `## Cell N`, `- Edge:`, the visual-content note) and re-applied it to all 77 generated documents; `scripts/check_course_material.py` now counts `^## Page \d+$`; `media-descriptions.json` and the five Danish week overviews rewritten in English; the remaining Danish slide text in the week 1 and week 3 PDFs translated. Two deliberate exceptions kept: the `week3` language-sample corpora. The corpus now measures **85 documents and 1,660 chunks** (week 1: 123 → 124). Also fixed documentation inconsistencies: the duplicate `ADR-021` became `ADR-023` (references updated), the duplicated ADR template was removed, the duplicate session number and the stale branch were corrected, and the README no longer claims the app is unimplemented. Source digests are now computed over LF-normalised bytes, which removed 11 false "source changed" reports (0 real drift); the check still reports six source PDFs that are absent from this working copy. **The Chroma index must be rebuilt** (`ingest.py --recreate`) before the app can answer from the translated corpus. |
 | 2026-11-09 (11) | Manual baseline for the house-price comparison | `regression/house-price-manual.ipynb` (49 code + 31 markdown cells): data quality, dtypes, distributions, correlations, outliers, feature engineering, a 70/15/15 split, preprocessing, baselines, the normal equation, gradient descent, log target, polynomial vs linear, regularisation, cross-validation, `RandomizedSearchCV` and one held-out test measurement. Executed headlessly through a real Jupyter kernel with every output saved, including one deliberate `ValueError` (accuracy on a continuous target). Found three impossible prices (up to 22 534 per sqft against a median of 245) that had made *every* model score R2 around 0.03 and RMSE around 1 M; after removing them, plain linear regression reached R2 0.667 and the tuned gradient booster MAE 111 626 on validation, then MAE 109 094 / RMSE 186 517 / R2 0.731 on the held-out test set (682 rows). Two negative results recorded rather than removed: the engineered ratio features slightly *worsened* validation MAE, and degree-2 expansion only helps when penalised. Numbers in `house-price-manual-results.csv` and `house-price-manual-final-test.csv`; README section added. **103 tests** still pass; nothing under `app/` was touched. |
+
+| 2026-11-09 (12) | Evaluation of the regression exercise (Phase 8 complete) | Wrote the missing LLM arm of the comparison and then the two evaluation documents. New `regression/compare-predictions.py` reproduces the 70/15/15 split of `non-llm.ipynb` exactly (train/val/test R2 0.9799/0.9819/0.9764 reproduce to four decimals), fits least squares on the 361 training rows, builds an in-memory Chroma collection from **12 reference rows of the training split only**, and asks `qwen2.5-coder:7b` for three held-out predictions both **with** and **without** retrieval — it is told not to write or execute code. Measured MAE over the three held-out rows: linear regression **13.28**, LLM + RAG **107.15**, LLM without retrieval **368.82**; with retrieval the model copied the nearest retrieved revenue verbatim (55.39, 552.82) and missed the case where no warm reference row was retrieved (630 against 918), because embeddings rank by wording, not by numerical distance (distances 0.485–0.535, nearly flat). Evidence in `regression/runs/predict/{results.csv,report.json,prompt.md}`. Documentation: new `docs/evaluation/regression-experiment.md` (every one of the 15 local runs + 3 cloud runs, a five-way failure taxonomy, the prompt-framing/`top_k` comparison, limitations, conclusion and a ready-to-paste synopsis paragraph), `docs/evaluation/regression-vs-rag.md` filled in with real numbers, `regression/README.md` corrected (the house-price notebook lives in `runs/cloud/deepseek/`, not at the folder root; `runs/cloud/` and `runs/predict/` documented) and `chat.py`'s docstring fixed (files go to `runs/rag/cmd/<n>/`, not `out/`). Re-executed `cmd/5` (alpha 0.001, coef 21.44362486, R2 0.9797) and `ui/7` (fails as recorded) to verify the archive. Nothing under `app/` was touched; the StudyGraph suite is unchanged. |
 

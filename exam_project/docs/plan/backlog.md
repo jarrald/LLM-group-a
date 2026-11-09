@@ -91,11 +91,12 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 
 | ID | Pri | Title | State | Depends on | Done when |
 |---|---|---|---|---|---|
-| SG-080 | P1 | Choose dataset, define input/target, split train/reference vs held-out test | Todo | — | Split stored as CSV; test targets never exposed to either approach |
-| SG-081 | P1 | scikit-learn linear regression baseline + predictions | Todo | SG-080 | Predictions and absolute error/MAE computed and recorded |
-| SG-082 | P1 | RAG collection built from the reference portion only | Todo | SG-003 | Collection documented; retrieved docs logged per test case |
-| SG-083 | P1 | LLM predictions for the same held-out inputs (no code execution) | Todo | SG-082, SG-002 | Predictions recorded verbatim with the retrieved context |
-| SG-084 | P1 | Comparison table + discussion (why they differ; when a trained model wins) | Todo | SG-081, SG-083 | Table with actual values and both error measures |
+| SG-080 | P1 | Choose dataset, define input/target, split train/reference vs held-out test | **Done** | — | Split stored as CSV; test targets never exposed to either approach |
+| SG-081 | P1 | scikit-learn linear regression baseline + predictions | **Done** | SG-080 | Predictions and absolute error/MAE computed and recorded |
+| SG-082 | P1 | RAG collection built from the reference portion only | **Done** | SG-003 | Collection documented; retrieved docs logged per test case |
+| SG-083 | P1 | LLM predictions for the same held-out inputs (no code execution) | **Done** | SG-082, SG-002 | Predictions recorded verbatim with the retrieved context |
+| SG-084 | P1 | Comparison table + discussion (why they differ; when a trained model wins) | **Done** | SG-081, SG-083 | Table with actual values and both error measures |
+| SG-085 | P1 | Evaluate the 15 recorded coding runs + cloud runs | **Done** | — | `docs/evaluation/regression-experiment.md` with the run table, failure taxonomy and conclusion |
 
 ## Phase 9 — Hardening, packaging, synopsis
 
