@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="24.7.17">
+  <diagram id="orchestration.drawio" name="Bounded coder and reviewer orchestration">
+    <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="Read immutable design&#10;returns = 0" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="40" width="280" height="70" />
+        </mxCell>
+        <mxCell id="coder" value="Coder&#10;write calculator.py" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="160" width="280" height="70" />
+        </mxCell>
+        <mxCell id="review" value="Reviewer / tester&#10;read code, write tests, run tests" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="290" width="280" height="90" />
+        </mxCell>
+        <mxCell id="gate" value="Review accepts AND&#10;fresh checks pass?" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rhombus;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="100" y="440" width="220" height="120" />
+        </mxCell>
+        <mxCell id="success" value="SUCCESS&#10;write report and stop" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="660" width="280" height="70" />
+        </mxCell>
+        <mxCell id="limit" value="returns &lt; 3?" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rhombus;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="570" y="440" width="220" height="120" />
+        </mxCell>
+        <mxCell id="feedback" value="Increment returns&#10;Send latest feedback to coder" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="540" y="180" width="300" height="80" />
+        </mxCell>
+        <mxCell id="failure" value="FAILURE&#10;write unresolved findings" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="850" y="650" width="280" height="80" />
+        </mxCell>
+        <mxCell id="edge0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="start" target="coder">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="coder" target="review">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="review" target="gate">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge3" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="gate" target="success">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge4" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="gate" target="limit">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge5" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="limit" target="feedback">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="feedback" target="coder">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge7" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="limit" target="failure">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

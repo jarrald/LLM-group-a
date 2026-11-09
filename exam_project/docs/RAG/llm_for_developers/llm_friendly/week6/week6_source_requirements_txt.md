@@ -1,0 +1,176 @@
+<!-- studygraph:converted-source:v1 -->
+# Uge 6 — requirements (txt)
+
+Kilde: [week6/requirements.txt](../../source/week6/requirements.txt).
+
+Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+
+### Kildelinjer 1–45
+
+````text
+# Week 8 — Ollama RAG starter
+
+This starter creates a minimal local RAG pipeline for:
+- PDF
+- TXT
+- MD
+
+It is meant for follow-along teaching in the terminal.
+
+## Recommended models
+
+Recommended:
+- chat model: `qwen3:4b`
+- embedding model: `embeddinggemma`
+
+Fallback for weaker machines:
+- chat model: `qwen3:1.7b`
+
+Pull models if needed:
+
+```bash
+ollama pull qwen3:4b
+ollama pull qwen3:1.7b
+ollama pull embeddinggemma
+```
+
+## Create environment
+
+```bash
+python -m venv .venv
+```
+
+### Windows PowerShell
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+### macOS / Linux
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+````
+
+### Kildelinjer 46–90
+
+````text
+
+## Project structure
+
+- `docs/` → put your `.pdf`, `.txt`, `.md` files here
+- `ingest.py` → reads files, chunks text, creates embeddings, stores chunks in Chroma
+- `ask.py` → asks questions against the stored document chunks
+- `chunking.py` → chunking helper
+- `rag_helpers.py` → shared helper
+- `example_questions.md` → test questions
+
+## Supported files
+
+- `.pdf` (text-based PDFs only)
+- `.txt`
+- `.md`
+
+Not supported this week:
+- scanned-image PDFs
+- OCR
+
+## Run it
+
+1. Put files in `docs/`
+2. Ingest them:
+
+```bash
+python ingest.py
+```
+
+3. Ask questions:
+
+```bash
+python ask.py
+```
+
+You can also ask one question directly:
+
+```bash
+python ask.py "What is RAG?"
+```
+
+## Useful environment variables
+
+Optional:
+- `OLLAMA_HOST` default `http://localhost:11434`
+````
+
+### Kildelinjer 91–135
+
+````text
+- `CHAT_MODEL` default `qwen3:4b`
+- `EMBEDDING_MODEL` default `embeddinggemma`
+- `CHUNK_SIZE` default `800`
+- `CHUNK_OVERLAP` default `120`
+- `TOP_K` default `4`
+
+### Example: weaker machine
+
+Windows PowerShell:
+
+```powershell
+$env:CHAT_MODEL="qwen3:1.7b"
+python ask.py
+```
+
+macOS / Linux:
+
+```bash
+export CHAT_MODEL=qwen3:1.7b
+python ask.py
+```
+
+## What the pipeline does
+
+1. Read PDF / TXT / MD
+2. Extract text
+3. Split text into chunks
+4. Create embeddings using Ollama
+5. Store chunks in Chroma
+6. Embed the question
+7. Retrieve top-k chunks
+8. Ask the chat model to answer only from that context
+
+## Grounding rules
+
+The prompt is designed to:
+- answer only from provided context
+- say "I don't know" if the answer is not in the context
+- cite the chunk numbers used
+
+## Typical workflow in class
+
+Start with the included sample documents.
+
+Then replace the files in `docs/` with your own documents and run:
+````
+
+### Kildelinjer 136–150
+
+````text
+
+```bash
+python ingest.py
+python ask.py
+```
+
+## Debugging tips
+
+If answers are poor:
+- check that ingestion ran successfully
+- try a smaller or larger chunk size
+- change overlap
+- change `TOP_K`
+- make sure the answer is actually present in the documents
+- remember that PDF extraction quality can vary
+````

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="24.7.17">
+  <diagram id="deployment.drawio" name="Single computer deployment">
+    <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="graph" value="Python process&#10;LangGraph outer workflow&#10;Coder + reviewer LangChain agents" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="150" width="440" height="150" />
+        </mxCell>
+        <mxCell id="model" value="Ollama localhost:11434&#10;One shared local model&#10;CPU inference, sequential requests" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="670" y="150" width="420" height="150" />
+        </mxCell>
+        <mxCell id="repo" value="Repository inputs (read only)&#10;Stories + acceptance criteria&#10;Draw.io models" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="490" width="400" height="130" />
+        </mxCell>
+        <mxCell id="out" value="Run directory&#10;calculator.py + test_calculator.py&#10;logs, snapshots, final report" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="670" y="490" width="420" height="130" />
+        </mxCell>
+        <mxCell id="edge0" value="model requests" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="graph" target="model">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge1" value="design context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="repo" target="graph">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge2" value="tools and test execution" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="graph" target="out">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

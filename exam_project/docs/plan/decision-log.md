@@ -104,7 +104,7 @@ Format: context → decision → consequences. Keep entries short; link to code 
 
 ## ADR-008 — PDF → Markdown conversion tool
 
-- **Status:** Proposed — to be closed by SG-010
+- **Status:** Superseded by ADR-021 (2026-10-31)
 - **Context:** Slides are PDFs; the RAG pipeline works on Markdown. Extraction quality
   drives everything downstream (chunking, metadata, answers). Candidates: `pypdf` (plain
   text, layout-poor), `pymupdf`/`pymupdf4llm` (layout-aware Markdown), heavier
@@ -274,6 +274,13 @@ Format: context → decision → consequences. Keep entries short; link to code 
   conscious choice, reversible by curating the folder.
 
 ---
+
+## ADR-021 — Lokal kildekonvertering og kodebevarende chunking
+
+- **Status:** Accepted (2026-10-31)
+- **Context:** Råmaterialet dækker nu uge 1, 2, 3, 4, 6, 8, 9 og 10 og indeholder PDF'er, notebooks, kode, data, diagrammer og animationer. De håndskrevne noter fra uge 1–3 skal bevares.
+- **Decision:** `scripts/convert_course_material.py` bruger PyMuPDF til sideopdelt PDF-tekst og valgfri dansk/engelsk OCR, standardbiblioteket til notebooks/data/Draw.io og FFmpeg til videometadata. Visuelle mediebeskrivelser vedligeholdes særskilt. Conversion-afhængigheder er en valgfri uv-gruppe. Hver kilde registreres med SHA-256 i manifestet. Kilder og håndskrevne noter overskrives ikke. Loaderen beskærer `source/`, miljøer og caches før gennemløb. Chunker-version 2 fortolker ikke overskrifter inde i fenced code blocks.
+- **Consequences:** 73 relevante kilder er dækket, inklusive én identisk dublet og fire visuelt beskrevne medier. 346 PDF-sider er kontrolleret for bevaret tekstlag. Korpusset er 85 dokumenter og 1.659 chunks. Eksisterende Chroma-indeks skal genopbygges med `ingest.py --recreate`. Layout/formler og OCR har dokumenterede begrænsninger; video er visuelt sammenfattet, ikke frame-for-frame-transskriberet. Uge 5 og 7 er ikke leveret.
 
 ## Template for new entries
 

@@ -77,8 +77,23 @@ docs/RAG/llm_for_developers/
     └── week3/week3_overview.md, week3_hallucinations.md, …
 ```
 
-Add a new lecture by dropping `week<N>/*.md` in there and re-running `ingest.py` (the run is
-idempotent — chunk ids are deterministic, so nothing is duplicated).
+Materialet dækker nu uge **1, 2, 3, 4, 6, 8, 9 og 10**: 85 Markdown-dokumenter og
+1.659 chunks. Uge 5 og 7 findes ikke i det uploadede råmateriale.
+Se [materialeoversigten](docs/RAG/llm_for_developers/llm_friendly/README.md) for kilder,
+ugeoversigter, PDF-sider, notebookceller og beskrivelser af animationerne.
+
+Efter nye uploads til `source/` kan materialet konverteres og kontrolleres lokalt:
+
+```powershell
+uv sync --group conversion
+uv run --group conversion python .\scripts\convert_course_material.py --ocr
+uv run --group conversion python .\scripts\check_course_material.py --verify-pdfs
+uv run python .\scripts\ingest.py --recreate
+```
+
+Chroma skal køre under ingestion. `--recreate` genopbygger kursusindekset med
+chunker-version 2; råmateriale og samtaler bevares. Konverteringen bruger ingen ekstern
+LLM og springer `.env`, virtuelle miljøer og caches over.
 
 ### Useful CLI equivalents
 
@@ -86,7 +101,7 @@ idempotent — chunk ids are deterministic, so nothing is duplicated).
 uv run python .\scripts\smoke_llm.py                 # are the models installed, and how fast?
 uv run python .\scripts\search.py "What is prompt injection?" --top-k 3
 uv run python .\scripts\ask.py --compare "What is overfitting?"   # RAG vs non-RAG side by side
-uv run pytest -q                                     # 95 tests, no live services needed
+uv run pytest -q                                     # 103 tests, no live services needed
 ```
 
 ### Troubleshooting

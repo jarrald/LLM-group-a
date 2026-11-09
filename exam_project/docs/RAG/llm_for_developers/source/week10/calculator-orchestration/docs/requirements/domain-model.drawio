@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="24.7.17">
+  <diagram id="domain-model.drawio" name="Calculator domain model">
+    <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cal" value="Calculation" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="420" y="280" width="220" height="90" />
+        </mxCell>
+        <mxCell id="operand" value="Operand&#10;Finite numeric value" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="100" width="240" height="100" />
+        </mxCell>
+        <mxCell id="op" value="Operator&#10;+  -  *  /" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="790" y="100" width="240" height="100" />
+        </mxCell>
+        <mxCell id="result" value="Result&#10;Finite numeric value" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="490" width="240" height="100" />
+        </mxCell>
+        <mxCell id="error" value="Calculation error&#10;Zero divisor / unsupported operator&#10;Non-finite number or result" style="whiteSpace=wrap;html=0;fontSize=16;fillColor=#E8F1F5;strokeColor=#205366;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="730" y="480" width="350" height="120" />
+        </mxCell>
+        <mxCell id="edge0" value="has 2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cal" target="operand">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge1" value="uses 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cal" target="op">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge2" value="produces 1 on success" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cal" target="result">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge3" value="produces 1 on failure" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=14;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cal" target="error">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

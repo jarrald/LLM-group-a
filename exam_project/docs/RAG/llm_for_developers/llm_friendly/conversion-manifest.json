@@ -1,0 +1,620 @@
+{
+  "converter_version": "1",
+  "ocr": true,
+  "files": [
+    {
+      "source": "week1/Handheld linear regression data.png",
+      "sha256": "505c3163ae97104b3d326871146eefb85e2779df290c473360cd19c1d3a5704e",
+      "status": "described",
+      "warnings": [],
+      "output": "week1/week1_source_handheld_linear_regression_data_png.md",
+      "characters": 942
+    },
+    {
+      "source": "week1/Salary_Data.csv",
+      "sha256": "901e98eb9d9a25bdb0f1a743367dbb65cc3c159d0a5f02fe77936d56f480e425",
+      "status": "converted",
+      "warnings": [],
+      "output": "week1/week1_source_salary_data_csv.md",
+      "characters": 935
+    },
+    {
+      "source": "week1/Week1.pdf",
+      "sha256": "1e67e746db423ce1be7394acd105cc3bcf54a5f478b6dd273c84ef1af1fd96a4",
+      "status": "converted",
+      "warnings": [],
+      "pages": 34,
+      "output": "week1/week1_source_week1_pdf.md",
+      "characters": 13066
+    },
+    {
+      "source": "week1/ml_0.0.1_training_data_list.txt",
+      "sha256": "5dabf2b7edb9d2c79bd2eba86a6821678f9bb431d59ac63475bbbcd72a5efa6d",
+      "status": "converted",
+      "warnings": [],
+      "output": "week1/week1_source_ml_0_0_1_training_data_list_txt.md",
+      "characters": 648
+    },
+    {
+      "source": "week1/ml_0.0.1_training_data_vectors.txt",
+      "sha256": "fcb56ebf5eac5fd882f28ec97dec6b4982681b20148ee1d42f6a9454a039fee4",
+      "status": "converted",
+      "warnings": [],
+      "output": "week1/week1_source_ml_0_0_1_training_data_vectors_txt.md",
+      "characters": 686
+    },
+    {
+      "source": "week1/simple_linear_regression.ipynb",
+      "sha256": "2629eb7c5f0454dea2cf5dbc257fe932631d666550ea9ba7aca878cbbcf2804d",
+      "status": "converted",
+      "warnings": [],
+      "output": "week1/week1_source_simple_linear_regression_ipynb.md",
+      "characters": 5669
+    },
+    {
+      "source": "week10/Agent_Orchestration_Lesson (1).pdf",
+      "sha256": "9bf25bae47fe72820a0406c31376f721a7ba80877cd07836f997cef45deefc4b",
+      "status": "converted",
+      "warnings": [],
+      "pages": 17,
+      "output": "week10/week10_source_agent_orchestration_lesson_1_pdf.md",
+      "characters": 7070
+    },
+    {
+      "source": "week10/SETUP.md",
+      "sha256": "100875211a0acceb7e32a6b8f4329539f7c0657963202dfea1e33175e9b5d06b",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_setup_md.md",
+      "characters": 8096
+    },
+    {
+      "source": "week10/calculator-orchestration/README.md",
+      "sha256": "9e19cc6181a42eb5558cc8fd7bb47a0116710b3ab757bb4ead424550a2af87e5",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_readme_md.md",
+      "characters": 4654
+    },
+    {
+      "source": "week10/calculator-orchestration/SETUP.md",
+      "sha256": "da7e90e0e828df720b8db71770849c177b3b40b6bb2b0dae4d3d2e0115ce7f16",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_setup_md.md",
+      "characters": 7914
+    },
+    {
+      "source": "week10/calculator-orchestration/agent_tools.py",
+      "sha256": "e6d71043d7862ca9501ef7d6ca17a74403202260111fa4d628dd9479ef516c98",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_agent_tools_py.md",
+      "characters": 5078
+    },
+    {
+      "source": "week10/calculator-orchestration/agents.py",
+      "sha256": "7327668c100bf10820fa6012e621f0044e04102937de0ffba881e22bbb6bf32f",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_agents_py.md",
+      "characters": 4038
+    },
+    {
+      "source": "week10/calculator-orchestration/check_environment.py",
+      "sha256": "df56d10da6ee08a71208ea354d07e30e7dec58396b47343c70c05d97e533ec10",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_check_environment_py.md",
+      "characters": 1661
+    },
+    {
+      "source": "week10/calculator-orchestration/design_reader.py",
+      "sha256": "762629293af45b6c95175c5f17eba7b0f0c481cb6d802c9b6b74bfd0c8a39fa1",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_design_reader_py.md",
+      "characters": 1562
+    },
+    {
+      "source": "week10/calculator-orchestration/main.py",
+      "sha256": "b9f7881f31e98161b3672066b8eddc08be07d4bcc5d848a0e6b8b9c6f455e142",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_main_py.md",
+      "characters": 4175
+    },
+    {
+      "source": "week10/calculator-orchestration/requirements-lock.txt",
+      "sha256": "fc751fdfc1c143d42192ee55726da90e878b61a67699f8c0dcbf2264faeabdbe",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_requirements_lock_txt.md",
+      "characters": 1178
+    },
+    {
+      "source": "week10/calculator-orchestration/requirements.txt",
+      "sha256": "be7f10b38080953face622da7e549bd8745da1ef7b94f472dbfe3675e64d9f92",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_requirements_txt.md",
+      "characters": 460
+    },
+    {
+      "source": "week10/calculator-orchestration/workflow.py",
+      "sha256": "aae34eecdfd1345c9594fc05ce4516814f55446ddad9ca33de9c1dbb5a7f5372",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_workflow_py.md",
+      "characters": 1716
+    },
+    {
+      "source": "week10/calculator-orchestration/checks/acceptance_checks.py",
+      "sha256": "8e8c42938aa532cfc467a8a0ade1b62f3b85a650f96a15dfa888a054ced914d8",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_checks_acceptance_checks_py.md",
+      "characters": 3893
+    },
+    {
+      "source": "week10/calculator-orchestration/checks/run_suite.py",
+      "sha256": "c46c67561cb5114ab4566476e0151d2d33dd02a9087bfbe06f8636fd71ddbd82",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_checks_run_suite_py.md",
+      "characters": 1119
+    },
+    {
+      "source": "week10/calculator-orchestration/docs/architecture/calculator-architecture.md",
+      "sha256": "f45cb8b97561a9b144142e2e9f7a874ab92637b3f8ad11bfc5123813d6f81878",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_docs_architecture_calculator_architecture_md.md",
+      "characters": 1375
+    },
+    {
+      "source": "week10/calculator-orchestration/docs/architecture/deployment.drawio",
+      "sha256": "087aaa0dfaee3203269f52f3657f54422719ee1124d6928d9f12f767b3df5bdc",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_docs_architecture_deployment_drawio.md",
+      "characters": 1456
+    },
+    {
+      "source": "week10/calculator-orchestration/docs/architecture/orchestration.drawio",
+      "sha256": "07f0662b3442a2260d1d6b6fa26a0ef7a38cfd8d5427370bb910bfcbce7d4762",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_docs_architecture_orchestration_drawio.md",
+      "characters": 1623
+    },
+    {
+      "source": "week10/calculator-orchestration/docs/design/calculator-activity.drawio",
+      "sha256": "aa65a2d1ab51901143656089c9b48f83ef6bb4718e1bb25b1d1438dc4027045c",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_docs_design_calculator_activity_drawio.md",
+      "characters": 1423
+    },
+    {
+      "source": "week10/calculator-orchestration/docs/design/class-diagram.drawio",
+      "sha256": "ecc9112d261ad770120539b5ae725e1a51fa2fb658515a1263e1422a3b77f79e",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_docs_design_class_diagram_drawio.md",
+      "characters": 1599
+    },
+    {
+      "source": "week10/calculator-orchestration/docs/requirements/domain-model.drawio",
+      "sha256": "66ee76b6925c3f84fb0e0aa4e47c42eeced9727dff36925a16650dd49ad61736",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_docs_requirements_domain_model_drawio.md",
+      "characters": 1101
+    },
+    {
+      "source": "week10/calculator-orchestration/docs/requirements/user-stories.md",
+      "sha256": "4af7ceb17ec733578ba0c4a2a3d4d153e76ff9ced747c9348862b9842059f3a4",
+      "status": "converted",
+      "warnings": [],
+      "output": "week10/week10_source_calculator_orchestration_docs_requirements_user_stories_md.md",
+      "characters": 6775
+    },
+    {
+      "source": "week2/AI_Machine_Learning_week2_EK.pdf",
+      "sha256": "ac0a09704a0ff54e5f640428ad8eed80dd26a7334ff1b9f724220f77ab84e5db",
+      "status": "converted",
+      "warnings": [],
+      "pages": 14,
+      "output": "week2/week2_source_ai_machine_learning_week2_ek_pdf.md",
+      "characters": 4109
+    },
+    {
+      "source": "week3/Ambiguity1.pdf",
+      "sha256": "d77f8955d696beabde2a6ed85b43d64fb81b2b496e76474d6f97607e5a164cbc",
+      "status": "converted",
+      "warnings": [],
+      "pages": 36,
+      "output": "week3/week3_source_ambiguity1_pdf.md",
+      "characters": 159942
+    },
+    {
+      "source": "week3/Ambiguity2.pdf",
+      "sha256": "b2115ec27db1849bfa8c340a310eb91b3b7e1668b0683d467972aae2965b6601",
+      "status": "converted",
+      "warnings": [],
+      "pages": 29,
+      "output": "week3/week3_source_ambiguity2_pdf.md",
+      "characters": 67240
+    },
+    {
+      "source": "week3/Exercise_3.1.ipynb",
+      "sha256": "570e6158e468f7e204b63e8ec6cb42614202cabf05fb788d9695180c5da7ea42",
+      "status": "converted",
+      "warnings": [],
+      "output": "week3/week3_source_exercise_3_1_ipynb.md",
+      "characters": 16574
+    },
+    {
+      "source": "week3/Hallucinations1.pdf",
+      "sha256": "2257f8628da9a46bc82524d41f697eb1afda5b748b480c881e2dbc7a0d8801a3",
+      "status": "converted",
+      "warnings": [],
+      "pages": 42,
+      "output": "week3/week3_source_hallucinations1_pdf.md",
+      "characters": 165680
+    },
+    {
+      "source": "week3/Hallucinations2.pdf",
+      "sha256": "1a30c480adb1996453adf94846925f1bc08a8a3c8715d6599c1ed900a383a1cf",
+      "status": "converted",
+      "warnings": [],
+      "pages": 15,
+      "output": "week3/week3_source_hallucinations2_pdf.md",
+      "characters": 33802
+    },
+    {
+      "source": "week3/HandInPromptingArtifacts.pdf",
+      "sha256": "d361401cd618ca3dae192e2459225cb359dee48526df226becbc16e2acf940df",
+      "status": "converted",
+      "warnings": [
+        "Side 1: OCR anvendt; tekst kan indeholde genkendelsesfejl."
+      ],
+      "pages": 1,
+      "output": "week3/week3_source_handinpromptingartifacts_pdf.md",
+      "characters": 3406
+    },
+    {
+      "source": "week3/Injection1.pdf",
+      "sha256": "c202a240f8f03c93cfafd157f218ec790c9e503beeaf80e229fb5e1645ab7f9c",
+      "status": "converted",
+      "warnings": [],
+      "pages": 32,
+      "output": "week3/week3_source_injection1_pdf.md",
+      "characters": 82100
+    },
+    {
+      "source": "week3/Injection2.pdf",
+      "sha256": "c6856f5c698c041620dcd9f16c48caef00ad6e72ba07a49804578eb3a9ba9a8b",
+      "status": "converted",
+      "warnings": [],
+      "pages": 12,
+      "output": "week3/week3_source_injection2_pdf.md",
+      "characters": 66899
+    },
+    {
+      "source": "week3/PCA_for_FewerDimensions_4d_to_2d.ipynb",
+      "sha256": "6f8215fae0de8895fddffff5236a69f6784616960aa75a4ebf0360b731ac9c99",
+      "status": "converted",
+      "warnings": [],
+      "output": "week3/week3_source_pca_for_fewerdimensions_4d_to_2d_ipynb.md",
+      "characters": 29870
+    },
+    {
+      "source": "week3/Web Resources.md",
+      "sha256": "da3bf77facf0c2a89048929a608a2a7a57add0c4deff1639707acffea9e7134f",
+      "status": "converted",
+      "warnings": [],
+      "output": "week3/week3_source_web_resources_md.md",
+      "characters": 1448
+    },
+    {
+      "source": "week3/Week3.pdf",
+      "sha256": "4127b4213af7533ffe1f64463d905b83e0cb9a6cf3c7c824e580720efcecee0c",
+      "status": "converted",
+      "warnings": [],
+      "pages": 39,
+      "output": "week3/week3_source_week3_pdf.md",
+      "characters": 15339
+    },
+    {
+      "source": "week3/corpus.txt",
+      "sha256": "9edcac909b4231610bd146ca5e86f2ccce7b4c510ec77658961bab82af7c73bb",
+      "status": "converted",
+      "warnings": [],
+      "output": "week3/week3_source_corpus_txt.md",
+      "characters": 908
+    },
+    {
+      "source": "week3/curriculum_embeddings.ipynb",
+      "sha256": "0f41a2d7d42a08bda55857308731c55b830f9a370d693f44914494e5d951ef42",
+      "status": "converted",
+      "warnings": [],
+      "output": "week3/week3_source_curriculum_embeddings_ipynb.md",
+      "characters": 16653
+    },
+    {
+      "source": "week3/danish_corpus.txt",
+      "sha256": "2e6454e40c52826dede98320b91fb5da01af6095e04d07b3a66c1938df568170",
+      "status": "converted",
+      "warnings": [],
+      "output": "week3/week3_source_danish_corpus_txt.md",
+      "characters": 931
+    },
+    {
+      "source": "week3/gradient_descent_linear_regression.ipynb",
+      "sha256": "570e6158e468f7e204b63e8ec6cb42614202cabf05fb788d9695180c5da7ea42",
+      "status": "duplicate",
+      "warnings": [],
+      "output": "week3/week3_source_exercise_3_1_ipynb.md"
+    },
+    {
+      "source": "week3/train_embeddings.ipynb",
+      "sha256": "7719fee4314977cd0c74dd39665ef045a68509ccbb8c1dddb7e23850377ff2da",
+      "status": "converted",
+      "warnings": [],
+      "output": "week3/week3_source_train_embeddings_ipynb.md",
+      "characters": 20594
+    },
+    {
+      "source": "week4/Local AI week 4.pdf",
+      "sha256": "45a2700b3952647ff69b5c6e845cbfc851f82aca277e61d97a1ad26e05f44923",
+      "status": "converted",
+      "warnings": [],
+      "pages": 15,
+      "output": "week4/week4_source_local_ai_week_4_pdf.md",
+      "characters": 6851
+    },
+    {
+      "source": "week6/README.md",
+      "sha256": "6a213c4ad2da69a90e303be9ad14a8809ba139890f01ade38b73e32422d548e3",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_readme_md.md",
+      "characters": 4160
+    },
+    {
+      "source": "week6/app.js",
+      "sha256": "7c65c0aea8f256e6bc6dc4ee6fe318a3f23f1fef1d85d1a479b64e945575025b",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_app_js.md",
+      "characters": 1856
+    },
+    {
+      "source": "week6/ask.py",
+      "sha256": "7ee6b1dd46c6e6a8d47c714cff935269fe71997dc5c447026c8c1b34af7fa268",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_ask_py.md",
+      "characters": 815
+    },
+    {
+      "source": "week6/chunking (2).py",
+      "sha256": "722d9682abc0103a42259cacfd4ec37e1318a9aff01c8f4a939d8e3eeb55753c",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_chunking_2_py.md",
+      "characters": 383
+    },
+    {
+      "source": "week6/chunking.py",
+      "sha256": "45b5996059dd9cd712509088f519005367c8bd14925d34145028ab378a8fe7b8",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_chunking_py.md",
+      "characters": 1955
+    },
+    {
+      "source": "week6/example_questions.md",
+      "sha256": "8ced634c99bf10b9e8bcffab07fb07bb151038e7a5cd54b7213226a6d00934c8",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_example_questions_md.md",
+      "characters": 1681
+    },
+    {
+      "source": "week6/index.html",
+      "sha256": "8ced634c99bf10b9e8bcffab07fb07bb151038e7a5cd54b7213226a6d00934c8",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_index_html.md",
+      "characters": 1651
+    },
+    {
+      "source": "week6/ingest (2).py",
+      "sha256": "93399e90efeabe83e534544b6cb9e090f86b1248e923aafc21a2cf2a01c2eda6",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_ingest_2_py.md",
+      "characters": 1472
+    },
+    {
+      "source": "week6/ingest.py",
+      "sha256": "450b172bb376694d13e187b5f5428034c76fc2098b0c64c23c1f5d0a112d67a7",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_ingest_py.md",
+      "characters": 745
+    },
+    {
+      "source": "week6/local_rag.pdf",
+      "sha256": "5b675e8c3d93bd52684f26620b21b6e00851ff95bb7fa9767461a27318b529da",
+      "status": "converted",
+      "warnings": [],
+      "pages": 21,
+      "output": "week6/week6_source_local_rag_pdf.md",
+      "characters": 12834
+    },
+    {
+      "source": "week6/rag_helpers.py",
+      "sha256": "eb636dc7d96a68935f3635bdee4d5ad723e0f2fed201e438c4732bf1e1f29db7",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_rag_helpers_py.md",
+      "characters": 2044
+    },
+    {
+      "source": "week6/rag_intro.txt",
+      "sha256": "fe6daf29b8710754097225f6d38c89c8aabf4e3f755cd1da00fe214abb7d2603",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_rag_intro_txt.md",
+      "characters": 2093
+    },
+    {
+      "source": "week6/requirements (2).txt",
+      "sha256": "eb636dc7d96a68935f3635bdee4d5ad723e0f2fed201e438c4732bf1e1f29db7",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_requirements_2_txt.md",
+      "characters": 2068
+    },
+    {
+      "source": "week6/requirements.txt",
+      "sha256": "f051fea5f7326c4b93b9160b0073ef0a8f99e2b2731022ff45ab1d1c6acab09e",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_requirements_txt.md",
+      "characters": 3123
+    },
+    {
+      "source": "week6/style.css",
+      "sha256": "c1072d0251e3befbbb3e8b3da77820d95d399f6cb71f488e5400d315445e62da",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_style_css.md",
+      "characters": 2005
+    },
+    {
+      "source": "week6/week8_notes.md",
+      "sha256": "703289949b07b8e5fb7610bed4835a0e54e2fcceb5674da812cae12fc689ba1c",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_week8_notes_md.md",
+      "characters": 670
+    },
+    {
+      "source": "week6/week8_rag_setup_guide.md",
+      "sha256": "cfc0cdd0f42178c58e69842b82a2190c936f9bb0271d4e9740c794a5c6ce6a09",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_week8_rag_setup_guide_md.md",
+      "characters": 363
+    },
+    {
+      "source": "week6/openwebui_demo/README.md",
+      "sha256": "3074e2ba7a80ca3ab6d763aa64f4e76bec2ba25a2513f30ffe4671e5a47f8490",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_openwebui_demo_readme_md.md",
+      "characters": 2527
+    },
+    {
+      "source": "week6/openwebui_demo/app.py",
+      "sha256": "03dc860e741f0dfcc5f5c5394d011a841e5083e674d79ae7e9fae4c7b1920cf7",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_openwebui_demo_app_py.md",
+      "characters": 3335
+    },
+    {
+      "source": "week6/openwebui_demo/mynewfile",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_openwebui_demo_mynewfile_text.md",
+      "characters": 331
+    },
+    {
+      "source": "week6/openwebui_demo/requirements.txt",
+      "sha256": "7d255d8571f90e6f4f78879ba7dbfa0faa5148071fa40e781b64324b42ca8dfa",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_openwebui_demo_requirements_txt.md",
+      "characters": 429
+    },
+    {
+      "source": "week6/openwebui_demo/static/app.js",
+      "sha256": "28d8f6ebccd5173cf09322e1a51c1746dc6913c0ed463f7ad21418ab35f91b31",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_openwebui_demo_static_app_js.md",
+      "characters": 1356
+    },
+    {
+      "source": "week6/openwebui_demo/templates/index.html",
+      "sha256": "4e3271fa643659529f58b1256e784b5c34efecef10f50b2e75edf9333ef5a272",
+      "status": "converted",
+      "warnings": [],
+      "output": "week6/week6_source_openwebui_demo_templates_index_html.md",
+      "characters": 2497
+    },
+    {
+      "source": "week8/Week_8_LLM_Agents_and_Agentic_LLMs_EK.pdf",
+      "sha256": "7142ea4d22bc638ad12fde8358872681f169bae016dcb498a5bf4c6552148ebb",
+      "status": "converted",
+      "warnings": [],
+      "pages": 16,
+      "output": "week8/week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf.md",
+      "characters": 7324
+    },
+    {
+      "source": "week9/Week9.pdf",
+      "sha256": "523b3b60fab1395cde2f1a0a0160cc30ad763d17b86039fd57d3a3cde9c4ec0f",
+      "status": "converted",
+      "warnings": [
+        "Side 2: OCR anvendt; tekst kan indeholde genkendelsesfejl."
+      ],
+      "pages": 23,
+      "output": "week9/week9_source_week9_pdf.md",
+      "characters": 7958
+    },
+    {
+      "source": "week9/cnn_3letter_mixed_scripts.mp4",
+      "sha256": "2cadc62c1a11f9ee21df41abd2e75356f945144be5add103166985a6af9a5e58",
+      "status": "described",
+      "warnings": [],
+      "media": {
+        "duration_seconds": 12.6,
+        "audio": false
+      },
+      "output": "week9/week9_source_cnn_3letter_mixed_scripts_mp4.md",
+      "characters": 1286
+    },
+    {
+      "source": "week9/gradient_descent_fit.mp4",
+      "sha256": "c788086885f43d678c4335f4c9010427b128b9c57edf046136bcce75324c6b81",
+      "status": "described",
+      "warnings": [],
+      "media": {
+        "duration_seconds": 10.0,
+        "audio": false
+      },
+      "output": "week9/week9_source_gradient_descent_fit_mp4.md",
+      "characters": 1231
+    },
+    {
+      "source": "week9/kfold_fit_evolution_dual_init.mp4",
+      "sha256": "cd6557eebba1aa2e8ba33e9f1e5cbe7cd46ed89cde8dc5e70396e6088ba3216f",
+      "status": "described",
+      "warnings": [],
+      "media": {
+        "duration_seconds": 10.0,
+        "audio": false
+      },
+      "output": "week9/week9_source_kfold_fit_evolution_dual_init_mp4.md",
+      "characters": 1328
+    }
+  ]
+}
