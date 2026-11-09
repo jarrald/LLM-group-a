@@ -47,6 +47,27 @@ and sends only what fits. Nothing is kept between sessions. Each run folder also
 
 The page has optional Task / Tone / Target / Traits fields. Anything you fill in is prefixed to the instruction as a bullet list and recorded verbatim in `prompt.md`, so the report can show exactly which framing produced which output. Empty fields are simply left out.
 
+## The manual baseline
+
+`house-price-manual.ipynb` is the same job done by hand, so the model's output has something to be
+compared against: explore `datasets/house prices.csv`, check the data, engineer features, compare
+models, tune, cross-validate, and predict a held-out test set exactly once.
+
+It is executed with every output saved, **including one cell that raises on purpose** (accuracy on a
+continuous target), so it doubles as a record of what was tried and what did not work. Open it in VS
+Code, pick the `studygraph (3.12.12)` kernel, and Run All - about 30 seconds.
+
+Three findings worth quoting in the report:
+
+| Finding | Where |
+|---|---|
+| Three prices are data-entry errors (up to 22 534 per sqft, median is 245). Left in, they made *every* model score R2 around 0.03 and RMSE around 1 M, because one row dominated both sums. | section 5 |
+| Model choice barely mattered: plain least squares (MAE 125 679) through to a tuned gradient booster (MAE 111 626) is an 11% band, and the linear models score a higher R2. | section 20 |
+| The engineered ratio features made validation MAE slightly *worse* (123 266 -> 125 187). Kept in the notebook as a negative result. | section 16 |
+
+Held-out result, measured once on 682 unseen rows: **MAE 109 094, RMSE 186 517, R2 0.731**.
+Recorded in `house-price-manual-results.csv` and `house-price-manual-final-test.csv`.
+
 ## Run archive
 
 Every run, from the command line or the web page, is written to its own numbered folder:
@@ -80,6 +101,9 @@ complete system + user prompt that was sent. `output.*` is exactly what the mode
 | `PROMPTS.md` | every prompt the model sees, plus the ones already run |
 | `.chroma/` | the index (git-ignored) |
 | `runs/rag/` | one folder per run: `prompt.md` + `output.py|ipynb|md` (committed; this is the report evidence) |
+| `house-price-manual.ipynb` | the hand-written baseline, executed with all outputs saved |
+| `house-price-manual-results.csv` | validation MAE/RMSE/R2 for every model tried |
+| `house-price-manual-final-test.csv` | the single held-out test measurement |
 | `scikit-learn-main/` | the corpus (git-ignored, 17 MB) |
 
 ## If something goes wrong

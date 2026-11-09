@@ -1,0 +1,2 @@
+model,MAE,RMSE,R2,median absolute error,rows
+"HistGradientBoosting (tuned), refit on train+val",109094.22427074015,186517.07223598,0.7310995877280732,62443.7992170933,682.0

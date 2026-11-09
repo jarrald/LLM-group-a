@@ -1,0 +1,14 @@
+model,MAE,RMSE,R2,notes
+Dummy (predict the mean),231535.069,407084.34,-0.0,no-skill baseline
+Linear regression (scaled + one-hot),125679.166,235074.845,0.667,ordinary least squares
+Normal equation (closed form),125679.166,235074.845,0.667,solved by hand
+Linear regression + log target,112592.811,256231.215,0.604,"log1p, no negative predictions"
+Gradient descent (1500 epochs),125682.653,235174.783,0.666,"iterative solver, same model as OLS"
+Polynomial degree 2 (no penalty),141302.185,466667.239,-0.314,all pairwise products
+Polynomial degree 2 + RidgeCV,116879.839,286381.829,0.505,penalised interactions
+Ridge (alpha=10),124415.876,234759.468,0.667,target standardised before fitting
+Lasso (alpha=0.001),124703.709,234827.073,0.667,target standardised before fitting
+"ElasticNet (alpha=0.001, l1_ratio=0.5)",124717.434,234699.083,0.668,target standardised before fitting
+RidgeCV (cross-validated alpha),125359.257,234962.758,0.667,target standardised before fitting
+HistGradientBoosting (tuned),111625.894,242270.009,0.646,12-candidate random search
+Random forest (300 trees),115983.286,243283.08,0.643,mostly default settings
