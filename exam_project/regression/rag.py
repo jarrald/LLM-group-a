@@ -300,6 +300,15 @@ def _dataset_preview(prompt: str) -> str:
     return ""
 
 
+def wrap_prompt(instruction: str, task: str = "", tone: str = "", target: str = "", traits: str = "") -> str:
+    """Prefix an instruction with the four T's; empty dimensions are left out."""
+    parts = [(label, value.strip()) for label, value in (("Task", task), ("Tone", tone), ("Target", target), ("Traits", traits)) if value.strip()]
+    if not parts:
+        return instruction.strip()
+    header = "\n".join(f"- {label}: {value}" for label, value in parts)
+    return f"{header}\n\n{instruction.strip()}"
+
+
 def extract_code(answer: str) -> str | None:
     """The first fenced python block, falling back to any fenced block."""
     blocks = re.findall(r"```(\w*)\n(.*?)```", answer, re.DOTALL)
@@ -312,12 +321,12 @@ def extract_code(answer: str) -> str | None:
     return None
 
 
-def save_file(prompt: str, answer: Answer, kind: str = "cmd", extra_context: str = "") -> Path:
+def save_file(prompt: str, answer: Answer, kind: str = "cmd", extra_context: str = "", top_k: int | None = None, run_dir: Path | None = None) -> Path:
     """Archive one run: runs/rag/<kind>/<n>/prompt.md plus output.py, .ipynb or .md."""
     code = extract_code(answer.text)
     wants_notebook = "notebook" in prompt.lower() or prompt.lower().endswith(".ipynb")
-    run_dir = _next_run_dir(kind)
-    (run_dir / "prompt.md").write_text(_prompt_record(prompt, answer, kind, extra_context), encoding="utf-8", newline="\n")
+    run_dir = run_dir or _next_run_dir(kind)
+    (run_dir / "prompt.md").write_text(_prompt_record(prompt, answer, kind, extra_context, top_k), encoding="utf-8", newline="\n")
     if code and wants_notebook:
         _write_notebook(prompt, code, run_dir / "output.ipynb")
         return run_dir / "output.ipynb"
@@ -338,7 +347,22 @@ def _next_run_dir(kind: str) -> Path:
     return run_dir
 
 
-def _prompt_record(prompt: str, answer: Answer, kind: str, extra_context: str) -> str:
+def new_run_dir(kind: str) -> Path:
+    """Allocate the next runs/rag/<kind>/<n> folder (used before the model is called)."""
+    return _next_run_dir(kind)
+
+
+def store_attachments(run_dir: Path, files: list[tuple[str, str]]) -> list[tuple[str, Path]]:
+    """Write attached files into the run folder so the generated code can read them."""
+    written: list[tuple[str, Path]] = []
+    for name, text in files:
+        path = run_dir / Path(name).name
+        path.write_text(text, encoding="utf-8", newline="\n")
+        written.append((name, path))
+    return written
+
+
+def _prompt_record(prompt: str, answer: Answer, kind: str, extra_context: str, top_k: int | None = None) -> str:
     """Everything needed to repeat this run in the report."""
     interface = "cmd (uv run python -m regression.chat)" if kind == "cmd" else "ui (uv run streamlit run regression/web.py)"
     speed = f"{answer.tokens_per_second:.0f} tok/s" if answer.tokens_per_second else "not reported"
@@ -349,7 +373,7 @@ def _prompt_record(prompt: str, answer: Answer, kind: str, extra_context: str) -
         f"- created: {created}",
         f"- interface: {interface}",
         f"- model: {CHAT_MODEL}",
-        f"- excerpts retrieved: {len(answer.hits)} (top_k {TOP_K})",
+        f"- excerpts retrieved: {len(answer.hits)} (top_k {top_k if top_k is not None else TOP_K})",
         f"- answer time: {answer.seconds:.1f} s, {speed}",
         "",
         "## Instruction",

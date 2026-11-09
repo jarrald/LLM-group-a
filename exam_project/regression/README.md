@@ -41,7 +41,11 @@ The answer streams in, is saved to `regression/runs/rag/ui/<n>/`, and can be dow
 
 Attached files are **not** embedded: their text goes into the prompt in full, because a small
 file loses more than it gains from top-k retrieval. Above 20,000 characters the page warns you
-and sends only what fits. Nothing is stored between runs.
+and sends only what fits. Nothing is kept between sessions. Each run folder also receives a copy of the attached files and its path is given to the model, so generated code can read the data instead of inventing a placeholder path.
+
+## The four T's
+
+The page has optional Task / Tone / Target / Traits fields. Anything you fill in is prefixed to the instruction as a bullet list and recorded verbatim in `prompt.md`, so the report can show exactly which framing produced which output. Empty fields are simply left out.
 
 ## Run archive
 

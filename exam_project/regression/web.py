@@ -70,6 +70,12 @@ instructions = st.text_area(
     height=180,
     placeholder="Please make a jupyter notebook that does a linear regression on the dataset in the attached CSV.",
 )
+with st.expander("The four T's (optional)"):
+    task = st.text_input("Task", placeholder="what has to be produced")
+    tone = st.text_input("Tone", placeholder="direct, simple, concise")
+    target = st.text_input("Target", placeholder="audience, output file, goal")
+    traits = st.text_input("Traits", placeholder="experienced software developer, data analyst")
+
 uploads = st.file_uploader("Files it should read", accept_multiple_files=True, type=TEXT_TYPES)
 attachments = read_uploads(uploads)
 
@@ -95,14 +101,19 @@ if generate and instructions.strip():
         pieces.append(piece)
         placeholder.markdown("".join(pieces))
 
+    run_dir = rag.new_run_dir("ui")
+    stored = rag.store_attachments(run_dir, attachments)
     extra = attachments_block(attachments)
-    answer = rag.ask(instructions, top_k=top_k, echo=False, on_token=on_token, extra_context=extra, model=model.strip() or None)
+    if stored:
+        extra += "## On-disk copies\n\n" + "\n".join(f"- {path}" for _, path in stored) + "\n\nRead the data from the path above.\n\n"
+    prompt = rag.wrap_prompt(instructions, task, tone, target, traits)
+    answer = rag.ask(prompt, top_k=top_k, echo=False, on_token=on_token, extra_context=extra, model=model.strip() or None)
     placeholder.markdown(answer.text)
 
     speed = f" - {answer.tokens_per_second:.0f} tok/s" if answer.tokens_per_second else ""
     st.caption(f"{answer.seconds:.1f} s{speed} - {len(answer.hits)} excerpts retrieved")
 
-    saved = rag.save_file(instructions, answer, kind="ui", extra_context=extra)
+    saved = rag.save_file(prompt, answer, kind="ui", extra_context=extra, top_k=top_k, run_dir=run_dir)
     st.success(f"Saved to {saved.relative_to(rag.REGRESSION.parent)}")
     st.download_button("Download", data=saved.read_bytes(), file_name=saved.name)
 
