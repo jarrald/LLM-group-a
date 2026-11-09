@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — requirements (txt)
+# Week 10 — requirements (txt)
 
-Kilde: [week10/calculator-orchestration/requirements.txt](../../source/week10/calculator-orchestration/requirements.txt).
+Source: [week10/calculator-orchestration/requirements.txt](../../source/week10/calculator-orchestration/requirements.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```text
 langchain==1.4.7

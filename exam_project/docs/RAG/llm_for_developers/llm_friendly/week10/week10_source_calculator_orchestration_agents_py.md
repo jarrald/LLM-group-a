@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — agents (py)
+# Week 10 — agents (py)
 
-Kilde: [week10/calculator-orchestration/agents.py](../../source/week10/calculator-orchestration/agents.py).
+Source: [week10/calculator-orchestration/agents.py](../../source/week10/calculator-orchestration/agents.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–32
+### Source lines 1-32
 
 ```python
 """Two LangChain tool-using agents sharing one ChatOllama model."""
@@ -42,7 +42,7 @@ No shell, network or changes to other files. Design:\n"""+design)
         for msg in result["messages"]:
 ```
 
-### Kildelinjer 33–64
+### Source lines 33-64
 
 ```python
             log("message",{"role":role,"type":msg.type,"content":str(msg.content),

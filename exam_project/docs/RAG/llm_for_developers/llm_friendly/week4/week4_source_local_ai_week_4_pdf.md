@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 4 — Local AI week 4 (pdf)
+# Week 4 — Local AI week 4 (pdf)
 
-Kilde: [week4/Local AI week 4.pdf](../../source/week4/Local%20AI%20week%204.pdf).
+Source: [week4/Local AI week 4.pdf](../../source/week4/Local%20AI%20week%204.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 august 2026
 
@@ -16,9 +16,9 @@ Openwebui interface and models
 ComfyUI install
 Connect Ollama and OpenWEBUI
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 What “connect to the API” means
 
@@ -39,9 +39,9 @@ http://localhost:11434/api/tags
 OpenWebUI models: GET
 http://localhost:3000/api/models
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 Ollama API — list models (sanity check)
 
@@ -57,9 +57,9 @@ Good response
 HTTP 200 + JSON containing a “models” array.
 Copy the model name exactly (including any :tag).
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
 Ollama API — chat (prompt → answer)
 
@@ -92,9 +92,9 @@ HTTP 200 JSON:
 
 Use: message.content
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 Ollama API — common failure modes
 
@@ -104,9 +104,9 @@ Ollama API — common failure modes
 • Timeouts → increase client timeout for slow hardware / large models.
 • Streaming confusion → set "stream": false to get one JSON response.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Configure OpenWebUI
 
@@ -116,9 +116,9 @@ Models
 • Make the model visible in OpenWebUI.
 • Copy model names exactly when using APIs later.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 4T’s in OpenWebUI
 
@@ -133,9 +133,9 @@ The point is not only to run a model, but to make it answer in a controlled and 
 
 way.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 OpenWebUI API — authentication (API key)
 
@@ -153,9 +153,9 @@ Body: (none)
 
 Good response: HTTP 200 + JSON list of models.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 OpenWebUI API — chat (OpenAI-compatible shape)
 
@@ -190,9 +190,9 @@ HTTP 200 JSON:
 
 Use: choices[0].message.content
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 OpenWebUI API — common failure modes
 
@@ -202,9 +202,9 @@ OpenWebUI API — common failure modes
 • Timeouts / slow responses → increase timeout; try smaller model.
 • Empty output → read choices[0].message.content.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 Quick troubleshooting (diagnose by HTTP result)
 
@@ -228,9 +228,9 @@ Timeout
 HTTP 500
   → server error; retry; inspect server logs; try a simpler prompt/model
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 AI Models
 
@@ -243,9 +243,9 @@ Models, setup and local tooling
 
 Goal: get the local AI stack running and understand where models fit.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 Setup
 
@@ -258,9 +258,9 @@ Reference
 
 https://github.com/comfyanonymous/ComfyUI
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 Configure OpenWebUI to use ComfyUI
 
@@ -273,13 +273,13 @@ OpenWebUI  →  ComfyUI
 
 UI/chat layer → image workflow backend
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 15
+## Page 15
 
 Rest of today: workshop on your mandatory 
 assignment
 
 THE END ;)
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

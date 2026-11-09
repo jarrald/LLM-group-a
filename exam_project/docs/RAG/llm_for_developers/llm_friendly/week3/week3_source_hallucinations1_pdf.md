@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Hallucinations1 (pdf)
+# Week 3 — Hallucinations1 (pdf)
 
-Kilde: [week3/Hallucinations1.pdf](../../source/week3/Hallucinations1.pdf).
+Source: [week3/Hallucinations1.pdf](../../source/week3/Hallucinations1.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 HalluLens: LLM Hallucination Benchmark
 
@@ -67,7 +67,7 @@ from “factuality” and providing a taxonomy that promotes consistency and fac
 
 arXiv:2504.17550v1  [cs.CL]  24 Apr 2025
 
-## Side 2
+## Page 2
 
 Figure 1 HalluLens: LLM Hallucination Benchmark. It consists of newly introduced extrinsic hallucination tasks and
 existing intrinsic hallucination tasks. Extrinsic hallucination test sets are dynamically generated.
@@ -118,9 +118,9 @@ introduce our criteria for hallucination evaluation benchmark design.
 
 2
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 Figure 2 Hallucination categories and factuality in LLMs: This diagram shows hallucinations in the two, extrinsic and
 intrinsic, categories in the blue circles, excluding “factuality” benchmarks. Existing categorizations by Zhang et al.
@@ -172,9 +172,9 @@ in both factuality and hallucination surveys. TruthfulQA (Lin et al., 2022) is o
 
 3
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
 Figure 3 Examples for each challenge, including extrinsic hallucination, intrinsic hallucination and factuality issues.
 Note that LLM factuality is not a type of hallucination, yet it is closely tied with hallucination problem in LLM. ∗As
@@ -226,9 +226,9 @@ literature (Ji et al., 2023; Huang et al., 2023; Zhang et al., 2023), we list th
 
 4
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 (1) unseen or limited knowledge; (2) contradictory or noisy training data and input source; (3) modeling error.
 
@@ -291,7 +291,7 @@ using open-source resources that are reproducible.
 
 5
 
-## Side 6
+## Page 6
 
 3
 HalluLens (a): Extrinsic Hallucination Evaluation
@@ -369,9 +369,9 @@ prevent hallucination when appropriate for the targeted use case.
 
 6
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 including Llama3.1-Instruct (8B, 70B, 405B), Llama-3.3-70B-Instruct, Qwen-2.5-Instruct (7B, 14B), Gemma-
 2-Instruct (9B, 27B) and Mistral-Instruct (7B, Nemo) and three commercial models, including Claude-3-haiku
@@ -439,7 +439,7 @@ based on the section from the previous step, and (ii) generating the answer usin
 
 7
 
-## Side 8
+## Page 8
 
 False Refusal
 
@@ -554,9 +554,9 @@ frequently (20.01%) compared to the same-sized 3.1 version (52.03%) and even les
 
 8
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 Figure 4 Analysis on performance of LLMs on different difficulty questions. Difficulty is assessed based on harmonic
 centrality score of Wikipedia pages and we divided the pages into 10 different groups (labeled 0 to 9, hardest to easiest).
@@ -608,9 +608,9 @@ alignment with training data.
 
 9
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 False Refusal Rate
 Recall@32
@@ -738,9 +738,9 @@ are not refused are then evaluated with following steps.
 
 10
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 Claim Extraction This step involves decomposing LLM-generated sentences into smaller, verifiable claims.
 
@@ -809,7 +809,7 @@ the model generates hallucindated information about these nonexistent instances.
 
 11
 
-## Side 12
+## Page 12
 
 subtasks: (i) MixedEntities and (ii) GeneratedEntities, which differ in prompt construction and domains.
 Since no knowledge exists for these entities, any information provided is considered a hallucination. This task
@@ -877,7 +877,7 @@ the model’s failure to recognize its beyond their training knowledge and confl
 
 12
 
-## Side 13
+## Page 13
 
 Model
 MixedEntities
@@ -986,9 +986,9 @@ exists or not (see Table 7).
 
 13
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 GeneratedEntities Table 7 demonstrates a generally higher false acceptance rate across models in the Gen-
 eratedEntitiestask compared to the MixedEntities, indicating that LLMs are more cautious at identifying
@@ -1053,7 +1053,7 @@ Evaluating intrinsic hallucination for widely used application, summarization
 
 14
 
-## Side 15
+## Page 15
 
 The Hughes Hallucination Evaluation Model (HHEM) serves as a benchmark for assessing intrinsic hallucination
 within the context of text summarization. Text summarization is a foundational task in NLG where the
@@ -1118,7 +1118,7 @@ Qwen1.5-14B achieves the lowest hallucination rate at 5.33%, indicating substant
 
 15
 
-## Side 16
+## Page 16
 
 hallucination in question answering with reference documents. In contrast, LLaMa-7B exhibits the highest
 hallucination rate at 58.16%, primarily due to language-dependent discrepancies.
@@ -1184,7 +1184,7 @@ in their training data. Consequently, TruthfulQA frequently appears in surveys a
 
 16
 
-## Side 17
+## Page 17
 
 hallucinations, specifically evaluating “factuality hallucination” (Zhang et al., 2023; Huang et al., 2023), as
 well as a benchmark for factuality (Wang et al., 2023). However, we contend that TruthfulQA is primarily a
@@ -1250,7 +1250,7 @@ The TruthfulQA correct answers for other prompts sometimes lack nuance in their 
 
 17
 
-## Side 18
+## Page 18
 
 for the prompt, “Who said, ‘Sometimes a cigar is just a cigar’?” the response is “It is unknown who said,
 ‘Sometimes a cigar is just a cigar.”’ Llama-3.1 models, however, correctly answer that the phrase is often
@@ -1315,7 +1315,7 @@ established knowledge source without concerning the training data. We claim thes
 
 18
 
-## Side 19
+## Page 19
 
 benchmark can be served as extrinsic hallucination when refusal rate measure is included and also the dataset
 is arguably confined to training data.
@@ -1379,7 +1379,7 @@ detect hallucination, which can then serve as a “judge” for the benchmark or
 
 19
 
-## Side 20
+## Page 20
 
 process. For example, HaluEval (Li et al., 2023b) and ANAH 2.0 (Gu et al., 2024) provide an automatic
 annotators for detecting hallucinations. Previous research has addressed factuality detection in LLM-generated
@@ -1450,7 +1450,7 @@ Padua, Italy, March 20–23, 2016. Proceedings 38, pages 716–722. Springer, 20
 
 20
 
-## Side 21
+## Page 21
 
 Nicholas Carlini, Florian Tramer, Eric Wallace, Matthew Jagielski, Ariel Herbert-Voss, Katherine Lee, Adam Roberts,
 
@@ -1535,7 +1535,7 @@ Blunsom. Teaching machines to read and comprehend. Advances in neural informatio
 
 21
 
-## Side 22
+## Page 22
 
 Xiangkun Hu, Dongyu Ru, Lin Qiu, Qipeng Guo, Tianhang Zhang, Yang Xu, Yun Luo, Pengfei Liu, Yue Zhang, and
 
@@ -1622,7 +1622,7 @@ Natural Language Processing, pages 6449–6464, 2023b.
 
 22
 
-## Side 23
+## Page 23
 
 Junyi Li, Jie Chen, Ruiyang Ren, Xiaoxue Cheng, Xin Zhao, Jian-Yun Nie, and Ji-Rong Wen. The dawn after the
 
@@ -1710,7 +1710,7 @@ Denny Jin, Shino Jomoto, Billie Jonn, Heewoo Jun, Tomer Kaftan, Łukasz Kaiser, 
 
 23
 
-## Side 24
+## Page 24
 
 Nitish Shirish Keskar, Tabarak Khan, Logan Kilpatrick, Jong Wook Kim, Christina Kim, Yongjik Kim, Jan Hendrik
 Kirchner, Jamie Kiros, Matt Knight, Daniel Kokotajlo, Łukasz Kondraciuk, Andrew Kondrich, Aris Konstantinidis,
@@ -1804,7 +1804,7 @@ Erik F. Tjong Kim Sang and Fien De Meulder. Introduction to the CoNLL-2003 share
 
 24
 
-## Side 25
+## Page 25
 
 named entity recognition. In Proceedings of the Seventh Conference on Natural Language Learning at HLT-NAACL
 2003, pages 142–147, 2003. https://www.aclweb.org/anthology/W03-0419.
@@ -1887,7 +1887,7 @@ Jian Xie, Kai Zhang, Jiangjie Chen, Renze Lou, and Yu Su. Adaptive chameleon or 
 
 25
 
-## Side 26
+## Page 26
 
 behavior of large language models in knowledge conflicts. In The Twelfth International Conference on Learning
 Representations, 2024. https://openreview.net/forum?id=auKAUJZMO6.
@@ -1913,7 +1913,7 @@ arXiv:2309.01219, 2023.
 
 26
 
-## Side 27
+## Page 27
 
 Appendix
 
@@ -2133,9 +2133,9 @@ more details in Appendix C.
 
 27
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 28
+## Page 28
 
 B
 Discussion and Implementation Details
@@ -2200,9 +2200,9 @@ considered a long-tail problem. Some models, such as GPT-4o and Mistral Nemo Ins
 
 28
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 29
+## Page 29
 
 Figure 6 Model Performance on PreciseWikiQA: A Breakdown by Question Difficulty. The graph shows the performance
 of various models, broken down by question difficulty. Some models tend to abstain less frequently, regardless of
@@ -2241,9 +2241,9 @@ precision, F1 and false refusal rate respectively.
 
 29
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 30
+## Page 30
 
 Figure 7 Average false acceptance rates (%) for MixedEntities and GeneratedEntities tasks. Lower rates indicate
 better performance, as they reflect the model’s ability to correctly refuses from providing information on non-existent
@@ -2290,9 +2290,9 @@ cannot be verified with the given sources.
 
 30
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 31
+## Page 31
 
 B.3.1
 MixedEntities
@@ -2434,9 +2434,9 @@ reported GPT-4o result.
 
 31
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 32
+## Page 32
 
 Figure 8 Kendall’s τ correlations of LLMs’ performance among domains for the sub task MixedEntities. All correlations
 are statistically significant (p ≤0.01), except for pairs with ∄Medicine domain.
@@ -2477,9 +2477,9 @@ a free REST API for quick inquiries into the Google Books Ngram Dataset v3 Miche
 
 32
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 33
+## Page 33
 
 Figure 10 False acceptance rate results for GeneratedEntities using different groups of entity generators in the round-
 robin approach. ‘Claude-3’, ‘Mistral’, and ‘Llama-3.1’ refer to ‘Claude-3-Sonnet’, ‘Mistral-Nemo-Instruct-2407’, and
@@ -2492,9 +2492,9 @@ better.
 
 33
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 34
+## Page 34
 
 C
 LLM Factuality Benchmark
@@ -2561,7 +2561,7 @@ Evaluating factuality with short and challenging fact-seeking questions
 
 34
 
-## Side 35
+## Page 35
 
 SimpleQA shared lots in common with our proposed PreciseWikiQA yet there is difference. SimpleQA
 aims to test factuality of model, which provide the absolute fact. SimpleQA serves as new strong factuality
@@ -2628,7 +2628,7 @@ under two evaluation modes: Relaxed, which focuses solely on the correctness of 
 
 35
 
-## Side 36
+## Page 36
 
 which also checks whether all facts in the answer are accurate. Evaluation is conducted using prompt-based
 LLMs, specifically GPT-4, based on the original code from the authors. The authors provide a notebook
@@ -2694,7 +2694,7 @@ time, this poses challenges for conducting comparative studies across different 
 
 36
 
-## Side 37
+## Page 37
 
 and our proposed LongWiki aim to evaluate model reliability in long-form generation, yet their focuses differ:
 LongFact emphasizes factuality, making it ideal for evaluation against the most current information via search
@@ -2749,7 +2749,7 @@ Please reply with the question only without any explanation or additional inform
 
 37
 
-## Side 38
+## Page 38
 
 PreciseWikiQA Question Answerability Prompt= “I would like you to judge question’s answerability and answer
 the question. I will provide a question and reference document, and you will judge whether the question is
@@ -2781,7 +2781,7 @@ YOUR JUDGEMENT:
 
 38
 
-## Side 39
+## Page 39
 
 PreciseWikiQA Abstention Judgement Prompt= “You’re given single-turn conversations between User and
 Chatbot. Your task is to look at the conversation and identify whether the chatbot abstains from providing an
@@ -2831,7 +2831,7 @@ Result: ”
 
 39
 
-## Side 40
+## Page 40
 
 D.2
 LongWiki
@@ -2903,9 +2903,9 @@ separated by commas. Do not be verbose or provide additional information, just l
 
 40
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 41
+## Page 41
 
 D.3.3
 Prompt template for evaluation MixedEntities
@@ -2955,7 +2955,7 @@ Answer: ”
 
 41
 
-## Side 42
+## Page 42
 
 Non-Existent Medicine evaluation prompt= “You are given a prompt containing a medicine named {name} and a generation
 by an AI. Your task is to determine whether the AI believes {name} exists or not.

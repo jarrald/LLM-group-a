@@ -104,7 +104,7 @@ Format: context → decision → consequences. Keep entries short; link to code 
 
 ## ADR-008 — PDF → Markdown conversion tool
 
-- **Status:** Superseded by ADR-021 (2026-10-31)
+- **Status:** Superseded by ADR-023 (2026-10-31)
 - **Context:** Slides are PDFs; the RAG pipeline works on Markdown. Extraction quality
   drives everything downstream (chunking, metadata, answers). Candidates: `pypdf` (plain
   text, layout-poor), `pymupdf`/`pymupdf4llm` (layout-aware Markdown), heavier
@@ -324,14 +324,12 @@ Format: context → decision → consequences. Keep entries short; link to code 
   for the assignment write-up, the numbers must be collected by a real run again, and
   `docs/evaluation/` is the place for them.
 
----
+## ADR-023 — Local source conversion and code-preserving chunking
 
-## ADR-021 — Lokal kildekonvertering og kodebevarende chunking
-
-- **Status:** Accepted (2026-10-31)
-- **Context:** Råmaterialet dækker nu uge 1, 2, 3, 4, 6, 8, 9 og 10 og indeholder PDF'er, notebooks, kode, data, diagrammer og animationer. De håndskrevne noter fra uge 1–3 skal bevares.
-- **Decision:** `scripts/convert_course_material.py` bruger PyMuPDF til sideopdelt PDF-tekst og valgfri dansk/engelsk OCR, standardbiblioteket til notebooks/data/Draw.io og FFmpeg til videometadata. Visuelle mediebeskrivelser vedligeholdes særskilt. Conversion-afhængigheder er en valgfri uv-gruppe. Hver kilde registreres med SHA-256 i manifestet. Kilder og håndskrevne noter overskrives ikke. Loaderen beskærer `source/`, miljøer og caches før gennemløb. Chunker-version 2 fortolker ikke overskrifter inde i fenced code blocks.
-- **Consequences:** 73 relevante kilder er dækket, inklusive én identisk dublet og fire visuelt beskrevne medier. 346 PDF-sider er kontrolleret for bevaret tekstlag. Korpusset er 85 dokumenter og 1.659 chunks. Eksisterende Chroma-indeks skal genopbygges med `ingest.py --recreate`. Layout/formler og OCR har dokumenterede begrænsninger; video er visuelt sammenfattet, ikke frame-for-frame-transskriberet. Uge 5 og 7 er ikke leveret.
+- **Status:** Accepted (2026-10-31; renumbered from a duplicate `ADR-021` on 2026-11-09)
+- **Context:** The raw material now covers weeks 1, 2, 3, 4, 6, 8, 9 and 10 and contains PDFs, notebooks, code, data, diagrams and animations. The hand-written notes from weeks 1–3 must be preserved.
+- **Decision:** `scripts/convert_course_material.py` uses PyMuPDF for page-split PDF text and optional Danish/English OCR, the standard library for notebooks, data and Draw.io, and FFmpeg for video metadata. Visual media descriptions are maintained separately in `media-descriptions.json`. The conversion dependencies are an optional `uv` group. Every source is recorded with a SHA-256 in the manifest. Sources and hand-written notes are never overwritten. The loader prunes `source/`, environments and caches before walking. Chunker version 2 does not interpret headings inside fenced code blocks. The generated scaffolding (`# Week N`, `Source:`, `## Page N`, `### Source lines`, `## Cell N`, `- Edge:`) and the media descriptions are in English, so the indexed corpus is monolingual apart from the two deliberate language-sample corpora in `week3`.
+- **Consequences:** 73 relevant sources are covered, including one identical duplicate and four visually described media. 346 PDF pages were checked for a preserved text layer. The corpus is 85 documents and 1,660 chunks after the 2026-11-09 translation (1,659 before it). An existing Chroma index must be rebuilt with `ingest.py --recreate`. Layout, formulas and OCR have documented limitations; video is summarised visually, not transcribed frame by frame. Weeks 5 and 7 were not delivered. Translation changed chunk text, so chunk ids and distances changed: the index must be rebuilt and the retrieval checks re-run. Source digests are computed over LF-normalised bytes for text sources, so a Windows checkout that rewrites line endings does not look like changed content.
 
 ## Template for new entries
 
@@ -344,13 +342,4 @@ Format: context → decision → consequences. Keep entries short; link to code 
 - **Consequences:** What becomes easier, what becomes harder, what must be updated.
 ```
 
-
-```markdown
-## ADR-0NN — <short title>
-
-- **Status:** Proposed | Accepted | Superseded by ADR-0NN | Rejected
-- **Context:** What forces the decision (constraints, evidence, requirements).
-- **Decision:** What we do, precisely enough to implement.
-- **Consequences:** What becomes easier, what becomes harder, what must be updated.
-```
 

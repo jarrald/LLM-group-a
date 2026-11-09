@@ -1,20 +1,20 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Week3 (pdf)
+# Week 3 — Week3 (pdf)
 
-Kilde: [week3/Week3.pdf](../../source/week3/Week3.pdf).
+Source: [week3/Week3.pdf](../../source/week3/Week3.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 LLMs for 
 Developers E26
 
 Week 3
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 Agenda
 
@@ -27,41 +27,41 @@ Agenda
 11. september 2026
 2
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
-Værdien af at være i studiegruppe KAN ikke overvurderes.
+The value of being in a study group CANNOT be overestimated.
 
 How are we doing
 
 on groups?
 ‘A’, ‘B’, ‘C’, ‘D’, …
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
-Vigtige datoer – igen.
+Important dates – again.
 
-Fre 4. september: mandatory assignment 1 udleveres.
+Fri 4 September: mandatory assignment 1 is released.
 
-Tir 29. september: workshop & mandatory assignment 2 udleveres. Gæst fra ITU!
+Tue 29 September: workshop & mandatory assignment 2 is released. Guest from ITU!
 
-Tor 8. oktober: aflevering mandatory assignment 1 + review one other assignment.
+Thu 8 October: hand-in of mandatory assignment 1 + review one other assignment.
 
-Tor 29. oktober: aflevering Mandatory Assignment 2 + review one other assignment.
+Thu 29 October: hand-in of Mandatory Assignment 2 + review one other assignment.
 
-Fre 6. november: projektforløb starter.
+Fri 6 November: the project period starts.
 
-Man 14. december - ?: Eksamen
+Mon 14 December - ?: Exam
 
 11. september 2026
 4
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 Recap – week 1
 
@@ -80,15 +80,15 @@ Machine Learning
 
 Societal Aspects
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Machine Learning
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 11. september 2026
 7
@@ -104,9 +104,9 @@ Prescriptive
 Compactification…
 … busy boil-down slide ... ☺
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 x = [1, 2, 3, 4]
 
@@ -130,9 +130,9 @@ x
 Remember, LLMs have billions of parameters!
 And non-linear functions.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 ❖In machine learning a model is trained, by minimizing an error function.
 
@@ -147,9 +147,9 @@ The model can now be used to predict output values from new data.
 
 Point being…
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 Example embedding map from Nomic.
 
@@ -158,15 +158,15 @@ https://atlas.nomic.ai/map/nomic-text-embed-v1-5m-sample
 https://static.nomic.ai/reports/2024_Nom
 ic_Embed_Text_Technical_Report.pdf
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 Societal Aspects
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 We are still also looking at some of these 
 societal aspects (SA) of the LLM revolution:
@@ -203,9 +203,9 @@ LLM Energy Consumption
 
 Small time case – but quite illustrative.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 Last week’s topics
 
@@ -232,9 +232,9 @@ Let’s relate this to Prompt
 
 Engineering!
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 Ambiguity, and worse yet, Hallucination of LLMs can inflict – sometimes even severely so – 
 unintended societal discourse.
@@ -256,18 +256,18 @@ attempts, this week (Week 3).
 
 Point being… Societal Aspects
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 15
+## Page 15
 
 11. september 2026
 15
 
 Take a 10 minute break.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 16
+## Page 16
 
 Machine Learning – week 3
 
@@ -278,9 +278,9 @@ Machine Learning – week 3
 11. september 2026
 16
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 17
+## Page 17
 
 Paper exercise: 1 iteration.
 
@@ -296,13 +296,13 @@ Python exercise: 10+ iterations.
 
 => error low
 
-=> nøjagtighed = high
+=> accuracy = high
 
 We trained a linear predictive machine learning model – linear regression.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 18
+## Page 18
 
 Our simple model from Week 1 is:
 
@@ -321,9 +321,9 @@ Only one set of a and b is the best one!!
 
 Gradient Descent 1
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 19
+## Page 19
 
 ‹#›
 
@@ -344,9 +344,9 @@ values of a and b.
 … and a few good guesses…
 … but which is the right one…?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 20
+## Page 20
 
 Gradient Descent 3
 
@@ -372,9 +372,9 @@ Our loss function becomes – remember – the (total) error:
 
 !! We must the a and b to match the data by looking for smallest value of L !!
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 21
+## Page 21
 
 Gradient Descent 4
 
@@ -408,9 +408,9 @@ v)
 vi)
 …SOLVED!
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 22
+## Page 22
 
 Model Training by Minimizing the Loss
 Exercise 3.1
@@ -427,9 +427,9 @@ Gradient descent in Python, Scikit Learn, diabetes data.
 5. Play with it, change parameters, especially the LEARNING_RATE.
 6. Try to “break” the fitting by severely altering the LEARNING_RATE (btw 0.0 and 1.0).
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 23
+## Page 23
 
 11. september 2026
 ‹#›
@@ -438,9 +438,9 @@ Gradient Descent 5
 
 You should see somethings like this
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 24
+## Page 24
 
 11. september 2026
 ‹#›
@@ -450,9 +450,9 @@ Gradient Descent 6
 We change into K-fold cross validation, where we sample K batches of training data and validation 
 data K times, at random, and make the fit(s). This gives K estimate(s) of slope and bias.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 25
+## Page 25
 
 Gradient Descent Last
 
@@ -478,9 +478,9 @@ semantically, nor syntatically.
 But we can get very close to a minimum by 
 training for months and months at a time.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 26
+## Page 26
 
 Multiple local minima – Global maximum
 
@@ -492,9 +492,9 @@ parameters
 • We may never find the “right” global 
 minimum but end up in a local trough
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 27
+## Page 27
 
 Example embedding map from Nomic.
 
@@ -503,9 +503,9 @@ https://atlas.nomic.ai/map/nomic-text-embed-v1-5m-sample
 https://static.nomic.ai/reports/2024_Nom
 ic_Embed_Text_Technical_Report.pdf
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 28
+## Page 28
 
 We will begin to look at language modeling next time 
 (week 5)
@@ -513,9 +513,9 @@ We will begin to look at language modeling next time
 11. september 2026
 28
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 29
+## Page 29
 
 Text Corpora and Embeddings
 Exercise 3.2
@@ -532,18 +532,18 @@ Voluntary prep for week 5, you can download ‘corpus.txt’ and play around.
 5. Play with it, change parameters, especially the LEARNING_RATE.
 6. Try to “break” the fitting by severely altering the LEARNING_RATE (btw 0.0 and 1.0).
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 30
+## Page 30
 
 11. september 2026
 30
 
 Take a 15 minute break.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 31
+## Page 31
 
 Societal Aspects – week 3
 
@@ -554,9 +554,9 @@ Societal Aspects – week 3
 11. september 2026
 31
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 32
+## Page 32
 
 Ambiguity, and worse yet, Hallucination of LLMs can inflict – sometimes even severely so – 
 unintended societal discourse.
@@ -578,9 +578,9 @@ attempts, this week (Week 3).
 
 Point being… Societal Aspects
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 33
+## Page 33
 
 Ambiguity, and worse yet, Hallucination of LLMs can inflict – sometimes even severely so – 
 unintended societal discourse.
@@ -601,9 +601,9 @@ fact validation measures.
 
 Point being… Societal Aspects
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 34
+## Page 34
 
 4 Ts -- Prompt Engineering
 
@@ -619,9 +619,9 @@ Task
 Tone
  Target
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 35
+## Page 35
 
 Prompt Injection I
 
@@ -634,9 +634,9 @@ Output / action — may follow either source
 
 No separation survives the concatenation step.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 36
+## Page 36
 
 Two Ways to Inject
 
@@ -648,18 +648,18 @@ INDIRECT
 
 Hidden in content the model reads later — the real user never sees it.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 37
+## Page 37
 
 11. september 2026
 ‹#›
 
 Week 3 SA topical slides
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 38
+## Page 38
 
 Exercise 3.3
 
@@ -672,9 +672,9 @@ Exercise 3.3
 • We finish Friday 25th September 
 (week 5).
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 39
+## Page 39
 
 11. september 2026
 39
@@ -687,4 +687,4 @@ LLMs for Developers next: week 5
 TBD
 TBD
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

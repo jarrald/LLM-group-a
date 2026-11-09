@@ -1,9 +1,9 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — week8_notes (md)
+# Week 6 — week8_notes (md)
 
-Kilde: [week6/week8_notes.md](../../source/week6/week8_notes.md).
+Source: [week6/week8_notes.md](../../source/week6/week8_notes.md).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 RAG means retrieval-augmented generation.
 

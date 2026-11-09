@@ -1,32 +1,32 @@
-# Uge 8 — LLM Agents og Agentic LLMs
+# Week 8 — LLM Agents and Agentic LLMs
 
-Kilde: `source/week8/Week_8_LLM_Agents_and_Agentic_LLMs_EK.pdf`, 16 PDF-sider. Se [kildekonverteringen](week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf.md). Sidenumre henviser til placeringen i PDF'en; de trykte slidenumre afviger enkelte steder.
+Source: `source/week8/Week_8_LLM_Agents_and_Agentic_LLMs_EK.pdf`, 16 PDF pages. See the [source conversion](week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf.md). Page numbers refer to the position in the PDF; the printed slide numbers differ in a few places.
 
-## Kursets skelnen handler om kontrol
+## The course's distinction is about control
 
-I kursets terminologi vælger en LLM Agent selv, hvordan den arbejder hen mod et mål. Instruktioner og harness definerer omgivelserne, men modellen vælger i høj grad rækkefølgen af handlinger.
+In the course's terminology, an LLM Agent chooses for itself how to work towards a goal. Instructions and a harness define the environment, but the model largely chooses the order of actions.
 
-En Agentic LLM følger derimod et eksekveringsforløb, som udvikleren har programmeret: trin, overgange, betingelser og validering. Modellen kan stadig træffe beslutninger inde i et trin. Slides understreger, at dette er kursets taksonomi; ordene bruges bredere uden for kurset.
+An Agentic LLM, by contrast, follows an execution path that the developer has programmed: steps, transitions, conditions and validation. The model can still make decisions inside a step. The slides emphasise that this is the course's taxonomy; the words are used more broadly outside the course.
 
-## Samme opgave, forskellig styring
+## Same task, different steering
 
-Eksemplet er implementering af et REST API-endpoint. En agent kan selv vælge, hvornår den læser filer, skriver kode, tester og stopper. I det programmerede forløb kræver harnesset i stedet generering, test og validering med et fastlagt antal nye forsøg ved fejl.
+The example is the implementation of a REST API endpoint. An agent can decide for itself when to read files, write code, test and stop. In the programmed flow the harness instead requires generation, testing and validation with a fixed number of new attempts on failure.
 
-En liste over tools, godkendelsestrin eller en tidsgrænse gør ikke alene et system til en Agentic LLM i denne definition. Det afgørende er, om brugeren eller udvikleren definerer overgangene i workflowet. Frameworkets navn er heller ikke nok til at afgøre kategorien.
+A list of tools, approval steps or a time limit does not by itself make a system an Agentic LLM in this definition. What matters is whether the user or the developer defines the transitions in the workflow. The name of the framework is not enough to decide the category either.
 
-## Hermes som eksempel på et harness
+## Hermes as an example of a harness
 
-Slides skelner mellem modeludbyder og endpoint, Hermes-harnessets agent-loop samt eksterne capabilities som tools, skills, memory og MCP. Praktikdelen undersøger installation, provideropsætning og dashboard, herunder modelvalg, instruktioner, tilladelser og vedvarende sessions.
+The slides distinguish between model provider and endpoint, the agent loop of the Hermes harness, and external capabilities such as tools, skills, memory and MCP. The practical part examines installation, provider setup and the dashboard, including model choice, instructions, permissions and persistent sessions.
 
-Installationskommandoerne i den fulde kilde er historiske undervisningseksempler. De er bevaret som kildetekst; konverteringen har ikke installeret eller startet Hermes.
+The installation commands in the full source are historical teaching examples. They are preserved as source text; the conversion has neither installed nor started Hermes.
 
-## Arkitekturøvelsen
+## The architecture exercise
 
-Vælg tilgang til de beskrevne scenarier, og begrund, hvor kontrol bør ligge. Slides nævner blandt andet undersøgende fejlsøgning og releasevalidering. Diskutér, hvad et fleksibelt modelstyret forløb giver, og hvornår faste test-, validerings- og retrytrin er nødvendige.
+Choose an approach for the described scenarios and argue where control should sit. Among other things the slides mention exploratory debugging and release validation. Discuss what a flexible model-steered flow gives you, and when fixed test, validation and retry steps are necessary.
 
-## Spørgsmål til repetition
+## Review questions
 
-1. Hvem bestemmer næste handling i de to tilgange?
-2. Hvorfor er tools og runtimebegrænsninger ikke i sig selv et programmeret workflow?
-3. Hvad er forskellen på en modeludbyder og et harness?
-4. Hvornår giver det mening at fastlåse test og validering i kode?
+1. Who decides the next action in the two approaches?
+2. Why are tools and runtime constraints not in themselves a programmed workflow?
+3. What is the difference between a model provider and a harness?
+4. When does it make sense to fix testing and validation in code?

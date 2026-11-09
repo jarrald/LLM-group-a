@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — app (js)
+# Week 6 — app (js)
 
-Kilde: [week6/openwebui_demo/static/app.js](../../source/week6/openwebui_demo/static/app.js).
+Source: [week6/openwebui_demo/static/app.js](../../source/week6/openwebui_demo/static/app.js).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–36
+### Source lines 1-36
 
 ```javascript
 const sendBtn = document.getElementById('sendBtn');

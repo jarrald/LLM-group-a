@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — HandInPromptingArtifacts (pdf)
+# Week 3 — HandInPromptingArtifacts (pdf)
 
-Kilde: [week3/HandInPromptingArtifacts.pdf](../../source/week3/HandInPromptingArtifacts.pdf).
+Source: [week3/HandInPromptingArtifacts.pdf](../../source/week3/HandInPromptingArtifacts.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 LLMs for Developers, SOFT, Autumn 2026
 September 11th, 2026
@@ -64,4 +64,4 @@ Scope
 Groups of 4-6 students. Workload: approximately 0.5 FTE week per group (this is about 23 hrs per group --
 or 4.5 hours for a group of five). Focus on analysis and synthesis of existing research, not experiments.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

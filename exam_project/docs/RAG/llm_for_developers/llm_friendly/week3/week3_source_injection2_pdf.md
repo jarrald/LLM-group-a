@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Injection2 (pdf)
+# Week 3 — Injection2 (pdf)
 
-Kilde: [week3/Injection2.pdf](../../source/week3/Injection2.pdf).
+Source: [week3/Injection2.pdf](../../source/week3/Injection2.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 Analysis of LLMs Against Prompt Injection and Jailbreak Attacks
 
@@ -147,9 +147,9 @@ support reproducible research in LLM security [3, 5–7].
 
 10
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
 Piyush Jaiswal, Aaditya Pratap, Shreyansh Saraswati, Harsh Kasyap, and Somanath Tripathy
@@ -286,7 +286,7 @@ safety alignment through supervised fine-tuning and RLHF,
 
 11
 
-## Side 3
+## Page 3
 
 Analysis of LLMs Against Prompt Injection and Jailbreak Attacks
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
@@ -427,7 +427,7 @@ responses (3.4).
 
 12
 
-## Side 4
+## Page 4
 
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
 Piyush Jaiswal, Aaditya Pratap, Shreyansh Saraswati, Harsh Kasyap, and Somanath Tripathy
@@ -591,9 +591,9 @@ vulnerable (True) if the model produces content that meaningfully
 
 13
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 Analysis of LLMs Against Prompt Injection and Jailbreak Attacks
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
@@ -744,7 +744,7 @@ for different deployment contexts without retraining.
 
 14
 
-## Side 6
+## Page 6
 
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
 Piyush Jaiswal, Aaditya Pratap, Shreyansh Saraswati, Harsh Kasyap, and Somanath Tripathy
@@ -891,7 +891,7 @@ rationalizing its own unsafe outputs.
 
 15
 
-## Side 7
+## Page 7
 
 Analysis of LLMs Against Prompt Injection and Jailbreak Attacks
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
@@ -1056,9 +1056,9 @@ Strongly Aligned / Over-Aligned Models
 
 16
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
 Piyush Jaiswal, Aaditya Pratap, Shreyansh Saraswati, Harsh Kasyap, and Somanath Tripathy
@@ -1217,9 +1217,9 @@ duration of adversarial testing.
 
 17
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 Analysis of LLMs Against Prompt Injection and Jailbreak Attacks
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
@@ -1395,9 +1395,9 @@ achieved in multiple attacker-defender pairings: Qwen3
 
 18
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
 Piyush Jaiswal, Aaditya Pratap, Shreyansh Saraswati, Harsh Kasyap, and Somanath Tripathy
@@ -1566,9 +1566,9 @@ standard safety filters failed.
 
 19
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 Analysis of LLMs Against Prompt Injection and Jailbreak Attacks
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
@@ -1738,9 +1738,9 @@ injection-robust but jailbreak-vulnerable models require
 
 20
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 LM-SHIELD ’26, June 01–05, 2026, Bangalore, India
 Piyush Jaiswal, Aaditya Pratap, Shreyansh Saraswati, Harsh Kasyap, and Somanath Tripathy
@@ -1931,4 +1931,4 @@ Language Models. arXiv preprint arXiv:2307.15043 (2023).
 
 21
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

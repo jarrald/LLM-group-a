@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — run_suite (py)
+# Week 10 — run_suite (py)
 
-Kilde: [week10/calculator-orchestration/checks/run_suite.py](../../source/week10/calculator-orchestration/checks/run_suite.py).
+Source: [week10/calculator-orchestration/checks/run_suite.py](../../source/week10/calculator-orchestration/checks/run_suite.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–18
+### Source lines 1-18
 
 ```python
 """Child-process test entry point. No zero-test or skipped-test success."""

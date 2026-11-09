@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — class-diagram (drawio)
+# Week 10 — class-diagram (drawio)
 
-Kilde: [week10/calculator-orchestration/docs/design/class-diagram.drawio](../../source/week10/calculator-orchestration/docs/design/class-diagram.drawio).
+Source: [week10/calculator-orchestration/docs/design/class-diagram.drawio](../../source/week10/calculator-orchestration/docs/design/class-diagram.drawio).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ## Diagram — Calculator class design
 
-Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet.
+Labels and edges from the diagram XML; placement and graphics are not reproduced.
 
 - Element: ConsoleApp ------------------------ - calculator: Calculator ------------------------ + __init__(calculator: Calculator) + run() -> int
 
@@ -15,7 +15,7 @@ Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet
 
 - Element: Module entry point if __name__ == "__main__": raise SystemExit( ConsoleApp(Calculator()).run())
 
-- Forbindelse: ConsoleApp
+- Edge: ConsoleApp
 ------------------------
 - calculator: Calculator
 ------------------------
@@ -27,7 +27,7 @@ Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet
 Raises ValueError for invalid operation,
 zero divisor or non-finite values. uses 1 (constructor injection)
 
-- Forbindelse: Module entry point
+- Edge: Module entry point
 if __name__ == "__main__":
     raise SystemExit(
         ConsoleApp(Calculator()).run()) → ConsoleApp

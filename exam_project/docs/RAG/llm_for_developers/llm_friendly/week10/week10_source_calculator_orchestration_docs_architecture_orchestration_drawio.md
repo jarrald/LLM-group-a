@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — orchestration (drawio)
+# Week 10 — orchestration (drawio)
 
-Kilde: [week10/calculator-orchestration/docs/architecture/orchestration.drawio](../../source/week10/calculator-orchestration/docs/architecture/orchestration.drawio).
+Source: [week10/calculator-orchestration/docs/architecture/orchestration.drawio](../../source/week10/calculator-orchestration/docs/architecture/orchestration.drawio).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ## Diagram — Bounded coder and reviewer orchestration
 
-Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet.
+Labels and edges from the diagram XML; placement and graphics are not reproduced.
 
 - Element: Read immutable design returns = 0
 
@@ -25,31 +25,31 @@ Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet
 
 - Element: FAILURE write unresolved findings
 
-- Forbindelse: Read immutable design
+- Edge: Read immutable design
 returns = 0 → Coder
 write calculator.py. 
 
-- Forbindelse: Coder
+- Edge: Coder
 write calculator.py → Reviewer / tester
 read code, write tests, run tests. 
 
-- Forbindelse: Reviewer / tester
+- Edge: Reviewer / tester
 read code, write tests, run tests → Review accepts AND
 fresh checks pass?. 
 
-- Forbindelse: Review accepts AND
+- Edge: Review accepts AND
 fresh checks pass? → SUCCESS
 write report and stop. yes
 
-- Forbindelse: Review accepts AND
+- Edge: Review accepts AND
 fresh checks pass? → returns < 3?. no
 
-- Forbindelse: returns < 3? → Increment returns
+- Edge: returns < 3? → Increment returns
 Send latest feedback to coder. yes
 
-- Forbindelse: Increment returns
+- Edge: Increment returns
 Send latest feedback to coder → Coder
 write calculator.py. 
 
-- Forbindelse: returns < 3? → FAILURE
+- Edge: returns < 3? → FAILURE
 write unresolved findings. no

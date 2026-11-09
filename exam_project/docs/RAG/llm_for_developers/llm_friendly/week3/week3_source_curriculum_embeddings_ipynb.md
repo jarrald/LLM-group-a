@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — curriculum_embeddings (ipynb)
+# Week 3 — curriculum_embeddings (ipynb)
 
-Kilde: [week3/curriculum_embeddings.ipynb](../../source/week3/curriculum_embeddings.ipynb).
+Source: [week3/curriculum_embeddings.ipynb](../../source/week3/curriculum_embeddings.ipynb).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-Kildeceller er bevaret i rækkefølge. Koden er ikke kørt. Gemte outputs, billeder og kørselsnumre er udeladt; der tilføjes ingen forsøgsresultater.
+Notebook cells are preserved in order. The code was not executed. Stored outputs, images and execution counts are omitted; no experimental results are added.
 
-## Celle 1 — markdown
+## Cell 1 — markdown
 
 ### Curriculum Skip-Gram: Watching Words Join the Embedding Space
 
@@ -33,9 +33,9 @@ the result:
 
 No external files are needed — the corpus is embedded below as plain text.
 
-## Celle 2 — code
+## Cell 2 — code
 
-### Kildelinjer 1–11
+### Source lines 1-11
 
 ```python
 
@@ -51,9 +51,9 @@ from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 (registers the '3d' projec
 %matplotlib inline
 ```
 
-## Celle 3 — code
+## Cell 3 — code
 
-### Kildelinjer 1–34
+### Source lines 1-34
 
 ```python
 
@@ -92,9 +92,9 @@ OUTPUT_MP4 = "curriculum_embedding_and_loss.mp4"
 FRAMERATE = 15
 ```
 
-## Celle 4 — code
+## Cell 4 — code
 
-### Kildelinjer 1–12
+### Source lines 1-12
 
 ```python
 
@@ -111,9 +111,9 @@ dig,og det vil d\u00f8 i din stumme sal.
 """
 ```
 
-## Celle 5 — code
+## Cell 5 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 
@@ -163,7 +163,7 @@ def full_batch_loss(pairs, W_in, W_out, neg_table, rng):
     pos_scores = sigmoid(np.sum(v_in * v_out, axis=1))
 ```
 
-### Kildelinjer 46–53
+### Source lines 46-53
 
 ```python
     pos_loss = -np.log(pos_scores + 1e-10)
@@ -176,9 +176,9 @@ def full_batch_loss(pairs, W_in, W_out, neg_table, rng):
     return float(np.mean(pos_loss + neg_loss))
 ```
 
-## Celle 6 — code
+## Cell 6 — code
 
-### Kildelinjer 1–21
+### Source lines 1-21
 
 ```python
 
@@ -204,9 +204,9 @@ W_in = (rng.random((vocab_size, EMBEDDING_DIM)) - 0.5) / EMBEDDING_DIM
 W_out = np.zeros((vocab_size, EMBEDDING_DIM))
 ```
 
-## Celle 7 — code
+## Cell 7 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 
@@ -256,7 +256,7 @@ for phase_idx, (budget, n_active_tracked) in enumerate(phases):
         target, context = pairs_arr[pair_ptr]
 ```
 
-### Kildelinjer 46–70
+### Source lines 46-70
 
 ```python
         pair_ptr += 1
@@ -286,9 +286,9 @@ print(f"Training complete: {step} pair-updates, {len(history)} snapshots, "
       f"{len(unlock_steps)} introduction events.")
 ```
 
-## Celle 8 — code
+## Cell 8 — code
 
-### Kildelinjer 1–44
+### Source lines 1-44
 
 ```python
 
@@ -337,9 +337,9 @@ coin_flip = (1 + NEGATIVE_SAMPLES) * np.log(2)
 print(f"{len(history)} snapshots ready to render.")
 ```
 
-## Celle 9 — code
+## Cell 9 — code
 
-### Kildelinjer 1–43
+### Source lines 1-43
 
 ```python
 
@@ -387,7 +387,7 @@ def render_frame(i, fig=None):
     ax_loss.plot(steps_so_far, tracked_losses_so_far, color=NEW_POINT_COLOR, linewidth=2,
 ```
 
-### Kildelinjer 44–54
+### Source lines 44-54
 
 ```python
                  label="tracked words only (the points on the left)")
@@ -403,7 +403,7 @@ def render_frame(i, fig=None):
     return fig
 ```
 
-## Celle 10 — markdown
+## Cell 10 — markdown
 
 #### Option A: interactive slider
 
@@ -411,9 +411,9 @@ Drag the slider to scrub through training. This redraws the figure in
 place, so it works right here in the notebook without needing any video
 file.
 
-## Celle 11 — code
+## Cell 11 — code
 
-### Kildelinjer 1–20
+### Source lines 1-20
 
 ```python
 
@@ -438,16 +438,16 @@ display(slider, _slider_output)
 _on_slider_change({"new": 0})  # draw the first frame immediately
 ```
 
-## Celle 12 — markdown
+## Cell 12 — markdown
 
 #### Option B: export as MP4
 
 Renders every snapshot to a PNG, then stitches them into a video with
 `ffmpeg` (must be installed and on your `PATH`).
 
-## Celle 13 — code
+## Cell 13 — code
 
-### Kildelinjer 1–12
+### Source lines 1-12
 
 ```python
 
@@ -464,9 +464,9 @@ plt.close(_export_fig)
 print(f"Wrote {len(history)} frames to '{FRAMES_DIR}/'.")
 ```
 
-## Celle 14 — code
+## Cell 14 — code
 
-### Kildelinjer 1–13
+### Source lines 1-13
 
 ```python
 
@@ -484,9 +484,9 @@ if result.returncode != 0:
 print(f"Saved {OUTPUT_MP4}")
 ```
 
-## Celle 15 — code
+## Cell 15 — code
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```python
 

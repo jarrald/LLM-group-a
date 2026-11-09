@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — agent_tools (py)
+# Week 10 — agent_tools (py)
 
-Kilde: [week10/calculator-orchestration/agent_tools.py](../../source/week10/calculator-orchestration/agent_tools.py).
+Source: [week10/calculator-orchestration/agent_tools.py](../../source/week10/calculator-orchestration/agent_tools.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 """Narrow tool surface; local execution is NOT a security sandbox."""
@@ -55,7 +55,7 @@ class WorkspaceTools:
     def reset_review(self):
 ```
 
-### Kildelinjer 46–86
+### Source lines 46-86
 
 ```python
         self.evidence = None
@@ -101,7 +101,7 @@ class WorkspaceTools:
                 return "ERROR: run tests after the latest file change before submitting review"
 ```
 
-### Kildelinjer 87–95
+### Source lines 87-95
 
 ```python
             if approved and not self.evidence["passed"]:

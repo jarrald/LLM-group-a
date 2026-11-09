@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — README (md)
+# Week 6 — README (md)
 
-Kilde: [week6/README.md](../../source/week6/README.md).
+Source: [week6/README.md](../../source/week6/README.md).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 from __future__ import annotations
@@ -55,7 +55,7 @@ def read_pdf_file(path: Path) -> str:
     reader = PdfReader(str(path))
 ```
 
-### Kildelinjer 46–90
+### Source lines 46-90
 
 ```python
     pages: List[str] = []
@@ -105,7 +105,7 @@ def embed_texts(texts: List[str]) -> List[List[float]]:
     )
 ```
 
-### Kildelinjer 91–133
+### Source lines 91-133
 
 ```python
     response.raise_for_status()

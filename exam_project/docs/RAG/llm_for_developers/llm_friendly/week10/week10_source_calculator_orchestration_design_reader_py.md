@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — design_reader (py)
+# Week 10 — design_reader (py)
 
-Kilde: [week10/calculator-orchestration/design_reader.py](../../source/week10/calculator-orchestration/design_reader.py).
+Source: [week10/calculator-orchestration/design_reader.py](../../source/week10/calculator-orchestration/design_reader.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–22
+### Source lines 1-22
 
 ```python
 """Read uncompressed draw.io XML as compact semantic text, not image pixels."""

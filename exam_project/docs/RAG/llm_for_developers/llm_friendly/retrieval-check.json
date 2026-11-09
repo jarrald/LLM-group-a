@@ -263,7 +263,7 @@
         }
       ]
     },
-    "interpretation": "Gradient descent og validering findes i både uge 3 og 9. Den brede søgning finder relevante uge 3-noter; uge 9 verificeres derfor særskilt med CNN-animationens indhold. Ingen filterændring er foretaget."
+    "interpretation": "Gradient descent and validation appear in both week 3 and week 9. The broad query finds relevant week 3 notes; week 9 is therefore verified separately against the content of the CNN animation. No filter was changed."
   },
   "cross_language_probe": {
     "result": {
@@ -309,6 +309,6 @@
         }
       ]
     },
-    "interpretation": "Den engelske CNN-forespørgsel finder ikke de danske videobeskrivelser blandt de seks første resultater. Dansk spørgsmål finder uge 9 som første resultat. Tværsproglig retrieval skal vurderes i fase 7; ingen algoritme eller filtrering er ændret for at bestå prøven."
+    "interpretation": "The English CNN query does not find the Danish video descriptions among the first six results. A Danish question finds week 9 as the first result. Cross-language retrieval is to be assessed in phase 7; no algorithm or filtering was changed to make the check pass."
   }
 }

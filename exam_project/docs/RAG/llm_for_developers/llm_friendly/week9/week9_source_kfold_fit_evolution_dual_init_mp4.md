@@ -1,14 +1,14 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 9 — kfold_fit_evolution_dual_init (mp4)
+# Week 9 — kfold_fit_evolution_dual_init (mp4)
 
-Kilde: [week9/kfold_fit_evolution_dual_init.mp4](../../source/week9/kfold_fit_evolution_dual_init.mp4).
+Source: [week9/kfold_fit_evolution_dual_init.mp4](../../source/week9/kfold_fit_evolution_dual_init.mp4).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Videoens indhold
+## Video content
 
-Varighed: 10,0 sekunder. Filen har intet lydspor. Beskrivelsen bygger på seks jævnt fordelte billedstikprøver; det er en visuel sammenfatning og ikke en transskription af hver frame.
+Duration: 10.0 seconds. The file has no audio track. The description is based on six evenly spaced frame samples; it is a visual summary and not a transcription of every frame.
 
-Venstre panel hedder Two Parallel Fits per Fold: Init A (solid) vs. Init B (dashed). Det viser BMI som standardiseret input, disease progression som target og fem farvede folds. Init A starter som en vandret linje omkring middelværdien; Init B har en anden begyndelsesværdi. Stiplede og fuldt optrukne linjer ændres gennem iterationerne og nærmer sig hinanden.
+The left panel is titled Two Parallel Fits per Fold: Init A (solid) vs. Init B (dashed). It shows BMI as standardised input, disease progression as the target and five coloured folds. Init A starts as a horizontal line around the mean; Init B has a different starting value. Dashed and solid lines change through the iterations and approach each other.
 
-Højre panel hedder Mean Loss Across Folds (log scale). Det viser trænings- og valideringstab for de to initialiseringer. Den ene initialisering starter med større tab, men kurverne falder og nærmer sig lignende niveauer. Animationen illustrerer forskelle mellem initialisering og validering på tværs af folds. Den er ikke dokumentation for, at alle modeller altid konvergerer til samme løsning.
+The right panel is titled Mean Loss Across Folds (log scale). It shows training and validation loss for the two initialisations. One initialisation starts with a larger loss, but the curves fall and approach similar levels. The animation illustrates differences between initialisation and validation across folds. It is not evidence that all models always converge to the same solution.

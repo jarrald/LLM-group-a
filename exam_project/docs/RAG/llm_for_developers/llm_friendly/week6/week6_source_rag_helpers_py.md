@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — rag_helpers (py)
+# Week 6 — rag_helpers (py)
 
-Kilde: [week6/rag_helpers.py](../../source/week6/rag_helpers.py).
+Source: [week6/rag_helpers.py](../../source/week6/rag_helpers.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 from pathlib import Path
@@ -55,7 +55,7 @@ def main() -> None:
                 }
 ```
 
-### Kildelinjer 46–62
+### Source lines 46-62
 
 ```python
             )

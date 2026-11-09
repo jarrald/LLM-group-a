@@ -2,9 +2,9 @@
 
 Implementation-facing companion to [../architecture/rag-pipeline.md](../architecture/rag-pipeline.md).
 It records **how** the course material is prepared and indexed, with the exact commands.
-Kildekonvertering og offline kontrol er gennemført 2026-10-31. Se
-[materialeoversigten](llm_for_developers/llm_friendly/README.md) for de enkelte uger,
-kildedækning og kendte begrænsninger.
+Source conversion and the offline check were completed on 2026-10-31. See the
+[material overview](llm_for_developers/llm_friendly/README.md) for the individual weeks,
+source coverage and known limitations.
 
 ## 1. Source material
 
@@ -28,10 +28,10 @@ docs/RAG/llm_for_developers/
 - The course files are **not modified**: metadata is derived from the path and the document
   header — `doc_id` = the file stem (`week3_hallucinations`), `lecture` = `<N>` from the
   directory, `doc_name` = the first `#` heading.
-- Materialet dækker nu **uge 1, 2, 3, 4, 6, 8, 9 og 10**: **85 dokumenter og 1.659 chunks**.
-  73 relevante kilder er dækket af manifestet, herunder 15 PDF'er med 346 sider.
-  Uge 5 og 7 findes ikke i råmaterialet. Håndskrevne noter og kildekonverteringer er
-  adskilt gennem filnavnene; nye ugeoversigter giver en emneopdelt indgang.
+- The material now covers **weeks 1, 2, 3, 4, 6, 8, 9 and 10**: **85 documents and 1,660 chunks**.
+  73 relevant sources are covered by the manifest, including 15 PDFs with 346 pages.
+  Weeks 5 and 7 are not in the raw material. Hand-written notes and source conversions are
+  separated by their file names; the new week overviews give a topic-by-topic entry point.
 - Sections use `## N. …` / `### …` headings, prose and bullet lists, which suits
   heading-first chunking.
 
@@ -39,13 +39,13 @@ docs/RAG/llm_for_developers/
   than being invented. If page numbers are unavailable, the `page` metadata field is
   omitted — never fabricated ([rag-pipeline.md](../architecture/rag-pipeline.md) §3).
 
-## 2. Kildekonvertering (ADR-021)
+## 2. Source conversion (ADR-023)
 
-`scripts/convert_course_material.py` konverterer alle tilgængelige uger lokalt.
-PyMuPDF 1.28.2 bevarer PDF'ens tekstlag side for side og OCR-læser billedbaserede sider
-med dansk/engelsk Tesseract-sprogdata. Notebooks konverteres celle for celle uden
-kørsel eller gemte outputs. Kode og data bevares; Draw.io bliver labels og forbindelser.
-Animationerne har visuelle beskrivelser og kontrollerede metadata fra FFmpeg.
+`scripts/convert_course_material.py` converts all available weeks locally.
+PyMuPDF 1.28.2 preserves the PDF text layer page by page and OCR-reads image-based pages
+with Danish/English Tesseract language data. Notebooks are converted cell by cell without
+execution or stored outputs. Code and data are preserved; Draw.io becomes labels and edges.
+The animations have visual descriptions and verified metadata from FFmpeg.
 
 ```powershell
 uv sync --group conversion
@@ -53,9 +53,12 @@ uv run --group conversion python .\scripts\convert_course_material.py --ocr
 uv run --group conversion python .\scripts\check_course_material.py --verify-pdfs
 ```
 
-De oprindelige uge 1–3-noter er bevaret. Manifestet registrerer kildehash, output og
-OCR-bemærkninger. `.env`, miljøer og caches springes over. Grafiske detaljer, OCR-tegn
-og matematiske layout kræver fortsat kritisk læsning; de er ikke automatisk verificeret.
+The original week 1-3 notes are preserved. The manifest records the source hash, the output
+and any OCR notes. `.env`, environments and caches are skipped. Graphical detail, OCR
+characters and mathematical layout still need critical reading; they are not verified
+automatically. The generated scaffolding and the media descriptions are in English
+(2026-11-09), so the indexed corpus is monolingual apart from the two deliberate
+language-sample corpora in `week3`.
 
 ## 3. Chunking
 
@@ -67,10 +70,10 @@ Strategy (to be validated against the real slides in SG-022):
   and never split inside a fenced code block or a table.
 - Drop chunks under **80** characters unless they clearly carry meaning (e.g. a short definition).
 
-Implemented in `app/adapters/chunker.py` (`CHUNKER_VERSION = "2"`, ADR-021).
-Kontrolleret på det aktuelle materiale: **85 dokumenter → 1.659 chunks**.
-Kodekommentarer og overskrifter inde i code fences opretter ikke nye Markdown-afsnit.
-Større kildefiler opdeles derfor i komplette kodeblokke med linjenumre før chunking.
+Implemented in `app/adapters/chunker.py` (`CHUNKER_VERSION = "2"`, ADR-023).
+Checked against the current material: **85 documents → 1,660 chunks** (measured 2026-11-09).
+Code comments and headings inside code fences do not create new Markdown sections.
+Larger source files are therefore split into complete code blocks with line numbers before chunking.
 - Every chunk inherits `course_id`, `doc_id`, `doc_name`, `lecture`, `page` (when known)
   plus `chunk_index` and `text_hash`.
 
@@ -125,7 +128,7 @@ uv run python .\scripts\ingest.py
 chroma browse llms_for_devs_v1 --local
 ```
 
-Historisk kontrol (2026-10-30 mod `llms_for_devs_v1`, uge 1–3, chunker-version 1):
+Historical check (2026-10-30 against `llms_for_devs_v1`, weeks 1–3, chunker version 1):
 
 - [x] Chunk count is reported and stable across two runs — **153** both times (idempotent).
 - [x] A fresh collection built from a clean run (`STUDYGRAPH_COLLECTION=repro_check_v1`)
@@ -139,13 +142,19 @@ Historisk kontrol (2026-10-30 mod `llms_for_devs_v1`, uge 1–3, chunker-version
 - [ ] An off-topic query must return low-relevance results so that `empty` handling can be
       exercised — still to record (belongs to the Phase 7 question set).
 
-Aktuel indeksering 2026-10-31: `uv run python .\scripts\ingest.py --recreate` gennemført.
-**1.659 vektorer upsertet, collection count = 1.659**, chunker-version 2, embeddings med
-`nomic-embed-text` (768 dimensioner). Embedding på CPU tog 569,1 sekunder.
+Current indexing, 2026-10-31: `uv run python .\scripts\ingest.py --recreate` completed.
+**1,659 vectors upserted, collection count = 1,659**, chunker version 2, embeddings with
+`nomic-embed-text` (768 dimensions). Embedding on this machine's CPU took 569.1 seconds.
+
+The corpus was translated to English on 2026-11-09, which changes chunk text, chunk ids and
+distances. `scripts/check_course_material.py` now counts **1,660 chunks**, so the Chroma
+collection still holds the pre-translation index: it has to be rebuilt with `--recreate` and
+the retrieval checks have to be re-run.
 
 ## 8. Open items
 
-- Visuel kvalitetskontrol af komplekse PDF-tabeller og formler (værktøjet er valgt i ADR-021).
+- Visual quality check of complex PDF tables and formulas (the tool is chosen in ADR-023).
+- Re-index and re-run the retrieval checks after the 2026-11-09 translation.
 - Exact chunk size/overlap and `top_k` (to be measured, then recorded in the decision log).
 - Whether lecture PDFs contain tables/code that need special handling.
 - Whether a relevance threshold is meaningful for this corpus.

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — rag_intro (txt)
+# Week 6 — rag_intro (txt)
 
-Kilde: [week6/rag_intro.txt](../../source/week6/rag_intro.txt).
+Source: [week6/rag_intro.txt](../../source/week6/rag_intro.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```text
 %PDF-1.3
@@ -55,7 +55,7 @@ Gar>Cd8&IN&:EXkk,h-rUkF>Gm9?9\6>G&Npn=m/]Y9bSFtMJ-\A.JZ*,lXM*8.B\fpT6PSEe_Os)%fh
 endobj
 ```
 
-### Kildelinjer 46–68
+### Source lines 46-68
 
 ```text
 xref

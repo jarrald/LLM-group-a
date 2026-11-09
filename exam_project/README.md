@@ -77,12 +77,14 @@ docs/RAG/llm_for_developers/
     └── week3/week3_overview.md, week3_hallucinations.md, …
 ```
 
-Materialet dækker nu uge **1, 2, 3, 4, 6, 8, 9 og 10**: 85 Markdown-dokumenter og
-1.659 chunks. Uge 5 og 7 findes ikke i det uploadede råmateriale.
-Se [materialeoversigten](docs/RAG/llm_for_developers/llm_friendly/README.md) for kilder,
-ugeoversigter, PDF-sider, notebookceller og beskrivelser af animationerne.
+The material now covers weeks **1, 2, 3, 4, 6, 8, 9 and 10**: 85 Markdown documents and
+1,660 chunks. Weeks 5 and 7 are not in the uploaded raw material. The corpus is written in
+English so that it matches the language of the embedding model; the only exception is the two
+deliberate language-sample corpora in `week3`.
+See the [material overview](docs/RAG/llm_for_developers/llm_friendly/README.md) for sources,
+week overviews, PDF pages, notebook cells and descriptions of the animations.
 
-Efter nye uploads til `source/` kan materialet konverteres og kontrolleres lokalt:
+After new uploads to `source/`, the material can be converted and checked locally:
 
 ```powershell
 uv sync --group conversion
@@ -91,9 +93,9 @@ uv run --group conversion python .\scripts\check_course_material.py --verify-pdf
 uv run python .\scripts\ingest.py --recreate
 ```
 
-Chroma skal køre under ingestion. `--recreate` genopbygger kursusindekset med
-chunker-version 2; råmateriale og samtaler bevares. Konverteringen bruger ingen ekstern
-LLM og springer `.env`, virtuelle miljøer og caches over.
+Chroma must be running during ingestion. `--recreate` rebuilds the course index with
+chunker version 2; raw material and conversations are preserved. The conversion uses no
+external LLM and skips `.env`, virtual environments and caches.
 
 ### Useful CLI equivalents
 
@@ -138,6 +140,8 @@ Additional documentation is maintained in the [`docs/`](docs/) directory:
 StudyGraph is an educational software prototype exploring local LLMs and Retrieval-Augmented
 Generation for course-specific study assistance.
 
-Current state: requirements, design, architecture, stack and plan are documented; the
-application is **not implemented yet** (Phase 0 of the implementation plan). See
+Current state: the application is working — three Streamlit pages on top of the same services the
+CLI uses, 103 passing tests and an 85-document course corpus (1,660 chunks). The corpus was
+translated to English on 2026-11-09, so the Chroma index has to be rebuilt with
+`uv run python .\scripts\ingest.py --recreate` before the app answers from it. See
 [`docs/plan/status.md`](docs/plan/status.md) for the live status, blockers and next steps.

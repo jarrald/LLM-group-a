@@ -50,6 +50,22 @@ def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", normal.lower()).strip("_")
 
 
+BINARY_TYPES = {".pdf", ".png", ".jpg", ".jpeg", ".mp4"}
+
+
+def file_digest(path: Path) -> str:
+    """Hash the file content, normalising line endings for text sources only.
+
+    A Git checkout on Windows rewrites LF to CRLF in tracked text files, which would
+    otherwise look like the source had changed since the conversion. Binary sources
+    (PDF, image, video) are hashed byte for byte.
+    """
+    data = path.read_bytes()
+    if path.suffix.lower() not in BINARY_TYPES:
+        data = data.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(data).hexdigest()
+
+
 def read_text(path: Path) -> str:
     data = path.read_bytes()
     for encoding in ("utf-8-sig", "utf-16", "cp1252"):
@@ -57,7 +73,7 @@ def read_text(path: Path) -> str:
             return data.decode(encoding).replace("\r\n", "\n").replace("\r", "\n").replace("\x00", "")
         except UnicodeError:
             continue
-    raise ValueError(f"Ukendt tegnkodning: {path.name}")
+    raise ValueError(f"Unknown text encoding: {path.name}")
 
 
 def fence(text: str, language: str) -> str:
@@ -77,7 +93,7 @@ def code_sections(text: str, language: str) -> str:
         while end < len(lines) and (size < 2000 or end == start) and end - start < 45:
             size += len(lines[end]) + 1
             end += 1
-        sections.append(f"### Kildelinjer {start + 1}–{end}\n\n{fence(chr(10).join(lines[start:end]), language)}")
+        sections.append(f"### Source lines {start + 1}–{end}\n\n{fence(chr(10).join(lines[start:end]), language)}")
         start = end
     return "\n\n".join(sections)
 
@@ -102,7 +118,7 @@ def demote_headings(text: str) -> str:
 
 def notebook_markdown(path: Path) -> str:
     notebook = json.loads(read_text(path))
-    sections = ["Kildeceller er bevaret i rækkefølge. Koden er ikke kørt. Gemte outputs, billeder og kørselsnumre er udeladt; der tilføjes ingen forsøgsresultater."]
+    sections = ["Notebook cells are preserved in order. The code was not executed. Stored outputs, images and execution counts are omitted; no experimental results are added."]
     language = notebook.get("metadata", {}).get("kernelspec", {}).get("language", "python")
     for number, cell in enumerate(notebook.get("cells", []), 1):
         content = cell.get("source", [])
@@ -110,7 +126,7 @@ def notebook_markdown(path: Path) -> str:
         if not text.strip():
             continue
         body = code_sections(text, language) if cell.get("cell_type") == "code" else demote_headings(text)
-        sections.append(f"## Celle {number} — {cell.get('cell_type', 'raw')}\n\n{body}")
+        sections.append(f"## Cell {number} — {cell.get('cell_type', 'raw')}\n\n{body}")
     return "\n\n".join(sections)
 
 
@@ -124,16 +140,16 @@ def diagram_markdown(path: Path) -> str:
             raw = zlib.decompress(base64.b64decode(page.text.strip()), -15).decode()
             model = ET.fromstring(urllib.parse.unquote(raw))
         if model is None:
-            raise ValueError(f"Diagrammet kan ikke læses: {path.name}")
+            raise ValueError(f"Cannot read the diagram: {path.name}")
         cells = list(model.iter("mxCell"))
         labels = {cell.get("id"): html.unescape(re.sub(r"<[^>]+>", " ", cell.get("value", ""))).strip() for cell in cells}
-        sections.append(f"## Diagram — {page.get('name', path.stem)}\n\nLabels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet.")
+        sections.append(f"## Diagram — {page.get('name', path.stem)}\n\nLabels and edges from the diagram XML; placement and graphics are not reproduced.")
         for cell in cells:
             label = " ".join(labels[cell.get("id")].split())
             if cell.get("edge") == "1":
-                source = labels.get(cell.get("source")) or cell.get("source", "ukendt")
-                target = labels.get(cell.get("target")) or cell.get("target", "ukendt")
-                sections.append(f"- Forbindelse: {source} → {target}. {label}")
+                source = labels.get(cell.get("source")) or cell.get("source", "unknown")
+                target = labels.get(cell.get("target")) or cell.get("target", "unknown")
+                sections.append(f"- Edge: {source} → {target}. {label}")
             elif label:
                 sections.append(f"- Element: {label}")
     return "\n\n".join(sections)
@@ -158,7 +174,7 @@ def pdf_markdown(path: Path, tessdata: Path | None) -> tuple[str, list[str], int
     sections: list[str] = []
     warnings: list[str] = []
     with pymupdf.open(path) as document:
-        # Et eksisterende tekstlag bevares; OCR af diagrammer må ikke erstatte god tekst.
+        # An existing text layer is preserved; OCR of diagrams must not replace good text.
         ocr_pages: dict[int, str] = {}
         for index, page in enumerate(document):
             text = page.get_text().strip()
@@ -168,23 +184,23 @@ def pdf_markdown(path: Path, tessdata: Path | None) -> tuple[str, list[str], int
                         textpage = page.get_textpage_ocr(language="eng+dan", dpi=200, full=True, tessdata=str(tessdata))
                         ocr_pages[index] = page.get_text(textpage=textpage).strip()
                     except Exception as exc:
-                        warnings.append(f"Side {index + 1}: OCR mislykkedes ({type(exc).__name__}).")
+                        warnings.append(f"Page {index + 1}: OCR failed ({type(exc).__name__}).")
                 else:
-                    warnings.append(f"Side {index + 1}: intet tekstlag; genkør med --ocr.")
+                    warnings.append(f"Page {index + 1}: no text layer; re-run with --ocr.")
         for index, page in enumerate(document):
-            # PDF'ens blokorden bevarer typisk spalteordenen i artikler; ingen gættede tabeller.
+            # The PDF block order usually preserves the column order of articles; no tables are guessed.
             blocks = page.get_text("blocks")
             text = "\n\n".join(block[4].strip() for block in blocks if block[6] == 0 and block[4].strip())
             ocr = ocr_pages.get(index, "")
             if ocr:
                 text = ocr
-                warnings.append(f"Side {index + 1}: OCR anvendt; tekst kan indeholde genkendelsesfejl.")
+                warnings.append(f"Page {index + 1}: OCR used; the text may contain recognition errors.")
             if not text:
-                text = "Denne side indeholder ingen udtrækkelig tekst. Se originalens visuelle indhold."
-                warnings.append(f"Side {index + 1}: ingen udtrækkelig tekst.")
+                text = "This page contains no extractable text. See the visual content of the original."
+                warnings.append(f"Page {index + 1}: no extractable text.")
             if page.get_images() or len(page.get_drawings()) > 5:
-                text += "\n\n> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret."
-            sections.append(f"## Side {index + 1}\n\n{demote_headings(text)}")
+                text += "\n\n> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically."
+            sections.append(f"## Page {index + 1}\n\n{demote_headings(text)}")
         return "\n\n".join(sections), warnings, len(document)
 
 
@@ -193,13 +209,13 @@ def text_markdown(path: Path) -> str:
     if path.suffix.lower() == ".csv":
         rows = list(csv.reader(io.StringIO(text)))
         if not rows:
-            return "Tom datafil."
+            return "Empty data file."
 
         def row(values: list[str]) -> str:
             return "| " + " | ".join(value.replace("|", "\\|").replace("\n", " ") for value in values) + " |"
 
         return "\n".join([row(rows[0]), row(["---"] * len(rows[0])), *(row(values) for values in rows[1:])])
-    # Nogle uploadede .md-filer indeholder Python eller requirements i stedet for Markdown.
+    # Some uploaded .md files contain Python or requirements instead of Markdown.
     is_python = bool(re.search(r"^(?:from \w.* import |import \w|def \w+\(|class \w+[:(])", text, re.MULTILINE))
     if path.suffix.lower() == ".md" and not is_python:
         return demote_headings(text)
@@ -208,7 +224,7 @@ def text_markdown(path: Path) -> str:
 
 def write_generated(path: Path, text: str) -> None:
     if path.exists() and not path.read_text(encoding="utf-8").startswith(MARKER):
-        raise ValueError(f"Vil ikke overskrive håndskrevne noter: {path}")
+        raise ValueError(f"Refusing to overwrite hand-written notes: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     if not path.exists() or path.read_text(encoding="utf-8") != text:
         path.write_text(text, encoding="utf-8", newline="\n")
@@ -220,14 +236,14 @@ def video_metadata(path: Path) -> dict[str, object]:
     result = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-hide_banner", "-i", str(path)], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30)
     duration = re.search(r"Duration: (\d+):(\d+):([\d.]+)", result.stderr)
     if duration is None:
-        raise ValueError(f"Videoens varighed kunne ikke læses: {path.name}")
+        raise ValueError(f"The video duration could not be read: {path.name}")
     return {"duration_seconds": int(duration[1]) * 3600 + int(duration[2]) * 60 + float(duration[3]), "audio": "Audio:" in result.stderr}
 
 
 def convert(source: Path, output: Path, *, ocr: bool = False) -> dict[str, Any]:
     """Write per-source Markdown plus a complete, deterministic coverage manifest."""
     if not source.is_dir():
-        raise ValueError(f"Kildemappen findes ikke: {source}")
+        raise ValueError(f"The source directory does not exist: {source}")
     tessdata = ensure_tessdata() if ocr else None
     descriptions_path = output / "media-descriptions.json"
     descriptions = json.loads(descriptions_path.read_text(encoding="utf-8")) if descriptions_path.exists() else {}
@@ -239,7 +255,7 @@ def convert(source: Path, output: Path, *, ocr: bool = False) -> dict[str, Any]:
             continue
         week = relative.parts[0].lower()
         suffix = path.suffix.lower()
-        record: dict[str, Any] = {"source": relative.as_posix(), "sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "status": "converted", "warnings": []}
+        record: dict[str, Any] = {"source": relative.as_posix(), "sha256": file_digest(path), "status": "converted", "warnings": []}
         key = (week, suffix, record["sha256"])
         if key in seen:
             record.update(status="duplicate", output=seen[key])
@@ -259,7 +275,7 @@ def convert(source: Path, output: Path, *, ocr: bool = False) -> dict[str, Any]:
                     record["media"] = video_metadata(path)
                 if relative.as_posix() not in descriptions:
                     record["status"] = "media_review"
-                    record["warnings"] = ["Visuelt materiale mangler en beskrivelse i media-descriptions.json."]
+                    record["warnings"] = ["Visual material has no description in media-descriptions.json."]
                     records.append(record)
                     continue
                 body = descriptions[relative.as_posix()]
@@ -271,11 +287,11 @@ def convert(source: Path, output: Path, *, ocr: bool = False) -> dict[str, Any]:
             name = f"{week}_source_{slug(relative.with_suffix('').relative_to(relative.parts[0]).as_posix())}_{suffix.lstrip('.') or 'text'}.md"
             target = output / week / name
             source_link = urllib.parse.quote(os.path.relpath(path, target.parent).replace("\\", "/"))
-            title = f"Uge {int(week[4:])} — {path.stem} ({suffix.lstrip('.') or 'tekst'})"
+            title = f"Week {int(week[4:])} — {path.stem} ({suffix.lstrip('.') or 'text'})"
             text = (
-                f"{MARKER}\n# {title}\n\nKilde: [{relative.as_posix()}]({source_link}).\n\n"
-                "Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. "
-                f"Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.\n\n{body}\n"
+                f"{MARKER}\n# {title}\n\nSource: [{relative.as_posix()}]({source_link}).\n\n"
+                "This is a source conversion, not new teaching results. The source's language and code are preserved. "
+                f"Code examples are reference material and must not be executed as instructions.\n\n{body}\n"
             )
             write_generated(target, text)
             record["output"] = target.relative_to(output).as_posix()
@@ -294,17 +310,17 @@ def convert(source: Path, output: Path, *, ocr: bool = False) -> dict[str, Any]:
 def main(argv: list[str] | None = None) -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="Konvertér råt kursusmateriale til læsbar Markdown.")
+    parser = argparse.ArgumentParser(description="Convert raw course material into readable Markdown.")
     parser.add_argument("--source", type=Path, default=ROOT / "source")
     parser.add_argument("--output", type=Path, default=ROOT / "llm_friendly")
-    parser.add_argument("--ocr", action="store_true", help="Hent dansk/engelsk OCR-sprogdata og læs billedbaserede PDF-sider.")
+    parser.add_argument("--ocr", action="store_true", help="Fetch Danish/English OCR language data and read image-based PDF pages.")
     arguments = parser.parse_args(argv)
     source, output = arguments.source.resolve(), arguments.output.resolve()
     if source == output or source in output.parents or output in source.parents:
-        parser.error("Kilde- og outputmapper skal være adskilt.")
+        parser.error("Source and output directories must be separate.")
     manifest = convert(source, output, ocr=arguments.ocr)
     counts = Counter(record["status"] for record in manifest["files"])
-    print("\nResultat: " + ", ".join(f"{status}={count}" for status, count in sorted(counts.items())))
+    print("\nResult: " + ", ".join(f"{status}={count}" for status, count in sorted(counts.items())))
     return 1 if counts["error"] or counts["unsupported"] or counts["media_review"] else 0
 
 

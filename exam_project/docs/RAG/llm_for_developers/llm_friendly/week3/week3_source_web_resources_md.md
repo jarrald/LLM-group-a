@@ -1,9 +1,9 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Web Resources (md)
+# Week 3 — Web Resources (md)
 
-Kilde: [week3/Web Resources.md](../../source/week3/Web%20Resources.md).
+Source: [week3/Web Resources.md](../../source/week3/Web%20Resources.md).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ### Links to Online Resources  
 The links below are meant to serve as *inspiration*, and you are encouraged to supplement with any material you find relevant and __reasonably__ "scientific", on the topics of ambiguity, semantic drift, hallucinations, prompt injection and security aspects, concerning deployment of LLMs in a wide range of applications.

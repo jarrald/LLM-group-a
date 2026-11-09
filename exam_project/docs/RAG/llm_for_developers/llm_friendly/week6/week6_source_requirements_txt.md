@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — requirements (txt)
+# Week 6 — requirements (txt)
 
-Kilde: [week6/requirements.txt](../../source/week6/requirements.txt).
+Source: [week6/requirements.txt](../../source/week6/requirements.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ````text
 # Week 8 — Ollama RAG starter
@@ -55,7 +55,7 @@ pip install -r requirements.txt
 ```
 ````
 
-### Kildelinjer 46–90
+### Source lines 46-90
 
 ````text
 
@@ -105,7 +105,7 @@ Optional:
 - `OLLAMA_HOST` default `http://localhost:11434`
 ````
 
-### Kildelinjer 91–135
+### Source lines 91-135
 
 ````text
 - `CHAT_MODEL` default `qwen3:4b`
@@ -155,7 +155,7 @@ Start with the included sample documents.
 Then replace the files in `docs/` with your own documents and run:
 ````
 
-### Kildelinjer 136–150
+### Source lines 136-150
 
 ````text
 

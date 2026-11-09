@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — local_rag (pdf)
+# Week 6 — local_rag (pdf)
 
-Kilde: [week6/local_rag.pdf](../../source/week6/local_rag.pdf).
+Source: [week6/local_rag.pdf](../../source/week6/local_rag.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 Local RAG in practice
 
@@ -33,9 +33,9 @@ answer from context
 
 1
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 Three packages — one problem
 
@@ -71,9 +71,9 @@ Different implementation choice: how much of the RAG pipeline your application o
 
 2
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 Package structure and responsibilities
 
@@ -124,9 +124,9 @@ Moves to OpenWebUI:
 
 3
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
 What RAG actually is
 
@@ -150,9 +150,9 @@ The retrieval step decides what context the model sees.
 
 4
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 Grounding rules
 
@@ -182,9 +182,9 @@ Ask something missing and confirm that the answer becomes “I don’t know.”
 
 5
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Live setup and first run
 
@@ -216,9 +216,9 @@ The package should already work. The first goal is to reproduce the run on your 
 
 6
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 Ingestion and question flow
 
@@ -252,9 +252,9 @@ answer from retrieved context.
 
 7
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 Exercise: add JSON support
 
@@ -291,9 +291,9 @@ chunks are useful?
 
 8
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 Website chatbox on top of local RAG
 
@@ -322,9 +322,9 @@ New idea: the RAG logic has not changed. We have added a browser client and an H
 
 9
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 Keep the API close to Ollama
 
@@ -360,9 +360,9 @@ Backend adds citations and grounded/no_answer flags.
 
 10
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 End-to-end request flow
 
@@ -386,9 +386,9 @@ Rebuild the local index with ingest.py before querying.
 
 11
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 Work with Package 2
 
@@ -424,9 +424,9 @@ boundary, not the retrieval logic.
 
 12
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 OpenWebUI Knowledge behind the website
 
@@ -458,9 +458,9 @@ The website barely changes. The important change is where ingestion, retrieval, 
 
 13
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 Set up Knowledge in OpenWebUI
 
@@ -496,9 +496,9 @@ token, model, and Knowledge/collection choice.
 
 14
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 15
+## Page 15
 
 OpenWebUI API with Knowledge
 
@@ -534,9 +534,9 @@ Knowledge ID.
 
 15
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 16
+## Page 16
 
 OpenWebUI request flow
 
@@ -562,9 +562,9 @@ Knowledge Base, retrieval behaviour, and model connection.
 
 16
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 17
+## Page 17
 
 Work with Package 3
 
@@ -600,9 +600,9 @@ architectures.
 
 17
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 18
+## Page 18
 
 GGUF model into Ollama
 
@@ -635,9 +635,9 @@ Path: Hugging Face GGUF
 
 18
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 19
+## Page 19
 
 Build the model and run it
 
@@ -663,9 +663,9 @@ Create the file, create the model, run it, and test it by API.
 
 19
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 20
+## Page 20
 
 Use the same model across the stack
 
@@ -699,9 +699,9 @@ Follow the same model: terminal
 
 20
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 21
+## Page 21
 
 Possible expansions
 
@@ -732,4 +732,4 @@ clearly than start many unrelated changes.
 
 21
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — chunking (py)
+# Week 6 — chunking (py)
 
-Kilde: [week6/chunking.py](../../source/week6/chunking.py).
+Source: [week6/chunking.py](../../source/week6/chunking.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 import os
@@ -53,7 +53,7 @@ def ask_once(question: str) -> None:
         print(f"[{index}] {item['source']} :: {preview}...")
 ```
 
-### Kildelinjer 46–65
+### Source lines 46-65
 
 ```python
 def main() -> None:

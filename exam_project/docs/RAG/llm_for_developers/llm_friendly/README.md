@@ -1,51 +1,58 @@
-# Læsbart kursusmateriale
+# Readable course material
 
-Materialet er organiseret efter mapperne i `../source/`. De tilgængelige uger er **1, 2, 3, 4, 6, 8, 9 og 10**. Der findes ikke kildemapper for uge 5 eller 7; der er derfor ikke oprettet undervisningsindhold for dem.
+The material is organised by the folders in `../source/`. The available weeks are **1, 2, 3, 4, 6, 8, 9 and 10**. There are no source folders for week 5 or 7, so no teaching content has been created for them.
 
-## Læsevejledning
+## Reading guide
 
-De oprindelige håndskrevne noter fra uge 1–3 er bevaret. De nye `week<N>_overview.md` giver en emneopdelt indgang til senere uger. Filer med `_source_` indeholder den enkelte kildes tekst, kode, data eller visuelle beskrivelse. PDF-konverteringer er opdelt efter originalens sidenumre, så et afsnit kan kontrolleres i kilden.
+The original hand-written notes from weeks 1-3 are preserved. The new `week<N>_overview.md` files give a topic-by-topic entry point to the later weeks. Files with `_source_` contain the text, code, data or visual description of a single source. PDF conversions are divided by the page numbers of the original, so a passage can be checked against the source.
 
-| Uge | Indgang til materialet | Dokumenter | RAG-chunks |
+| Week | Entry point to the material | Documents | RAG chunks |
 |---|---|---:|---:|
-| 1 | [ML, regression og kursusintroduktion](week1/week1_complete_rag.md) | 7 | 123 |
-| 2 | [De fire T'er og lokal AI](week2/week2_prompt_engineering_rag.md) | 2 | 36 |
-| 3 | [Gradient descent, embeddings og samfundsaspekter](week3/week3_overview.md) | 21 | 1.212 |
-| 4 | [Lokale API'er, Ollama og OpenWebUI](week4/week4_overview.md) | 2 | 22 |
-| 6 | [RAG, Chroma og webintegration](week6/week6_overview.md) | 24 | 89 |
-| 8 | [LLM Agents og Agentic LLMs](week8/week8_overview.md) | 2 | 23 |
-| 9 | [Parameterfitting, validering og animationer](week9/week9_overview.md) | 5 | 39 |
-| 10 | [Agentorkestrering og specifikationsbaseret udvikling](week10/week10_overview.md) | 22 | 115 |
-| I alt | | **85** | **1.659** |
+| 1 | [ML, regression and course introduction](week1/week1_complete_rag.md) | 7 | 124 |
+| 2 | [The four T's and local AI](week2/week2_prompt_engineering_rag.md) | 2 | 36 |
+| 3 | [Gradient descent, embeddings and societal aspects](week3/week3_overview.md) | 21 | 1,212 |
+| 4 | [Local APIs, Ollama and OpenWebUI](week4/week4_overview.md) | 2 | 22 |
+| 6 | [RAG, Chroma and web integration](week6/week6_overview.md) | 24 | 89 |
+| 8 | [LLM Agents and Agentic LLMs](week8/week8_overview.md) | 2 | 23 |
+| 9 | [Parameter fitting, validation and animations](week9/week9_overview.md) | 5 | 39 |
+| 10 | [Agent orchestration and specification-driven development](week10/week10_overview.md) | 22 | 115 |
+| Total | | **85** | **1,660** |
 
-Tallene er kontrolleret 2026-10-31 med chunker-version 2. De beskriver Markdown-korpusset; et Chroma-indeks skal genopbygges, før appen kan bruge hele korpusset.
+The document counts are unchanged since 2026-10-31; the chunk counts were measured again on
+2026-11-09 after the corpus was translated to English (`scripts/check_course_material.py`),
+which moved week 1 from 123 to 124 chunks. Chunker version 2. A Chroma index must be rebuilt
+before the app can use the corpus.
 
-Indekset er genopbygget på udviklingsmaskinen med 1.659 chunks. `scripts/doctor.py`
-melder alle kontroller OK. [Søgeprøverne](retrieval-check.json) registrerer konkrete
-forespørgsler, dokument-id'er og afstande for de nye uger. Prøverne er en kontrol af
-materialets tilgængelighed, ikke den formelle RAG-evaluering.
+The Chroma collection was rebuilt on the development machine with 1,659 chunks on 2026-10-31,
+before the translation. `scripts/doctor.py`
+reports every check as OK. The [retrieval checks](retrieval-check.json) record concrete
+queries, document ids and distances for the newer weeks; they were captured against the
+pre-translation corpus. The checks verify that the
+material is reachable; they are not the formal RAG evaluation.
 
-En bred gradient-descent-søgning finder også relevant uge 3-materiale, fordi emnet
-gentages i uge 9. En engelsk CNN-søgning finder ikke de danske videonoter blandt de
-første seks resultater, mens et dansk spørgsmål finder uge 9 øverst. Disse observationer
-er bevaret i søgerapporten; tværsproglig søgekvalitet skal vurderes i fase 7.
+A broad gradient-descent query also finds relevant week 3 material, because the topic is
+repeated in week 9. An English CNN query did not find the Danish video notes among the
+first six results, while a Danish question found week 9 at the top. Those observations were
+made against the original mixed-language corpus and are preserved in the retrieval report;
+they no longer describe the corpus after the translation to English on 2026-11-09.
+Cross-language retrieval quality is assessed in phase 7.
+## Coverage and limitations
 
-## Dækning og begrænsninger
+`conversion-manifest.json` records all 73 relevant sources with SHA-256, output file, status and any OCR notes. 68 sources are text-converted, four media have visual descriptions, and one identical duplicate reuses a conversion. The 15 PDFs cover 346 pages. The check also compares the original text layer with the Markdown, so that text does not disappear silently during conversion.
 
-`conversion-manifest.json` registrerer alle 73 relevante kilder med SHA-256, outputfil, status og eventuelle OCR-bemærkninger. 68 kilder er tekstkonverteret, fire medier har visuelle beskrivelser, og én identisk dublet genbruger en konvertering. De 15 PDF'er omfatter 346 sider. Kontrollen sammenligner også det oprindelige tekstlag med Markdown, så tekst ikke tavst forsvinder under konverteringen.
+- The PDF text blocks are preserved in source order. Layout, columns and tables are not a perfect visual facsimile; the order of mathematical symbols may need checking. Key formulas from week 9 have been checked visually and written readably in the week overview.
+- The scanned assignment description from week 3 was OCR-read in Danish and English. OCR can confuse characters, for example `AI` and `Al`; the existing topic notes help with reading it.
+- Notebook cells are preserved in order without being run. Stored outputs and embedded images are omitted and are not presented as new experimental results.
+- Python, JavaScript, HTML, CSS and text are reference content. Large code files are divided into sections with line numbers. A misleading file extension does not cause the content to be rewritten as something else.
+- Draw.io diagrams are reproduced as labels and edges, not merely as detached names.
+- Three videos without sound are described from six frame samples per video. The descriptions are not a transcription of every frame. The descriptions and the image notes are maintained in `media-descriptions.json`.
+- `.env`, hidden configuration files, virtual environments, caches and generated runs are skipped before the content is read. No local API key has been taken from a `.env` file.
+- The sources in `week6` use several different week numbers in their titles. The folder placement is preserved, and the original titles appear in the source conversions.
+- The two language-sample corpora in `week3` (`corpus.txt`, `danish_corpus.txt`) are kept in their original language on purpose: they are the lecture's example of comparing English and Danish text with the same embedding model. Every other document is in English.
 
-- PDF'ens tekstblokke er bevaret i kildeorden. Layout, spalter og tabeller er ikke et perfekt visuelt facsimile; matematiske symbolers rækkefølge kan kræve kontrol. Centrale formler fra uge 9 er visuelt kontrolleret og skrevet læsbart i ugeoversigten.
-- Den scannede opgavebeskrivelse fra uge 3 er OCR-læst på dansk og engelsk. OCR kan forveksle tegn, eksempelvis `AI` og `Al`; de eksisterende emnenoter hjælper med læsningen.
-- Notebookceller er bevaret i rækkefølge uden at blive kørt. Gemte outputs og indlejrede billeder er udeladt og præsenteres ikke som nye forsøgsresultater.
-- Python, JavaScript, HTML, CSS og tekst er referenceindhold. Store kodefiler er opdelt med linjenumre. En misvisende filendelse får ikke indholdet omskrevet til noget andet.
-- Draw.io-diagrammer er gengivet som labels og forbindelser, ikke kun som løsrevne navne.
-- Tre videoer uden lyd er beskrevet ud fra seks billedstikprøver pr. video. Beskrivelserne er ikke en transskription af hver frame. Beskrivelserne og billednoterne vedligeholdes i `media-descriptions.json`.
-- `.env`, skjulte konfigurationsfiler, virtuelle miljøer, caches og genererede runs springes over, før indholdet læses. Ingen lokal API-nøgle er taget fra en `.env`-fil.
-- Kilderne i `week6` bruger flere forskellige ugenumre i deres titler. Mappeplaceringen er bevaret, og de originale titler fremgår af kildekonverteringerne.
+## Re-running the conversion
 
-## Genkør konverteringen
-
-Kør fra `exam_project/` i PowerShell:
+Run from `exam_project/` in PowerShell:
 
 ```powershell
 uv sync --group conversion
@@ -53,9 +60,9 @@ uv run --group conversion python .\scripts\convert_course_material.py --ocr
 uv run --group conversion python .\scripts\check_course_material.py --verify-pdfs
 ```
 
-Conversion-gruppen indeholder PyMuPDF og den pakkede FFmpeg-læser til videometadata. OCR henter ved første kørsel officielle engelske og danske Tesseract-sprogdata til brugerens lokale cache uden for repositoryet. Der anvendes ingen ekstern LLM. Kilderne ændres ikke, og scriptet nægter at overskrive håndskrevne noter. Genererede filer har en særskilt markør.
+The conversion group contains PyMuPDF and the bundled FFmpeg reader for video metadata. On its first run OCR downloads the official English and Danish Tesseract language data to the user's local cache outside the repository. No external LLM is used. The sources are not modified, and the script refuses to overwrite hand-written notes. Generated files carry a dedicated marker.
 
-Når Markdown ændres, skal det lokale indeks genopbygges. Start først Chroma i en separat terminal, og kør derefter ingestion:
+When the Markdown changes, the local index must be rebuilt. Start Chroma in a separate terminal first, then run ingestion:
 
 ```powershell
 uv run chroma run --host 127.0.0.1 --path .\data\chroma
@@ -66,4 +73,4 @@ uv run python .\scripts\ingest.py --recreate
 uv run python .\scripts\search.py "What is the difference between an LLM Agent and an Agentic LLM?"
 ```
 
-`--recreate` genopbygger kursussamlingen i Chroma fra Markdown. Det ændrer ikke råmaterialet eller samtaledatabasen. Det er nødvendigt efter skiftet til chunker-version 2, som beskytter kodekommentarer og indlejrede code fences mod at blive fortolket som Markdown-overskrifter.
+`--recreate` rebuilds the course collection in Chroma from the Markdown. It does not change the raw material or the conversation database. It is required after the switch to chunker version 2, which protects code comments and embedded code fences from being interpreted as Markdown headings.

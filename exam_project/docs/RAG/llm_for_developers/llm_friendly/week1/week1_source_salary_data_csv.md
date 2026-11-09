@@ -1,9 +1,9 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 1 — Salary_Data (csv)
+# Week 1 — Salary_Data (csv)
 
-Kilde: [week1/Salary_Data.csv](../../source/week1/Salary_Data.csv).
+Source: [week1/Salary_Data.csv](../../source/week1/Salary_Data.csv).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 | YearsExperience | Salary |
 | --- | --- |

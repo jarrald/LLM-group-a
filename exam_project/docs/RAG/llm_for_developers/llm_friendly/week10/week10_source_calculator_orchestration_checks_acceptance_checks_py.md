@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — acceptance_checks (py)
+# Week 10 — acceptance_checks (py)
 
-Kilde: [week10/calculator-orchestration/checks/acceptance_checks.py](../../source/week10/calculator-orchestration/checks/acceptance_checks.py).
+Source: [week10/calculator-orchestration/checks/acceptance_checks.py](../../source/week10/calculator-orchestration/checks/acceptance_checks.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 """Fixed teacher-owned checks. Executed in a child process with the run directory on sys.path."""
@@ -55,7 +55,7 @@ class AcceptanceChecks(unittest.TestCase):
     def test_AC07_invalid_input(self):
 ```
 
-### Kildelinjer 46–74
+### Source lines 46-74
 
 ```python
         r = self.cli("oops\n+\n4\n")

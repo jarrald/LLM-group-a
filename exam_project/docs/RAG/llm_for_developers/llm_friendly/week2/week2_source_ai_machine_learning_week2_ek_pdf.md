@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 2 — AI_Machine_Learning_week2_EK (pdf)
+# Week 2 — AI_Machine_Learning_week2_EK (pdf)
 
-Kilde: [week2/AI_Machine_Learning_week2_EK.pdf](../../source/week2/AI_Machine_Learning_week2_EK.pdf).
+Source: [week2/AI_Machine_Learning_week2_EK.pdf](../../source/week2/AI_Machine_Learning_week2_EK.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 august 2026
 
@@ -14,9 +14,9 @@ Engineering
 
 AI & Machine Learning
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 Topics of Today
 
@@ -27,15 +27,15 @@ Topics of Today
 fredag 14. august 2026
 2
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 Traits
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
 Traits
 
@@ -56,22 +56,22 @@ Behavior(s)
 Eks: You are confident and sassy.
 etc
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 Task
 Be specific
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Tone
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 Tone
 
@@ -101,15 +101,15 @@ Etc.
 
 Style of language that the LLM should use
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 Targets
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 Target
 
@@ -135,9 +135,9 @@ eks.:
 ”something”
 • etc
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 Exercise
 
@@ -169,17 +169,17 @@ answer for
 
 you.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 11
 
 Permanent Traits And Tone Eks: ChatGPT
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 Exercise
 
@@ -199,9 +199,9 @@ Memory
 Feed Documents
 Etc.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 Setup
 
@@ -212,9 +212,9 @@ DOWNLOAD OLLAMA ON WINDOWS
 INSTALL 
 HTTPS://DOCS.OPENWEBUI.COM/
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 august 2026
 
@@ -222,4 +222,4 @@ Exercise if time permits.
 
 Try out all the previous exercises on the local AI.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

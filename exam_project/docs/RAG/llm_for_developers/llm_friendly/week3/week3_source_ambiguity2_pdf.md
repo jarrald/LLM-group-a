@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Ambiguity2 (pdf)
+# Week 3 — Ambiguity2 (pdf)
 
-Kilde: [week3/Ambiguity2.pdf](../../source/week3/Ambiguity2.pdf).
+Source: [week3/Ambiguity2.pdf](../../source/week3/Ambiguity2.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 1/29
 
@@ -62,7 +62,7 @@ Our findings demonstrate that current evaluation frameworks miss the primary mod
 information degradation in AI systems: systematic semantic transformation that preserves 
 facts while fundamentally altering content purpose.
 
-## Side 2
+## Page 2
 
 2/29
 
@@ -123,9 +123,9 @@ Gen₀ Input
 Source Type 
 Core Tokens
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 3/29
 
@@ -262,9 +262,9 @@ intention, law, legal,
 offer, relations, 
 requires, valid
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
 4/29
 
@@ -438,9 +438,9 @@ nucleophilic, pair,
 reaction, replacing, 
 substitution
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 5/29
 
@@ -533,9 +533,9 @@ environmental, climate, atmospheric, warming, science
 
 Table 2: Conceptual dependencies by domain
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 6/29
 
@@ -641,9 +641,9 @@ scientific_report
 
 Table 3: Original purpose specifications for Purpose Fidelity evaluation
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 7/29
 
@@ -713,9 +713,9 @@ explicit LinkedIn framing introduces consistent format pressure, encouraging the
 adopt business-oriented language and structure. This setting provides a controlled 
 environment for measuring semantic transformation, revealing how professional
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 8/29
 
@@ -778,7 +778,7 @@ Accuracy Measurement
 
 Definition: Accuracy quantifies the degree to which a model-generated output retains the
 
-## Side 9
+## Page 9
 
 9/29
 
@@ -844,7 +844,7 @@ Scores in between are linearly interpolated to reflect gradations in semantic cl
 This ensures that factually equivalent paraphrases are appropriately credited, even when 
 wording diverges from the original.
 
-## Side 10
+## Page 10
 
 10/29
 
@@ -900,7 +900,7 @@ for longitudinal analysis.
 
 Precision Measurement
 
-## Side 11
+## Page 11
 
 11/29
 
@@ -961,7 +961,7 @@ model’s variability under fixed conditions.
 
 Clarity Measurement
 
-## Side 12
+## Page 12
 
 12/29
 
@@ -1026,7 +1026,7 @@ o The score is converted to a normalized clarity value using the following
 
 transformation, normalised to unity. A lower FKGL implies greater
 
-## Side 13
+## Page 13
 
 13/29
 
@@ -1086,7 +1086,7 @@ Methodology: The Purpose Fidelity score is computed using a four-part evaluation
 framework. Each component targets a different dimension of communicative intent and is 
 weighted according to its semantic significance.
 
-## Side 14
+## Page 14
 
 14/29
 
@@ -1142,7 +1142,7 @@ receives full credit.
 
 4. Semantic Purpose Similarity (20% weight): A composite textual descriptor of purpose is
 
-## Side 15
+## Page 15
 
 15/29
 
@@ -1205,7 +1205,7 @@ o Metric correlations were analyzed using the Pearson correlation coefficient,
 allowing assessment of relationships between dimensions such as accuracy, 
 clarity, compliance, and purpose fidelity
 
-## Side 16
+## Page 16
 
 16/29
 
@@ -1256,7 +1256,7 @@ relatively stable throughout the recursive process. Accuracy declined only sligh
 0.983 in Generation 0 (Gen₀) to 0.964 in Generation 9 (Gen₉), representing a 1.9% relative 
 decrease. By contrast, the novel Purpose Fidelity metric exhibited substantial degradation,
 
-## Side 17
+## Page 17
 
 17/29
 
@@ -1370,9 +1370,9 @@ Domain-Specific Patterns
 A breakdown of results by domain, summarized in Table 6, reveals heterogeneous 
 degradation patterns:
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 18
+## Page 18
 
 18/29
 
@@ -1460,9 +1460,9 @@ correlation between compliance and Purpose Fidelity (r = −0.73, p < 0.001). Th
 suggests that as model outputs increasingly adhered to LinkedIn-style formatting 
 conventions—such as professional tone, authority claims, and structured layout—they
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 19
+## Page 19
 
 19/29
 
@@ -1527,7 +1527,7 @@ intent.
 
 History Domain: Complete Purpose Collapse
 
-## Side 20
+## Page 20
 
 20/29
 
@@ -1576,7 +1576,7 @@ the genre of scientific explanation.
 
 By Gen₉, the output had evolved to:
 
-## Side 21
+## Page 21
 
 21/29
 
@@ -1624,7 +1624,7 @@ but the purpose has shifted from clinical instruction to executive-level managem
 This repurposing results in a Purpose Fidelity score of 0.1, indicating a near-total 
 transformation of communicative intent despite factual consistency.
 
-## Side 22
+## Page 22
 
 22/29
 
@@ -1674,7 +1674,7 @@ narrowly defined as fact retention, is insufficient for maintaining the communic
 of information. What erodes more rapidly is the “why” behind the text: its epistemic role, 
 pedagogical intent, and contextual framing.
 
-## Side 23
+## Page 23
 
 23/29
 
@@ -1742,7 +1742,7 @@ intentionality.
 
 From an applied perspective, these findings call for greater awareness among model
 
-## Side 24
+## Page 24
 
 24/29
 
@@ -1809,7 +1809,7 @@ hybrid human-AI evaluation loops to refine the measurement of meaning loss at sc
 
 5. Conclusion
 
-## Side 25
+## Page 25
 
 25/29
 
@@ -1875,11 +1875,11 @@ Neural Information Processing Systems, 33, 1877-1901.
 [7] Zou, Y., et al. (2023). A Survey of Hallucination in Natural Language Generation. 
 arXiv:2304.10649.
 
-## Side 26
+## Page 26
 
 26/29
 
-## Side 27
+## Page 27
 
 27/29
 
@@ -2494,9 +2494,9 @@ Economics
 0.146667 
 5
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 28
+## Page 28
 
 28/29
 
@@ -3157,9 +3157,9 @@ Medicine
 0.130639 
 5
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 29
+## Page 29
 
 29/29
 
@@ -3585,4 +3585,4 @@ Physics
 0.179629 
 5
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Ambiguity1 (pdf)
+# Week 3 — Ambiguity1 (pdf)
 
-Kilde: [week3/Ambiguity1.pdf](../../source/week3/Ambiguity1.pdf).
+Source: [week3/Ambiguity1.pdf](../../source/week3/Ambiguity1.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 arXiv:2505.06120v1  [cs.CL]  9 May 2025
 
@@ -148,9 +148,9 @@ worst-case performance. In short, we find that LLMs get lost in multi-turn, unde
 
 ∗Equal Contributions
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -222,7 +222,7 @@ different aspects such as naturalness [72] or tool use [85, 80].
 
 2
 
-## Side 3
+## Page 3
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -293,7 +293,7 @@ fully-specified instruction, and define five key properties a sharded instructio
 
 3
 
-## Side 4
+## Page 4
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -407,9 +407,9 @@ the conversation so far, tasking it with deciding the next shard to reveal that 
 
 4
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -523,9 +523,9 @@ turn-level reminders help alleviate the need for LLMs to recall information acro
 
 5
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -752,9 +752,9 @@ using basic arithmetic operations to reach a numerical answer. We sourced proble
 
 6
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -851,9 +851,9 @@ and reliability.
 
 7
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -1256,9 +1256,9 @@ models) than the bottom rows (stronger models).
 
 8
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -1816,9 +1816,9 @@ models with higher aptitude tend to be more reliable. This fact is known in the 
 
 9
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -1916,9 +1916,9 @@ chance to leverage the redundancy to improve its responses. We include the exper
 
 10
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2049,9 +2049,9 @@ engineering or inspection) from an author to prepare and finalize 100 sharded in
 
 11
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2143,9 +2143,9 @@ risk of the model getting lost in conversation.
 
 12
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2219,7 +2219,7 @@ https://api.semanticscholar.org/CorpusID:257598212.
 
 13
 
-## Side 14
+## Page 14
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2323,7 +2323,7 @@ llm-based chatbots. arXiv preprint arXiv:2406.01633, 2024.
 
 14
 
-## Side 15
+## Page 15
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2405,7 +2405,7 @@ Natural Language Processing, pages 790–807, 2023.
 
 15
 
-## Side 16
+## Page 16
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2507,7 +2507,7 @@ and benchmark. arXiv preprint arXiv:2503.13975, 2025.
 
 16
 
-## Side 17
+## Page 17
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2586,7 +2586,7 @@ Press, 1949.
 
 17
 
-## Side 18
+## Page 18
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2670,7 +2670,7 @@ function”).
 
 18
 
-## Side 19
+## Page 19
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2812,9 +2812,9 @@ original instruction, ten CONCAT conversations with the sharded instruction (by 
 
 19
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 20
+## Page 20
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -2932,9 +2932,9 @@ with roughly 98% of inspected conversations labeled as successful. Some errors o
 
 20
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 21
+## Page 21
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -3169,9 +3169,9 @@ instructions, and mixed performance (6 perfect scores per instruction) on five o
 
 21
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 22
+## Page 22
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -3377,9 +3377,9 @@ solutions, which conflict with subsequent user instructions in later turns.
 
 22
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 23
+## Page 23
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -3543,9 +3543,9 @@ summaries include citation in roughly equal proportion for turn-1 and turn-2 doc
 
 23
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 24
+## Page 24
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -3762,9 +3762,9 @@ responses are bad both for models and end-users.
 
 24
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 25
+## Page 25
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -3860,9 +3860,9 @@ system messages consists of (if any).
 
 25
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 26
+## Page 26
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -3982,9 +3982,9 @@ until reaching a total of 107 valid sharded instructions.
 
 26
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 27
+## Page 27
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4056,9 +4056,9 @@ The first shard consists of the initial HTML-formatted table without highlightin
 
 27
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 28
+## Page 28
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4130,9 +4130,9 @@ and truncating at 10-sentences.
 
 28
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 29
+## Page 29
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4297,9 +4297,9 @@ GPT-4o and GPT-4o-mini. Findings of the gradual sharding experiment are describe
 
 29
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 30
+## Page 30
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4363,7 +4363,7 @@ responses.
 
 30
 
-## Side 31
+## Page 31
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4418,7 +4418,7 @@ Now complete the task for the following fully specified instruction:
 
 31
 
-## Side 32
+## Page 32
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4491,7 +4491,7 @@ Segments:
 
 32
 
-## Side 33
+## Page 33
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4545,7 +4545,7 @@ Shards:
 
 33
 
-## Side 34
+## Page 34
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4603,7 +4603,7 @@ or:
 
 34
 
-## Side 35
+## Page 35
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT
@@ -4653,7 +4653,7 @@ Conversation's last turn:
 
 35
 
-## Side 36
+## Page 36
 
 LLMs Get Lost In Multi-Turn Conversation
 PREPRINT

@@ -1,41 +1,41 @@
-# Uge 6 — Lokal RAG fra dokument til applikation
+# Week 6 — Local RAG from document to application
 
-Kilder: `source/week6/local_rag.pdf` og de ledsagende kodeeksempler. Se [slidesenes fulde tekst](week6_source_local_rag_pdf.md). Mappen hedder `week6`, selv om nogle vedlagte filer kalder sig Week 8 eller Week 10. Ugeplaceringen følger den uploadede mappe; filernes oprindelige titler er bevaret.
+Sources: `source/week6/local_rag.pdf` and the accompanying code examples. See the [full text of the slides](week6_source_local_rag_pdf.md). The folder is called `week6`, even though some included files call themselves Week 8 or Week 10. The week placement follows the uploaded folder; the original titles of the files are preserved.
 
-## RAG er en arbejdsgang
+## RAG is a workflow
 
-RAG er ikke en særlig model. Dokumenter indlæses, opdeles i chunks og omsættes til embeddings, som gemmes i Chroma. Når der stilles et spørgsmål, bliver spørgsmålet embedded, relevante chunks hentes, og modellen får dem som kontekst før svargenerering.
+RAG is not a particular model. Documents are loaded, split into chunks and turned into embeddings, which are stored in Chroma. When a question is asked, the question is embedded, the relevant chunks are retrieved, and the model receives them as context before generating the answer.
 
-Ingestion og spørgsmålssvar er to forskellige forløb: ingestion forbereder indekset, mens et spørgsmål bruger indekset. Hvis dokumenterne ændres, skal indekset opdateres.
+Ingestion and question answering are two different courses of events: ingestion prepares the index, while a question uses the index. If the documents change, the index must be updated.
 
-## Tre pakker og placering af ansvar
+## Three packages and where the responsibility sits
 
-| Pakke | Brugerflade | Hvem håndterer retrieval? | Modeladgang |
+| Package | Interface | Who handles retrieval? | Model access |
 |---|---|---|---|
-| Custom RAG CLI | Terminal | Python-kode og Chroma | Ollama |
-| Custom RAG Web | Browser og Flask | Samme Python-RAG-kerne | Ollama |
-| OpenWebUI Knowledge Web | Browser og backend | OpenWebUI Knowledge | OpenWebUI API |
+| Custom RAG CLI | Terminal | Python code and Chroma | Ollama |
+| Custom RAG web | Browser and Flask | The same Python RAG core | Ollama |
+| OpenWebUI Knowledge web | Browser and backend | OpenWebUI Knowledge | OpenWebUI API |
 
-I webpakken ændres brugerfladen og HTTP-grænsen, mens retrieval-kernen genbruges. Browseren sender spørgsmålet til backend, som tilføjer retrieval og returnerer svar, kildehenvisninger og grounding-status. I Knowledge-varianten flyttes ingestion, embeddings og retrieval til OpenWebUI.
+In the web package the interface and the HTTP boundary change, while the retrieval core is reused. The browser sends the question to the backend, which adds retrieval and returns the answer, the source references and the grounding status. In the Knowledge variant, ingestion, embeddings and retrieval move into OpenWebUI.
 
-## Grounding og afprøvning
+## Grounding and testing
 
-Materialets regel er at svare ud fra konteksten og sige “I don't know”, når svaret ikke findes. Kildehenvisninger som `[1]` og `[2]` skal kunne knyttes til de hentede chunks. Et understøttet spørgsmål og et spørgsmål uden svar i materialet skal begge afprøves.
+The rule in the material is to answer from the context and to say "I don't know" when the answer is not there. Source references such as `[1]` and `[2]` must be traceable to the retrieved chunks. Both a supported question and a question without an answer in the material must be tested.
 
-Denne regel er undervisningspakkens adfærd. StudyGraphs egen promptstrategi findes i projektets promptfiler og kan have en eksplicit markeret generel fallback.
+This rule is the behaviour of the teaching package. StudyGraph's own prompt strategy lives in the project's prompt files and may have an explicitly marked general fallback.
 
-## Øvelse: JSON-understøttelse
+## Exercise: JSON support
 
-Slides beder om at finde dokumentindlæsningen, tilføje `.json`, lægge et dokument i dokumentmappen, genkøre ingestion og stille et spørgsmål, hvis svar kun findes i JSON-filen. Øvelsen undersøger, hvor strukturerede data bør omsættes til retrieval-egnet tekst; den er ikke et påstået resultat af at have ændret undervisningskoden.
+The slides ask you to find the document loading, add `.json`, place a document in the document folder, re-run ingestion and ask a question whose answer is only in the JSON file. The exercise examines where structured data should be turned into retrievable text; it is not a claimed result of having changed the teaching code.
 
-## Kode og kildefiler
+## Code and source files
 
-`week6_source_*.md` bevarer Python, frontendkode, tekster og konfigurationsbeskrivelser. Kode er opdelt i afsnit med oprindelige linjenumre og er ikke udført. Flere `.md`-filer i råmaterialet indeholder faktisk Python eller pakkelister; konverteringen viser deres reelle indhold frem for at gætte ud fra filnavnet. Virtuelle miljøer, caches og `.env` er ikke undervisningsindhold i indekset.
+`week6_source_*.md` preserve Python, frontend code, texts and configuration descriptions. Code is divided into sections with the original line numbers and has not been executed. Several `.md` files in the raw material actually contain Python or package lists; the conversion shows their real content rather than guessing from the file name. Virtual environments, caches and `.env` are not teaching content in the index.
 
-## Spørgsmål til repetition
+## Review questions
 
-1. Hvad er forskellen på ingestion og retrieval ved et spørgsmål?
-2. Hvad ændrer sig fra CLI til Flask-webpakken?
-3. Hvem ejer retrieval i OpenWebUI-varianten?
-4. Hvor skal JSON-understøttelse tilføjes, hvis to brugerflader deler RAG-kernen?
-5. Hvordan testes det, at et svar ikke opfinder støtte fra dokumenterne?
+1. What is the difference between ingestion and retrieval when a question is asked?
+2. What changes from the CLI to the Flask web package?
+3. Who owns retrieval in the OpenWebUI variant?
+4. Where should JSON support be added if two interfaces share the RAG core?
+5. How do you test that an answer does not invent support from the documents?

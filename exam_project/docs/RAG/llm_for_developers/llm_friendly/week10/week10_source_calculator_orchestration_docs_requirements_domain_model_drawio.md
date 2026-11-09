@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — domain-model (drawio)
+# Week 10 — domain-model (drawio)
 
-Kilde: [week10/calculator-orchestration/docs/requirements/domain-model.drawio](../../source/week10/calculator-orchestration/docs/requirements/domain-model.drawio).
+Source: [week10/calculator-orchestration/docs/requirements/domain-model.drawio](../../source/week10/calculator-orchestration/docs/requirements/domain-model.drawio).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ## Diagram — Calculator domain model
 
-Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet.
+Labels and edges from the diagram XML; placement and graphics are not reproduced.
 
 - Element: Calculation
 
@@ -19,15 +19,15 @@ Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet
 
 - Element: Calculation error Zero divisor / unsupported operator Non-finite number or result
 
-- Forbindelse: Calculation → Operand
+- Edge: Calculation → Operand
 Finite numeric value. has 2
 
-- Forbindelse: Calculation → Operator
+- Edge: Calculation → Operator
 +  -  *  /. uses 1
 
-- Forbindelse: Calculation → Result
+- Edge: Calculation → Result
 Finite numeric value. produces 1 on success
 
-- Forbindelse: Calculation → Calculation error
+- Edge: Calculation → Calculation error
 Zero divisor / unsupported operator
 Non-finite number or result. produces 1 on failure

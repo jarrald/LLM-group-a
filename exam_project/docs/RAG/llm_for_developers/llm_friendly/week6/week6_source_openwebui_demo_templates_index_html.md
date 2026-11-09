@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — index (html)
+# Week 6 — index (html)
 
-Kilde: [week6/openwebui_demo/templates/index.html](../../source/week6/openwebui_demo/templates/index.html).
+Source: [week6/openwebui_demo/templates/index.html](../../source/week6/openwebui_demo/templates/index.html).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```html
 <!doctype html>
@@ -55,7 +55,7 @@ Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog o
         padding: 0.75rem 1rem;
 ```
 
-### Kildelinjer 46–72
+### Source lines 46-72
 
 ```html
         font-size: 1rem;

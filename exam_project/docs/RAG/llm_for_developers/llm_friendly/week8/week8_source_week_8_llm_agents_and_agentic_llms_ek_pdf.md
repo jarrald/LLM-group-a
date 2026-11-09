@@ -1,19 +1,19 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 8 — Week_8_LLM_Agents_and_Agentic_LLMs_EK (pdf)
+# Week 8 — Week_8_LLM_Agents_and_Agentic_LLMs_EK (pdf)
 
-Kilde: [week8/Week_8_LLM_Agents_and_Agentic_LLMs_EK.pdf](../../source/week8/Week_8_LLM_Agents_and_Agentic_LLMs_EK.pdf).
+Source: [week8/Week_8_LLM_Agents_and_Agentic_LLMs_EK.pdf](../../source/week8/Week_8_LLM_Agents_and_Agentic_LLMs_EK.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 LLM Agents and Agentic LLMs
 
 Week 8  |  LLM for Developers
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 Course classification: Agent vs Agentic?
 
@@ -34,9 +34,9 @@ steps, paths, conditions and validation.
 
 Terminology note: this is our course taxonomy; “agentic AI” has broader industry usage.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 LLM Agent: instruction-guided execution
 
@@ -59,9 +59,9 @@ Control principle
 Instructions guide choices; the LLM largely determines the sequence of 
 work.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
 Agentic LLM: workflow defined in code
 
@@ -88,9 +88,9 @@ retries
 
 The model can make decisions inside a step; code controls transitions between steps.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 Same task, different execution control
 
@@ -114,9 +114,9 @@ retry on failure.
 
 Code defines the order and branches.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Where is the boundary?
 
@@ -130,9 +130,9 @@ Where is the boundary?
 
 • Framework names do not automatically determine the category.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 Hermes: the toolchain we will inspect
 
@@ -157,9 +157,9 @@ connections
 Today’s practical focus is configuration and observation, not building a new 
 framework.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 Installing Hermes: Linux and macOS
 
@@ -177,9 +177,9 @@ curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 
 • Open a new terminal if the hermes command is not found.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 Installing Hermes: Windows
 
@@ -197,9 +197,9 @@ iex (irm https://hermes-agent.nousresearch.com/install.ps1)
 
 • Windows WSL2 users can follow the Linux installation instead.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 After installation: shared steps
 
@@ -215,9 +215,9 @@ After installation: shared steps
 
 • Keep API keys out of repositories and shared screenshots
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 Hermes dashboard: guided tour
 
@@ -239,9 +239,9 @@ What capabilities can be invoked?
 
 What information persists?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 Live walkthrough: existing installation
 
@@ -257,9 +257,9 @@ Live walkthrough: existing installation
 
 • Run one short task to observe tool usage.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 Student exercise: choose the right approach
 
@@ -284,9 +284,9 @@ failure.
 
 Discuss: Why is your choice suitable? What flexibility or guarantees do you gain or lose?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 Discussion in class: defend your architecture choice
 
@@ -302,9 +302,9 @@ Discussion in class: defend your architecture choice
 
 • What would the user provide, configure or control in each solution?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 15
+## Page 15
 
 Resources and preparation
 
@@ -318,10 +318,10 @@ Resources and preparation
 
 • verify Hermes, provider credentials and dashboard access
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 16
+## Page 16
 
 Questions, comments and discussion
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — chunking (2) (py)
+# Week 6 — chunking (2) (py)
 
-Kilde: [week6/chunking (2).py](../../source/week6/chunking%20%282%29.py).
+Source: [week6/chunking (2).py](../../source/week6/chunking%20%282%29.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–4
+### Source lines 1-4
 
 ```python
 chromadb
