@@ -53,20 +53,33 @@ Use these exact column names.
 Reply with one fenced ```python block.
 ````
 
-## 3. Prompts that were actually run
+## 2b. Attached files (web page only)
 
-| # | Prompt (verbatim) | Model | Result |
-|---|---|---|---|
-| 1 | `Please make a jupyter notebook that does a linear regression on the dataset at regression/datasets/ice_cream_regression.csv` | qwen2.5-coder:7b | **failed** — invented columns `temperature`/`sales` instead of `Temperature`/`Revenue` → `KeyError`. This is why the dataset preview was added. |
-| 2 | same as #1 | qwen2.5-coder:7b | **ok** — 3.9 s, 64 tok/s, 10 cells, ran from its own folder: `MSE 652.52`, `Coefficients: [21.38197386]`, `Intercept: 46.804641` |
-| 3 | `Please make a python script that fits a linear regression on regression/datasets/ice_cream_regression.csv` | qwen2.5-coder:7b | **ok** — wrote `.py`, ran: `Coefficient: [21.44362551]`, `Intercept: 44.83126709` |
+When files are attached in `web.py`, they are added as one more section of the user message,
+between the excerpts and `## Request`. They are never embedded:
 
-Commands used:
+```text
+## Attached files (given in full; they are not embedded)
 
-```powershell
-uv run python -m regression.chat --ask "Please make a jupyter notebook that does a linear regression on the dataset at regression/datasets/ice_cream_regression.csv"
-uv run python -m regression.chat
+### notes.md
+
+```text
+{the whole file, or as much as fits in 20,000 characters}
 ```
+```
+
+## 3. Runs (prompt + output)
+
+Every run is archived with the prompt that produced it:
+
+```text
+runs/rag/cmd/<n>/prompt.md   +   output.py | output.ipynb | output.md
+runs/rag/ui/<n>/prompt.md    +   output.py | output.ipynb | output.md
+```
+
+`prompt.md` records the instruction, the excerpts retrieved (with distances) and the full
+system + user prompt. Read those files rather than a list here: they cannot drift from what
+was actually sent. The hand-written table that used to live in this section moved there.
 
 ## 4. Settings that shape the prompt
 

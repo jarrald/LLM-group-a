@@ -56,9 +56,9 @@ line-length = 240
 target-version = "py312"
 # Course material (docs/RAG) and the design exports are not our source code.
 # regression/scikit-learn-main is a third-party checkout: lint it with upstream's rules,
-# not ours. regression/.chroma and regression/out are generated artifacts, and
+# not ours. regression/.chroma, regression/out and regression/runs hold generated files, and
 # regression/*.ipynb is a scratchpad that is edited live (ADR-021, ADR-022).
-extend-exclude = [".venv", "docs", "Designs", "data", "regression/scikit-learn-main", "regression/.chroma", "regression/out", "regression/*.ipynb"]
+extend-exclude = [".venv", "docs", "Designs", "data", "regression/scikit-learn-main", "regression/.chroma", "regression/out", "regression/runs", "regression/*.ipynb"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]

@@ -59,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.model:
         rag.CHAT_MODEL = args.model
 
-    print(f"model {rag.CHAT_MODEL} | index {rag.CHROMA_PATH} | output {rag.OUT_DIR}")
+    print(f"model {rag.CHAT_MODEL} | index {rag.CHROMA_PATH} | output {rag.RUNS_DIR}")
     if args.ask:
         handle(args.ask, args.top_k)
         return 0

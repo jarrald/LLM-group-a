@@ -32,7 +32,7 @@ models/
 # --- Experiment artifacts that are regenerated on every run ---
 experiments/**/artifacts/
 regression/images/
-#regression/out/
+regression/out/
 regression/.chroma/
 
 # --- Third-party corpus: the downloaded scikit-learn checkout (17 MB, not ours) ---

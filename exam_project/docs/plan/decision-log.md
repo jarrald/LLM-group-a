@@ -309,7 +309,7 @@ Format: context → decision → consequences. Keep entries short; link to code 
 - **Decision:** implement the experiment as two small modules in `regression/`: `rag.py`
   (config via `RAG_*` variables, AST/heading chunking, index build, retrieval, one Ollama
   call, and writing the answer to a file) and `chat.py` (a loop that takes a pasted prompt
-  and returns a `.py`, or a `.ipynb` when a notebook was asked for). Retrieval uses an
+  and returns a `.py`, or a `.ipynb` when a notebook was asked for), and `web.py` (a Streamlit page with the same flow: paste instructions, attach text files, download the result; attached files are pasted into the prompt, never embedded). Retrieval uses an
   in-process `PersistentClient` on `regression/.chroma` — no server, nothing shared with
   `data/chroma` — and nothing imports from `app/`. Generated files go to `regression/out/`.
   The first version of this experiment had ~1,300 lines (scoring harness, baseline arm,

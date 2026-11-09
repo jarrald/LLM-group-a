@@ -29,6 +29,34 @@ Please make a jupyter notebook that does a linear regression
 on the dataset at regression/datasets/ice_cream_regression.csv
 ```
 
+## Web interface
+
+```powershell
+uv run streamlit run regression\web.py
+```
+
+Opens `http://localhost:8501`. Paste instructions, attach any text file you want the model to
+read, pick how many scikit-learn excerpts to include (0 = only your files), press Generate.
+The answer streams in, is saved to `regression/runs/rag/ui/<n>/`, and can be downloaded.
+
+Attached files are **not** embedded: their text goes into the prompt in full, because a small
+file loses more than it gains from top-k retrieval. Above 20,000 characters the page warns you
+and sends only what fits. Nothing is stored between runs.
+
+## Run archive
+
+Every run, from the command line or the web page, is written to its own numbered folder:
+
+```text
+runs/rag/cmd/1/prompt.md   runs/rag/cmd/1/output.py      (or .ipynb / .md)
+runs/rag/ui/1/prompt.md    runs/rag/ui/1/output.py
+```
+
+`prompt.md` holds the instruction verbatim, the excerpts used with their distances, and the
+complete system + user prompt that was sent. `output.*` is exactly what the model produced
+(`.md` when it returned no code). Runs `cmd/1-4` and `ui/1-2` were backfilled from the old
+`out/` folder, so their excerpt lists say "not recorded".
+
 ## What happens
 
 1. Your prompt is embedded and matched against 962 excerpts of the scikit-learn source.
@@ -47,7 +75,7 @@ on the dataset at regression/datasets/ice_cream_regression.csv
 | `chat.py` | the prompt loop |
 | `PROMPTS.md` | every prompt the model sees, plus the ones already run |
 | `.chroma/` | the index (git-ignored) |
-| `out/` | generated files (git-ignored) |
+| `runs/rag/` | one folder per run: `prompt.md` + `output.py|ipynb|md` (committed; this is the report evidence) |
 | `scikit-learn-main/` | the corpus (git-ignored, 17 MB) |
 
 ## If something goes wrong
