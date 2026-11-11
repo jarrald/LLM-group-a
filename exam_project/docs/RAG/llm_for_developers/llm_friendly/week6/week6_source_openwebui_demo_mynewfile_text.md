@@ -1,8 +1,8 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — mynewfile (tekst)
+# Week 6 — mynewfile (text)
 
-Kilde: [week6/openwebui_demo/mynewfile](../../source/week6/openwebui_demo/mynewfile).
+Source: [week6/openwebui_demo/mynewfile](../../source/week6/openwebui_demo/mynewfile).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 

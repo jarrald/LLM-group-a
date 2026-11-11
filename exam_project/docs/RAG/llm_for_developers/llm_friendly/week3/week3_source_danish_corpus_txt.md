@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — danish_corpus (txt)
+# Week 3 — danish_corpus (txt)
 
-Kilde: [week3/danish_corpus.txt](../../source/week3/danish_corpus.txt).
+Source: [week3/danish_corpus.txt](../../source/week3/danish_corpus.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```text
 The quick brown fox jumps over the lazy dog. Natural Language Processing with Python is incredibly powerful. Word2Vec maps text tokens into dense numerical vector spaces. 

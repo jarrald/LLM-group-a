@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — requirements (2) (txt)
+# Week 6 — requirements (2) (txt)
 
-Kilde: [week6/requirements (2).txt](../../source/week6/requirements%20%282%29.txt).
+Source: [week6/requirements (2).txt](../../source/week6/requirements%20%282%29.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 from pathlib import Path
@@ -55,7 +55,7 @@ def main() -> None:
                 }
 ```
 
-### Kildelinjer 46–62
+### Source lines 46-62
 
 ```python
             )

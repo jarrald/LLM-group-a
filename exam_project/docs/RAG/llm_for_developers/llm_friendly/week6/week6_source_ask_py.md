@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — ask (py)
+# Week 6 — ask (py)
 
-Kilde: [week6/ask.py](../../source/week6/ask.py).
+Source: [week6/ask.py](../../source/week6/ask.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–27
+### Source lines 1-27
 
 ```python
 # Week 8 Notes

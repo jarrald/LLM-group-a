@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — check_environment (py)
+# Week 10 — check_environment (py)
 
-Kilde: [week10/calculator-orchestration/check_environment.py](../../source/week10/calculator-orchestration/check_environment.py).
+Source: [week10/calculator-orchestration/check_environment.py](../../source/week10/calculator-orchestration/check_environment.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–32
+### Source lines 1-32
 
 ```python
 """Check versions, model connection and a tiny tool call before class."""

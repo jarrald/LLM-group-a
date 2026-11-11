@@ -1,37 +1,37 @@
-# Uge 9 — Parameterfitting, gradient descent og validering
+# Week 9 — Parameter fitting, gradient descent and validation
 
-Kilder: `source/week9/Week9.pdf`, 23 sider, samt tre korte animationer. Se [PDF-teksten](week9_source_week9_pdf.md) og de separate videobeskrivelser, der hedder `week9_source_*_mp4.md`. Slides er dateret 23. oktober 2026; datoer og planer i dem er historiske kildeoplysninger.
+Sources: `source/week9/Week9.pdf`, 23 pages, and three short animations. See the [PDF text](week9_source_week9_pdf.md) and the separate video descriptions named `week9_source_*_mp4.md`. The slides are dated 23 October 2026; dates and plans in them are historical source information.
 
-## En model som funktion
+## A model as a function
 
-Slides repeterer, at en model omsætter input til output. Eksemplet `x = [1, 2, 3, 4]` og `f(x) = [1, 4, 9, 16]` illustrerer en ikke-lineær funktion. En model trænes ved at minimere en fejlfunktion, vurderes på data uden for træningen og bruges derefter til forudsigelser.
+The slides repeat that a model turns input into output. The example `x = [1, 2, 3, 4]` and `f(x) = [1, 4, 9, 16]` illustrates a non-linear function. A model is trained by minimising an error function, evaluated on data outside the training set and then used for predictions.
 
-## Lineær model og tab
+## Linear model and loss
 
-Den simple model er `f(x) = a*x + b`, hvor `a` er hældning og `b` er bias/intercept. Visuel kontrol af PDF-side 15 bekræfter denne formel og følgende gennemsnitlige kvadratiske tab:
+The simple model is `f(x) = a*x + b`, where `a` is the slope and `b` is the bias/intercept. Visual inspection of PDF page 15 confirms this formula and the following mean squared loss:
 
 \[
 L(a,b) = \frac{1}{N}\sum_{i=1}^{N}(a x_i + b - y_i)^2
 \]
 
-Formlerne er skrevet læsbart her, fordi automatisk PDF-udtræk blander nogle matematiske symboler og deres placeringer. De øvrige PDF-formler er ikke alle manuelt kontrolleret.
+The formulas are written readably here because automatic PDF extraction mixes some mathematical symbols and their positions. The remaining PDF formulas have not all been checked manually.
 
-## Gradient descent og initialisering
+## Gradient descent and initialisation
 
-Slides beskriver en initial parameteridé, retningen mod størst fald i tabet og små opdateringer indtil konvergens. Animationen `gradient_descent_fit.mp4` viser den ændrede regressionslinje sammen med trænings- og valideringstab. Valideringspunkterne bliver først vist senere i animationen, hvilket adskiller tilpasning fra vurdering på tilbageholdte data.
+The slides describe an initial parameter guess, the direction of the greatest decrease in the loss, and small updates until convergence. The animation `gradient_descent_fit.mp4` shows the changing regression line together with the training and validation loss. The validation points are only shown later in the animation, which separates fitting from evaluation on held-out data.
 
 ## K-fold cross-validation
 
-Materialet bruger fem folds og sammenligner estimater af hældning og bias. Animationen `kfold_fit_evolution_dual_init.mp4` viser fem farvede folds med to initialiseringer: fuldt optrukne og stiplede linjer. Tab på tværs af folds vises med logaritmisk skala. Beskrivelsen af animationen er visuel observation og ikke et nyt reproduceret træningsforsøg.
+The material uses five folds and compares estimates of slope and bias. The animation `kfold_fit_evolution_dual_init.mp4` shows five coloured folds with two initialisations: solid and dashed lines. Loss across folds is shown on a logarithmic scale. The description of the animation is visual observation, not a newly reproduced training experiment.
 
-## Ikke-lineære modeller og neurale netværk
+## Non-linear models and neural networks
 
-Slides diskuterer lokale og globale minima i funktioner med mange parametre. Den planlagte fortsættelse mod neurale netværk beskrives som en mulighed, ikke som noget hele kurset allerede har gennemgået. CNN-animationen viser dog et eksempel med tre inputtegn, convolutional feature maps og tre softmax-outputhoveder. Den er forklaret særskilt i medienoterne.
+The slides discuss local and global minima in functions with many parameters. The planned continuation towards neural networks is described as a possibility, not as something the whole course has already covered. The CNN animation does, however, show an example with three input characters, convolutional feature maps and three softmax output heads. It is explained separately in the media notes.
 
-## Spørgsmål til repetition
+## Review questions
 
-1. Hvad optimeres i den lineære model?
-2. Hvad er forskellen på træningstab og valideringstab?
-3. Hvad viser de to initialiseringer i fold-animationen?
-4. Hvorfor kan præcision pr. tegn og pr. tegntriple være forskellige?
-5. Hvorfor er et lokalt minimum ikke en garanti for sandhed i et LLM-svar?
+1. What is optimised in the linear model?
+2. What is the difference between training loss and validation loss?
+3. What do the two initialisations in the fold animation show?
+4. Why can per-character accuracy and per-character-triple accuracy differ?
+5. Why is a local minimum not a guarantee of truth in an LLM answer?

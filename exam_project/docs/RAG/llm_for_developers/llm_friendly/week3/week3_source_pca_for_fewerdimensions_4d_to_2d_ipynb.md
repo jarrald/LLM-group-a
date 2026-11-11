@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — PCA_for_FewerDimensions_4d_to_2d (ipynb)
+# Week 3 — PCA_for_FewerDimensions_4d_to_2d (ipynb)
 
-Kilde: [week3/PCA_for_FewerDimensions_4d_to_2d.ipynb](../../source/week3/PCA_for_FewerDimensions_4d_to_2d.ipynb).
+Source: [week3/PCA_for_FewerDimensions_4d_to_2d.ipynb](../../source/week3/PCA_for_FewerDimensions_4d_to_2d.ipynb).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-Kildeceller er bevaret i rækkefølge. Koden er ikke kørt. Gemte outputs, billeder og kørselsnumre er udeladt; der tilføjes ingen forsøgsresultater.
+Notebook cells are preserved in order. The code was not executed. Stored outputs, images and execution counts are omitted; no experimental results are added.
 
-## Celle 1 — markdown
+## Cell 1 — markdown
 
 ### Collapsing four dimensions into two: PCA as an animation
 
@@ -27,9 +27,9 @@ The notebook builds one animated Plotly figure that plays through the whole proc
 
 Requirements: `pip install numpy plotly`. With `pio.renderers.default = "browser"`, each `fig.show()` opens a new browser tab.
 
-## Celle 2 — code
+## Cell 2 — code
 
-### Kildelinjer 1–8
+### Source lines 1-8
 
 ```python
 import textwrap
@@ -42,13 +42,13 @@ from plotly.subplots import make_subplots
 pio.renderers.default = "browser"   # every fig.show() opens in a new browser tab
 ```
 
-## Celle 3 — markdown
+## Cell 3 — markdown
 
 #### Settings
 
-## Celle 4 — code
+## Cell 4 — code
 
-### Kildelinjer 1–4
+### Source lines 1-4
 
 ```python
 DATASET  = "spiral"   # "spiral", "clusters" or "rings": the 2D pattern hidden inside the 4D data
@@ -57,7 +57,7 @@ N_POINTS = 1000       # number of points in the cloud
 FPS      = 12         # animation frames per second; lower it for a smaller, faster-loading figure
 ```
 
-## Celle 5 — markdown
+## Cell 5 — markdown
 
 #### 1. Build a 4D dataset with a hidden 2D pattern
 
@@ -65,9 +65,9 @@ To make the demo meaningful, the data really is (almost) two-dimensional. A 2D p
 
 The sheet starts from a balanced orthonormal basis, so each feature carries a similar share of the pattern. It is then shuffled and tilted by a small random 4D rotation. Finally each feature gets its own offset and unit, so the raw data needs standardizing.
 
-## Celle 6 — code
+## Cell 6 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 def make_latent(kind, n, rng):
@@ -117,7 +117,7 @@ def make_dataset(kind, n, seed):
     X = np.c_[uv, noise] @ E                               # rows of E: sheet, sheet, noise, noise
 ```
 
-### Kildelinjer 46–59
+### Source lines 46-59
 
 ```python
 
@@ -136,7 +136,7 @@ for name, m, s in zip(FEATURES, F.mean(axis=0), F.std(axis=0, ddof=1)):
     print(f"{name:>8} {m:9.2f} {s:8.2f}")
 ```
 
-## Celle 7 — markdown
+## Cell 7 — markdown
 
 #### 2. Standardize and compute the principal components
 
@@ -148,9 +148,9 @@ The principal components are the eigenvectors of the covariance matrix $C = \fra
 
 Stacking the eigenvectors as the **rows** of a matrix $W$ gives the PCA rotation: the component scores are $q = W z$. An eigenvector's sign is arbitrary, so the signs are chosen to keep $W$ close to the identity and to make $\det W = +1$. That makes $W$ a proper rotation that can be animated.
 
-## Celle 8 — code
+## Cell 8 — code
 
-### Kildelinjer 1–28
+### Source lines 1-28
 
 ```python
 mean = F.mean(axis=0)
@@ -183,7 +183,7 @@ for i in range(4):
     print(f"PC{i+1:<3} {lam[i]:11.3f} {100*explained[i]:9.1f}% {100*explained[:i+1].sum():10.1f}%   {W[i]}")
 ```
 
-## Celle 9 — markdown
+## Cell 9 — markdown
 
 #### 3. A smooth rotation in four dimensions
 
@@ -191,9 +191,9 @@ To animate the change from the original axes to the principal axes, there needs 
 
 Any 4D rotation can be split into six **plane rotations**, one for each pair of axes. Each zeroes one entry below the diagonal, like a QR decomposition done with Givens rotations. Scaling all six angles by $t$ gives a smooth path that is a genuine rotation at every step, so distances between points never distort during the animation.
 
-## Celle 10 — code
+## Cell 10 — code
 
-### Kildelinjer 1–39
+### Source lines 1-39
 
 ```python
 def givens_decompose(W):
@@ -237,15 +237,15 @@ for j, i, angle in rots:
     print(f"  {FEATURES[j]}–{FEATURES[i]} plane: {np.degrees(angle):7.1f}")
 ```
 
-## Celle 11 — markdown
+## Cell 11 — markdown
 
 #### 4. The timeline
 
 Each stage has a duration. `state_at(T)` turns a time in seconds into eased progress values that drive the animation, such as how far the standardization, rotation and collapses have gone.
 
-## Celle 12 — code
+## Cell 12 — code
 
-### Kildelinjer 1–22
+### Source lines 1-22
 
 ```python
 STAGES = [
@@ -272,7 +272,7 @@ STAGES = [
     dict(id="end", dur=6.5, short="2D result", title="The two-component view",
 ```
 
-### Kildelinjer 23–67
+### Source lines 23-67
 
 ```python
          caption="PC1 and PC2 keep {kept} of the total variance. Recoloring by the original feature c shows "
@@ -320,13 +320,13 @@ def stage_index(T):
     return max(i for i, s in enumerate(STAGES) if T >= s["start"] - 1e-9)
 ```
 
-### Kildelinjer 68–68
+### Source lines 68-68
 
 ```python
 print(f"{len(STAGES)} stages, {TOTAL:.1f} s in total")
 ```
 
-## Celle 13 — markdown
+## Cell 13 — markdown
 
 #### 5. Draw one frame
 
@@ -338,9 +338,9 @@ print(f"{len(STAGES)} stages, {TOTAL:.1f} s in total")
 * **Camera:** a slow orbit that settles into a view straight down on the PC1–PC2 plane.
 * **Bar chart:** explained variance, with bars fading as their components are dropped.
 
-## Celle 14 — code
+## Cell 14 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 COLORSCALE = [[0.00, "rgb(72,80,216)"], [0.25, "rgb(28,159,214)"], [0.50, "rgb(47,179,109)"],
@@ -388,7 +388,7 @@ def segments(pairs):
     return xs, ys, zs
 ```
 
-### Kildelinjer 46–90
+### Source lines 46-90
 
 ```python
 GRID_SEGMENTS = segments(
@@ -438,7 +438,7 @@ def frame_at(T):
     pos = lerp(raw_pos, k_scale * q[:, :3], st["std"])
 ```
 
-### Kildelinjer 91–127
+### Source lines 91-127
 
 ```python
     color = lerp(q[:, 3], Z[:, 3], st["recolor"])
@@ -480,7 +480,7 @@ def frame_at(T):
             labels.append(label3d("xyz"[i], label_pos[i], size=18, italic=True))
 ```
 
-### Kildelinjer 128–159
+### Source lines 128-159
 
 ```python
         elif st["cam"] < 0.5 or i == 2:
@@ -517,7 +517,7 @@ def frame_at(T):
                              showlegend=False, marker=dict(size=6, symbol="diamond", color=ink(st["arrow"])))
 ```
 
-### Kildelinjer 160–190
+### Source lines 160-190
 
 ```python
         if st["rot"] < 0.5:
@@ -553,15 +553,15 @@ def frame_at(T):
     return data, layout
 ```
 
-## Celle 15 — markdown
+## Cell 15 — markdown
 
 #### 6. Assemble the animation and open it in the browser
 
 The figure has one Plotly frame every `1 / FPS` seconds. **Play** and **Pause** control playback, the slider scrubs through time, and the dropdown jumps to the start of any step. You can drag to orbit while paused, but the camera follows the script again once the animation plays.
 
-## Celle 16 — code
+## Cell 16 — code
 
-### Kildelinjer 1–40
+### Source lines 1-40
 
 ```python
 times = np.append(np.arange(0.0, TOTAL, 1.0 / FPS), TOTAL - 1e-3)
@@ -606,7 +606,7 @@ fig.update_layout(
         font=dict(color="rgba(0,0,0,0)"), ticklen=0, tickcolor="rgba(0,0,0,0)",
 ```
 
-### Kildelinjer 41–48
+### Source lines 41-48
 
 ```python
         steps=[dict(method="animate", label=f"{T:.1f}", args=[[fr.name], jump_args]) for T, fr in zip(times, frames)],
@@ -619,22 +619,22 @@ print(f"{len(frames)} frames at {FPS} fps")
 fig.show()
 ```
 
-## Celle 17 — markdown
+## Cell 17 — markdown
 
 ##### Save a standalone copy (optional)
 
 This writes a self-contained HTML file that plays offline and can be shared.
 
-## Celle 18 — code
+## Cell 18 — code
 
-### Kildelinjer 1–2
+### Source lines 1-2
 
 ```python
 fig.write_html("pca_4d_to_2d.html", include_plotlyjs=True, auto_play=False)
 print("Saved pca_4d_to_2d.html")
 ```
 
-## Celle 19 — markdown
+## Cell 19 — markdown
 
 #### 7. Check the result against the hidden pattern
 
@@ -644,9 +644,9 @@ Both panels are colored by the original feature $c$. The smooth color gradient a
 
 The printed $R^2$ values measure how well a linear map from (PC1, PC2) reproduces the hidden $(u, v)$; values near 1 mean PCA recovered the sheet.
 
-## Celle 20 — code
+## Cell 20 — code
 
-### Kildelinjer 1–21
+### Source lines 1-21
 
 ```python
 A = np.c_[scores[:, :2], np.ones(N_POINTS)]

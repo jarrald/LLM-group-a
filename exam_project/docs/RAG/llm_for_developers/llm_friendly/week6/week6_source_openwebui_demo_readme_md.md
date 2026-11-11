@@ -1,9 +1,9 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — README (md)
+# Week 6 — README (md)
 
-Kilde: [week6/openwebui_demo/README.md](../../source/week6/openwebui_demo/README.md).
+Source: [week6/openwebui_demo/README.md](../../source/week6/openwebui_demo/README.md).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ### Week 10 - Tiny website using OpenWebUI API
 

@@ -1,38 +1,38 @@
-# Uge 4 — Lokale LLM-API'er og OpenWebUI
+# Week 4 — Local LLM APIs and OpenWebUI
 
-Kilde: `source/week4/Local AI week 4.pdf`, 15 sider. Den fulde tekst findes i [kildekonverteringen](week4_source_local_ai_week_4_pdf.md). Dette er en læsevejledning til materialet, ikke en ny installationsvejledning med verificerede API-versioner.
+Source: `source/week4/Local AI week 4.pdf`, 15 pages. The full text is in the [source conversion](week4_source_local_ai_week_4_pdf.md). This is a reading guide to the material, not a new installation guide with verified API versions.
 
-## Fra en lokal model til et API-kald
+## From a local model to an API call
 
-Undervisningen skelner mellem at nå den lokale service, kontrollere modelnavne og sende en chatforespørgsel. Ollama bruger i eksemplerne port 11434, mens OpenWebUI bruger port 3000. Et modelnavn skal kopieres med sit præcise tag fra servicens modelliste.
+The lecture distinguishes between reaching the local service, checking model names and sending a chat request. In the examples Ollama uses port 11434, while OpenWebUI uses port 3000. A model name must be copied with its exact tag from the service's model list.
 
-I Ollama-eksemplerne læser `GET /api/tags` modellisten, mens `POST /api/chat` modtager `model`, `messages` og `stream`. Med `stream: false` læses svaret fra `message.content` i et samlet JSON-svar. Streaming ændrer, hvordan klienten skal læse svaret.
+In the Ollama examples `GET /api/tags` reads the model list, while `POST /api/chat` receives `model`, `messages` and `stream`. With `stream: false` the answer is read from `message.content` in a single JSON response. Streaming changes how the client must read the response.
 
-## OpenWebUI og de fire T'er
+## OpenWebUI and the four T's
 
-OpenWebUI viser modellerne gennem sin egen brugerflade og kan konfigurere modeladfærd med Traits, Task, Tone og Target. API-eksemplerne bruger Bearer-autentificering. Modellisten ligger på `/api/models`, og chat-eksemplet bruger `/api/chat/completions`. De er eksempler fra undervisningen og skal holdes adskilt fra Ollamas egne endpoints.
+OpenWebUI exposes the models through its own interface and can configure model behaviour with Traits, Task, Tone and Target. The API examples use Bearer authentication. The model list is at `/api/models`, and the chat example uses `/api/chat/completions`. They are examples from the lecture and must be kept separate from Ollama's own endpoints.
 
-En API-nøgle skal holdes uden for delte noter og Git. De uploadede `.env`-filer er derfor ikke konverteret eller indekseret.
+An API key must be kept out of shared notes and Git. The uploaded `.env` files are therefore neither converted nor indexed.
 
-## Fejlsøgning efter HTTP-resultat
+## Troubleshooting by HTTP result
 
-| Symptom i materialet | Kontrol |
+| Symptom in the material | Check |
 |---|---|
-| Connection refused | Kører den rigtige service på den rigtige port? |
-| HTTP 404 | Er endpointstien korrekt? |
-| HTTP 401/403 | Er OpenWebUI-tokenet til stede og gyldigt? |
-| HTTP 400 | Er JSON og feltnavne korrekte? |
-| Timeout | Prøv mindre model, længere timeout eller et ikke-streamet svar. |
-| HTTP 500 | Undersøg serverfejlen og prøv en enklere forespørgsel. |
+| Connection refused | Is the right service running on the right port? |
+| HTTP 404 | Is the endpoint path correct? |
+| HTTP 401/403 | Is the OpenWebUI token present and valid? |
+| HTTP 400 | Are the JSON and field names correct? |
+| Timeout | Try a smaller model, a longer timeout or a non-streamed response. |
+| HTTP 500 | Investigate the server error and try a simpler request. |
 
-## ComfyUI og workshop
+## ComfyUI and workshop
 
-Slides introducerer ComfyUI som lokal backend til billedgenerering og OpenWebUI som brugerflade, der kan forbindes til den. Resten af dagen er afsat til workshop om den obligatoriske opgave. Slides dokumenterer ikke, at en bestemt installation er gennemført.
+The slides introduce ComfyUI as a local backend for image generation and OpenWebUI as an interface that can be connected to it. The rest of the day is reserved for a workshop on the mandatory assignment. The slides do not document that any particular installation was carried out.
 
-## Spørgsmål til repetition
+## Review questions
 
-1. Hvorfor kontrolleres modellisten før en chatforespørgsel?
-2. Hvad ændrer `stream: false` for klientens svarhåndtering?
-3. Hvordan adskiller Ollama- og OpenWebUI-endpoints sig?
-4. Hvad fortæller henholdsvis 404 og 401 om fejlen?
-5. Hvilken rolle har OpenWebUI i forhold til ComfyUI?
+1. Why is the model list checked before a chat request?
+2. What does `stream: false` change for the client's handling of the response?
+3. How do the Ollama and OpenWebUI endpoints differ?
+4. What do 404 and 401 respectively tell you about the error?
+5. What role does OpenWebUI play relative to ComfyUI?

@@ -1,20 +1,20 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 1 — Week1 (pdf)
+# Week 1 — Week1 (pdf)
 
-Kilde: [week1/Week1.pdf](../../source/week1/Week1.pdf).
+Source: [week1/Week1.pdf](../../source/week1/Week1.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 LLMs for 
 Developers E26
 
 Week 1: Welcome!
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 Timings.
 
@@ -48,9 +48,9 @@ F2027
 SOFT 
 Bach. Project
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 Topical flow of LLMs course
 
@@ -100,87 +100,87 @@ MAIN PROJECT
 
 WORK
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
-Efteråret 2026 – overblik.
+Autumn 2026 – overview.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
-Vigtige datoer.
+Important dates.
 
-Fre 4. september: mandatory assignment 1 udleveres.
+Fri 4 September: mandatory assignment 1 is released.
 
-Tir 29. september: workshop & mandatory assignment 2 udleveres. Gæst fra ITU!
+Tue 29 September: workshop & mandatory assignment 2 is released. Guest from ITU!
 
-Tor 8. oktober: aflevering mandatory assignment 1 + review one other assignment.
+Thu 8 October: hand-in of mandatory assignment 1 + review one other assignment.
 
-Tor 29. oktober: aflevering Mandatory Assignment 2 + review one other assignment.
+Thu 29 October: hand-in of Mandatory Assignment 2 + review one other assignment.
 
-Fre 6. november: projektforløb starter.
+Fri 6 November: the project period starts.
 
-Man 14. december - ?: Eksamen
+Mon 14 December - ?: Exam
 
 28. august 2026
 5
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Dannelse af 
-projektgrupper
+project groups
 
-Vi anbefaler på det varmeste:
-• 5 personer pr. gruppe.
-• 5 == 3+2 fra 1.sem + 2.sem.
+We strongly recommend:
+• 5 people per group.
+• 5 == 3+2 from 1st semester + 2nd semester.
 
 We’re not alone in
 
 this… ☺
 
-Lidt mere: ‘Har du lyst til at være med…?’
+A little more: 'Would you like to take part…?'
 
-Lidt mindre: ‘Må jeg være med…?’
+A little less: 'May I take part…?'
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
-Værdien af at være i studiegruppe KAN ikke overvurderes.
+The value of being in a study group CANNOT be overestimated.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
-Studie-AI
+Study AI
 
-Refleksioner: Viden, erfaring, anvendelse af AI i dine studier?
-
-•
-Hvordan bruger du AI/LLMs i dit daglige studiearbejde?
+Reflections: knowledge, experience and use of AI in your studies?
 
 •
-Hvordan har du tidligere brugt du AI/LLMs i forbindelse med eksamen?
+How do you use AI/LLMs in your daily study work?
 
 •
-Hvordan påvirker AI samarbejde og rollefordeling i gruppearbejde?
+How have you previously used AI/LLMs in connection with exams?
+
+•
+How does AI affect collaboration and role distribution in group work?
 
 •
 Hvilke dilemmaer og bekymringer oplever I ved at bruge AI?
 
 •
-Hvad savner du af undervisning og kompetenceudvikling på området?
+What do you miss in terms of teaching and competence development in this area?
 
 15 minutter i 
 grupperne
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 Machine Learning – week 1
 
@@ -191,18 +191,18 @@ Machine Learning – week 1
 28. august 2026
 9
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 AI, ML, and LLM: 
 How They Relate?
 
 Sets – or classes – of AI.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 Data Science Taxonomy
 -- the Machine Learning Element(s)
@@ -222,9 +222,9 @@ ML
 
 LLM
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 Fundamental
 Machine Learning
@@ -233,18 +233,18 @@ Machine Learning
 28. august 2026
 12
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 28. august 2026
 13
 
 A Machine Learning Landscape
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 Generally: A Machine Learning Model is a Function.
 
@@ -261,9 +261,9 @@ Input
 
 x
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 15
+## Page 15
 
 Generally: A Machine Learning Model is a Function.
 
@@ -280,9 +280,9 @@ Input
 
 x
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 16
+## Page 16
 
 Machine learning: ‘training’ is an unfortunate word. 
 It sounds as if the model is alive and sentient.
@@ -301,9 +301,9 @@ Training an extremely simple machine learning model, by hand.
 28. august 2026
 16
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 17
+## Page 17
 
 When you make your model too sensitive and wrong.
 
@@ -319,9 +319,9 @@ Model 8th, “better” fit to
 data, with much smaller 
 error.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 18
+## Page 18
 
 Machine learning: ‘training’ is an unfortunate word. 
 It sounds as if the model is alive and sentient.
@@ -340,9 +340,9 @@ Training an extremely simple machine learning model, with ‘MSExcel’, ‘Goog
 28. august 2026
 18
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 19
+## Page 19
 
 Linear regression – Use ‘Jupyter Notebook’, or ‘Visual Studio Code’ or ‘Spyder’ IDEs. 
 Kaggle salary data are found on ItsLearning, week 1 resources.
@@ -353,9 +353,9 @@ Kaggle salary data are found on ItsLearning, week 1 resources.
 In-class: exercise 1.3
 -- automated ML training in Python.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 20
+## Page 20
 
 Linear regression – "samesame” – BUT use your favorite chatbot... ‘Mistral’, 
 ‘Qwen’, ‘Ollama’, ‘ChatGPT’, ‘Claude’, ’Gemini’, UNameIt. ☺
@@ -371,9 +371,9 @@ Bot doesn’t do it all by itself. ☺
 In-class: exercise 1.4
 -- automated ML training
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 21
+## Page 21
 
 Things getting worse… 
 – or much more interesting!? -- Outliers
@@ -393,9 +393,9 @@ believing that we found a good fit to our
 • Model is wrong!?
 • Data are wrong?!
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 22
+## Page 22
 
 Anaconda and Iris.
 
@@ -408,9 +408,9 @@ ML Demo 1
 
 Pen and Paper
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 23
+## Page 23
 
 ❖In machine learning a model is trained, by minimizing a cost/error function.
 
@@ -425,9 +425,9 @@ The model can now be used to predict output values from new data.
 
 Point being…
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 24
+## Page 24
 
 Next on Machine Learning
 
@@ -439,9 +439,9 @@ Week 3
 28. august 2026
 24
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 25
+## Page 25
 
 Tentative direction
 
@@ -455,9 +455,9 @@ Next week we’ll continue closing in on LLMs in depth.
 
 https://www.youtube.com/watch?v=LPZh9BOjkQs
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 26
+## Page 26
 
 Embedding map of a from Nomic.
 
@@ -469,9 +469,9 @@ mic_Embed_Text_Technical_Report.pdf
 
 https://atlas.nomic.ai/map/nomic-text-embed-v1-5m-sample
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 27
+## Page 27
 
 Societal Aspects – week 1
 
@@ -482,9 +482,9 @@ Societal Aspects – week 1
 28. august 2026
 27
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 28
+## Page 28
 
 Societal Aspects
 
@@ -523,9 +523,9 @@ Small time case – but quite illustrative.
 We shall research societal and human aspects of the ongoing LLM revolution, some of 
 which will be chosen from:
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 29
+## Page 29
 
 Societal Aspects. A few tests of cloud LLMs. In prep for L-LLMs, week 2.
 
@@ -545,9 +545,9 @@ Hint: invent something that does not exist. “Explain the principle underlying 
 In-class: exercise 1.5
 -- simple tests of the global LLM machinery
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 30
+## Page 30
 
 In-group reflection
 
@@ -564,9 +564,9 @@ Hallucination
 Did you find something useful about LLM hallucination? Would you have been fooled into alternate reality, 
 had you listened to only one LLM, asking the “wrong question”?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 31
+## Page 31
 
 In-class debate
 
@@ -583,9 +583,9 @@ Hallucination
 Did you find something useful about LLM hallucination? Would you have been fooled into alternate reality, 
 had you listened to only one LLM, asking the “wrong question”?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 32
+## Page 32
 
 Next on Societal Aspects
 
@@ -597,9 +597,9 @@ Week 3
 28. august 2026
 32
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 33
+## Page 33
 
 Prompt Injection
 
@@ -611,9 +611,9 @@ Example link: https://www.promptfoo.dev/blog/prompt-injection/
 
 From week 2, do we face the same challenges in using ‘cloud’ and ‘local’ LLMs?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 34
+## Page 34
 
 Linear regression in Jupyter Notebooks / ChatBots
 
@@ -643,4 +643,4 @@ Is it a meaningful result? (linear dependence in data?)
 •
 Could a curve – other than a straight line (linear fit) – better fit the data?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

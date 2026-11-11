@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — train_embeddings (ipynb)
+# Week 3 — train_embeddings (ipynb)
 
-Kilde: [week3/train_embeddings.ipynb](../../source/week3/train_embeddings.ipynb).
+Source: [week3/train_embeddings.ipynb](../../source/week3/train_embeddings.ipynb).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-Kildeceller er bevaret i rækkefølge. Koden er ikke kørt. Gemte outputs, billeder og kørselsnumre er udeladt; der tilføjes ingen forsøgsresultater.
+Notebook cells are preserved in order. The code was not executed. Stored outputs, images and execution counts are omitted; no experimental results are added.
 
-## Celle 1 — markdown
+## Cell 1 — markdown
 
 ### Skip-Gram Word Embeddings (Notebook Version)
 
@@ -30,9 +30,9 @@ notebook format:
 Everything else \u2014 every function, every hyperparameter, the training
 loop itself \u2014 is unchanged from the original script.
 
-## Celle 2 — code
+## Cell 2 — code
 
-### Kildelinjer 1–5
+### Source lines 1-5
 
 ```python
 
@@ -42,9 +42,9 @@ import numpy as np
 from collections import Counter
 ```
 
-## Celle 3 — code
+## Cell 3 — code
 
-### Kildelinjer 1–29
+### Source lines 1-29
 
 ```python
 
@@ -78,13 +78,13 @@ GENERATE_MOVIE = True
 #   GENERATE_MOVIE    : bool  - If True, render the PNG movie frames after training.
 ```
 
-## Celle 4 — markdown
+## Cell 4 — markdown
 
 #### Core functions (unchanged from `train_embeddings.py`)
 
-## Celle 5 — code
+## Cell 5 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 
@@ -134,7 +134,7 @@ def negative_sampling_table(freqs: np.ndarray, table_size: int = 1_000_000) -> n
     table = np.repeat(np.arange(len(freqs)), counts)
 ```
 
-### Kildelinjer 46–50
+### Source lines 46-50
 
 ```python
     return table
@@ -144,9 +144,9 @@ def sigmoid(x: np.ndarray) -> np.ndarray:
     return 1.0 / (1.0 + np.exp(-np.clip(x, -20, 20)))
 ```
 
-## Celle 6 — code
+## Cell 6 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 
@@ -196,7 +196,7 @@ def train_skipgram(pairs, vocab_size, neg_table, rng: np.random.Generator,
                 grad_neg = neg_score * LEARNING_RATE
 ```
 
-### Kildelinjer 46–64
+### Source lines 46-64
 
 ```python
                 in_grad += grad_neg * W_out[neg]
@@ -220,7 +220,7 @@ def train_skipgram(pairs, vocab_size, neg_table, rng: np.random.Generator,
     return W_in, history
 ```
 
-## Celle 7 — markdown
+## Cell 7 — markdown
 
 #### Movie-rendering functions (from `plot_embedding_evolution.py`, inlined)
 
@@ -229,9 +229,9 @@ and frame-rendering logic behind `GENERATE_MOVIE`. That file's contents are
 reproduced here unchanged, just moved into this notebook so nothing external
 is required.
 
-## Celle 8 — code
+## Cell 8 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 
@@ -281,7 +281,7 @@ def compute_projection(embeddings: np.ndarray, mode: str, n_components: int) -> 
     """
 ```
 
-### Kildelinjer 46–90
+### Source lines 46-90
 
 ```python
     n_snapshots, n_words, dim = embeddings.shape
@@ -331,7 +331,7 @@ def render_frames(history_path: str, frames_dir: str, pca_mode: str = PCA_MODE,
     words = data["words"]                 # (n_words,)
 ```
 
-### Kildelinjer 91–133
+### Source lines 91-133
 
 ```python
 
@@ -379,7 +379,7 @@ def render_frames(history_path: str, frames_dir: str, pca_mode: str = PCA_MODE,
                 ax.text(current[w, 0], current[w, 1], current[w, 2],
 ```
 
-### Kildelinjer 134–146
+### Source lines 134-146
 
 ```python
                         str(words[w]), fontsize=8)
@@ -397,7 +397,7 @@ def render_frames(history_path: str, frames_dir: str, pca_mode: str = PCA_MODE,
     print(f"Wrote {n_snapshots} frames to '{frames_dir}/'.")
 ```
 
-## Celle 9 — markdown
+## Cell 9 — markdown
 
 #### Configuration
 
@@ -408,9 +408,9 @@ If `CORPUS_PATH` doesn't exist, a small demo corpus is written there
 automatically so the notebook runs out of the box \u2014 point it at your own
 text file to use real data.
 
-## Celle 10 — code
+## Cell 10 — code
 
-### Kildelinjer 1–30
+### Source lines 1-30
 
 ```python
 
@@ -445,13 +445,13 @@ if not os.path.exists(CORPUS_PATH):
     print(f"No corpus found at {CORPUS_PATH!r} \u2014 wrote a small demo corpus there instead.")
 ```
 
-## Celle 11 — markdown
+## Cell 11 — markdown
 
 #### Run the pipeline (equivalent to `main()` in the original script)
 
-## Celle 12 — code
+## Cell 12 — code
 
-### Kildelinjer 1–37
+### Source lines 1-37
 
 ```python
 
@@ -493,9 +493,9 @@ print(f"Tracking {len(tracked_words)} words for the evolution movie: {tracked_wo
 embeddings, history = train_skipgram(pairs, len(word2idx), neg_table, rng, tracked_ids)
 ```
 
-## Celle 13 — code
+## Cell 13 — code
 
-### Kildelinjer 1–11
+### Source lines 1-11
 
 ```python
 
@@ -511,9 +511,9 @@ print(f"Saved embeddings to {OUT_PREFIX}.npy and vocabulary to {OUT_PREFIX}.voca
 print(f"Saved embedding-evolution history to {history_path}")
 ```
 
-## Celle 14 — code
+## Cell 14 — code
 
-### Kildelinjer 1–6
+### Source lines 1-6
 
 ```python
 
@@ -524,16 +524,16 @@ if GENERATE_MOVIE:
     render_frames(history_path, FRAMES_DIR, pca_mode, plot_dims)
 ```
 
-## Celle 15 — markdown
+## Cell 15 — markdown
 
 #### Bonus: preview a frame, and export the movie as MP4
 
 Not part of the original script, but a natural next step now that we're in
 a notebook \u2014 inline previewing and an MP4 export using `ffmpeg`.
 
-## Celle 16 — code
+## Cell 16 — code
 
-### Kildelinjer 1–6
+### Source lines 1-6
 
 ```python
 
@@ -544,9 +544,9 @@ if GENERATE_MOVIE:
     display(Image(filename=os.path.join(FRAMES_DIR, last_frame)))
 ```
 
-## Celle 17 — code
+## Cell 17 — code
 
-### Kildelinjer 1–19
+### Source lines 1-19
 
 ```python
 
@@ -570,9 +570,9 @@ if GENERATE_MOVIE:
     print(f"Saved {OUTPUT_MP4}")
 ```
 
-## Celle 18 — code
+## Cell 18 — code
 
-### Kildelinjer 1–5
+### Source lines 1-5
 
 ```python
 

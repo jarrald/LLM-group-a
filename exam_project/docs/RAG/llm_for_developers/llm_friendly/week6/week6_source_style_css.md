@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — style (css)
+# Week 6 — style (css)
 
-Kilde: [week6/style.css](../../source/week6/style.css).
+Source: [week6/style.css](../../source/week6/style.css).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 import os
@@ -55,7 +55,7 @@ def api_chat() -> Any:
     return jsonify(
 ```
 
-### Kildelinjer 46–61
+### Source lines 46-61
 
 ```python
         {

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — example_questions (md)
+# Week 6 — example_questions (md)
 
-Kilde: [week6/example_questions.md](../../source/week6/example_questions.md).
+Source: [week6/example_questions.md](../../source/week6/example_questions.md).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–43
+### Source lines 1-43
 
 ```python
 from typing import List

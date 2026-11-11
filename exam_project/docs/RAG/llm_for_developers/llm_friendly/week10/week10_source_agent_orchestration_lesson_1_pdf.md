@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — Agent_Orchestration_Lesson (1) (pdf)
+# Week 10 — Agent_Orchestration_Lesson (1) (pdf)
 
-Kilde: [week10/Agent_Orchestration_Lesson (1).pdf](../../source/week10/Agent_Orchestration_Lesson%20%281%29.pdf).
+Source: [week10/Agent_Orchestration_Lesson (1).pdf](../../source/week10/Agent_Orchestration_Lesson%20%281%29.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 Agent orchestration
 
@@ -17,15 +17,15 @@ Python · LangGraph · LangChain · Ollama
 
 LLM for Developers
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 2
+## Page 2
 
 Exam-project questions
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 3
+## Page 3
 
 Agent, Agentic and Orchestration
 
@@ -43,9 +43,9 @@ Developer-defined transitions govern execution.
 Agent orchestration
 Coordination across agents and tasks.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 4
+## Page 4
 
 Two agents and an orchestrator
 
@@ -57,9 +57,9 @@ Reviewer: checks the code, runs tests and gives feedback.
 
 Orchestrator: decides which agent runs next and when the process stops.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 5
+## Page 5
 
 What orchestration adds
 
@@ -73,9 +73,9 @@ Coordination: what must complete before the next task?
 
 Completion: who accepts results and who stops the workflow?
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Coordination patterns
 
@@ -96,9 +96,9 @@ A coordinator delegates dynamically. Decisions need inspection.
 Review loop
 Feedback drives revision. Requires an explicit limit.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 Two agents need a reason
 
@@ -112,9 +112,9 @@ Sharing a model saves resources but can preserve shared blind spots.
 
 Extra handoffs cost time and tokens.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 Specification-based development
 
@@ -141,9 +141,9 @@ Implement and review one feature at a time.
 
 08
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 The bounded review loop
 
@@ -167,9 +167,9 @@ SUCCESS
 Fail at limit: finish with 
 FAILURE
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 Shared state and private context
 
@@ -193,9 +193,9 @@ Controls routing and records the final outcome
 Private agent messages
 Fresh per invocation. Stored in the run trace
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 11
+## Page 11
 
 Setup: Python environment
 
@@ -211,9 +211,9 @@ python3 -m venv .venv
 
 Use the virtual-environment Python executable for the remaining commands.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 12
+## Page 12
 
 Setup: model and tool-call check
 
@@ -229,9 +229,9 @@ Then: PASS
 A successful smoke test checks connectivity and one tool call.
 It does not establish coding or review quality.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 Agent tools and boundaries
 
@@ -252,9 +252,9 @@ Run real tests and inspect results
 Receive latest feedback
 Submit an approving or rejecting review
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 14
+## Page 14
 
 Run the workflow
 
@@ -269,9 +269,9 @@ python main.py --allow-local-execution
 The first run is scripted. The second uses the local model.
 Both execute tests and record graph transitions.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 15
+## Page 15
 
 The routing decision
 
@@ -287,9 +287,9 @@ return "finish"
 
 The feedback node increments the counter before returning to coder.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 16
+## Page 16
 
 What counts as success?
 
@@ -303,9 +303,9 @@ Fresh verification matches the reviewed implementation.
 
 No agent invocation error occurred in the attempt.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 17
+## Page 17
 
 Run the generated calculator
 
@@ -320,4 +320,4 @@ Result: 3.0
 
 Then try division by zero, an unsupported operator and invalid input.
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.

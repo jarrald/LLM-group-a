@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 1 — ml_0.0.1_training_data_list (txt)
+# Week 1 — ml_0.0.1_training_data_list (txt)
 
-Kilde: [week1/ml_0.0.1_training_data_list.txt](../../source/week1/ml_0.0.1_training_data_list.txt).
+Source: [week1/ml_0.0.1_training_data_list.txt](../../source/week1/ml_0.0.1_training_data_list.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–21
+### Source lines 1-21
 
 ```text
 Machine learning 0.0.1, training data.

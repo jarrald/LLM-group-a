@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — app (py)
+# Week 6 — app (py)
 
-Kilde: [week6/openwebui_demo/app.py](../../source/week6/openwebui_demo/app.py).
+Source: [week6/openwebui_demo/app.py](../../source/week6/openwebui_demo/app.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 import os
@@ -55,7 +55,7 @@ def chat():
         }
 ```
 
-### Kildelinjer 46–90
+### Source lines 46-90
 
 ```python
 
@@ -105,7 +105,7 @@ def chat():
         return jsonify({"error": "Unexpected backend error", "details": str(exc)}), 500
 ```
 
-### Kildelinjer 91–94
+### Source lines 91-94
 
 ```python
 

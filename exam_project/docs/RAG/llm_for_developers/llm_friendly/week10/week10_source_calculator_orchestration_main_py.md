@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — main (py)
+# Week 10 — main (py)
 
-Kilde: [week10/calculator-orchestration/main.py](../../source/week10/calculator-orchestration/main.py).
+Source: [week10/calculator-orchestration/main.py](../../source/week10/calculator-orchestration/main.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–41
+### Source lines 1-41
 
 ```python
 """Run from the project root: python main.py --demo --allow-local-execution."""
@@ -51,7 +51,7 @@ def main():
             print("SCRIPTED DEMO: no model calls. Tests still execute real Python.",flush=True)
 ```
 
-### Kildelinjer 42–66
+### Source lines 42-66
 
 ```python
             coder,reviewer=demo_workers(work,log,args.demo_fail)

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — requirements (txt)
+# Week 6 — requirements (txt)
 
-Kilde: [week6/openwebui_demo/requirements.txt](../../source/week6/openwebui_demo/requirements.txt).
+Source: [week6/openwebui_demo/requirements.txt](../../source/week6/openwebui_demo/requirements.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```text
 Flask==3.1.0

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — requirements-lock (txt)
+# Week 10 — requirements-lock (txt)
 
-Kilde: [week10/calculator-orchestration/requirements-lock.txt](../../source/week10/calculator-orchestration/requirements-lock.txt).
+Source: [week10/calculator-orchestration/requirements-lock.txt](../../source/week10/calculator-orchestration/requirements-lock.txt).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–41
+### Source lines 1-41
 
 ```text
 annotated-types==0.8.0

@@ -1,9 +1,9 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — SETUP (md)
+# Week 10 — SETUP (md)
 
-Kilde: [week10/calculator-orchestration/SETUP.md](../../source/week10/calculator-orchestration/SETUP.md).
+Source: [week10/calculator-orchestration/SETUP.md](../../source/week10/calculator-orchestration/SETUP.md).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ### Setup and classroom run guide
 

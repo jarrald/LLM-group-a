@@ -1,27 +1,27 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 1 — simple_linear_regression (ipynb)
+# Week 1 — simple_linear_regression (ipynb)
 
-Kilde: [week1/simple_linear_regression.ipynb](../../source/week1/simple_linear_regression.ipynb).
+Source: [week1/simple_linear_regression.ipynb](../../source/week1/simple_linear_regression.ipynb).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-Kildeceller er bevaret i rækkefølge. Koden er ikke kørt. Gemte outputs, billeder og kørselsnumre er udeladt; der tilføjes ingen forsøgsresultater.
+Notebook cells are preserved in order. The code was not executed. Stored outputs, images and execution counts are omitted; no experimental results are added.
 
-## Celle 1 — markdown
+## Cell 1 — markdown
 
 ### Simple Linear Regression
 
-## Celle 2 — markdown
+## Cell 2 — markdown
 
 ### Data Collection
 
-## Celle 3 — markdown
+## Cell 3 — markdown
 
 We need Pandas for data manipulation, NumPy for mathematical calculations, and Matplotlib, and Seaborn for visualizations. Sklearn libraries are used for machine learning operations
 
-## Celle 4 — code
+## Cell 4 — code
 
-### Kildelinjer 1–8
+### Source lines 1-8
 
 ```python
 # Import libraries
@@ -34,17 +34,17 @@ from pandas.core.common import random_state
 from sklearn.linear_model import LinearRegression
 ```
 
-## Celle 5 — markdown
+## Cell 5 — markdown
 
 ### Load and Explore the Dataset
 
-## Celle 6 — markdown
+## Cell 6 — markdown
 
 We will load the dataset, check its structure, and read it into the panda's data frame.
 
-## Celle 7 — code
+## Cell 7 — code
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```python
 # Get dataset
@@ -52,35 +52,35 @@ df_sal = pd.read_csv('Salary_Data.csv')
 df_sal.head()
 ```
 
-## Celle 8 — markdown
+## Cell 8 — markdown
 
 #### Data Analysis
 
-## Celle 9 — markdown
+## Cell 9 — markdown
 
 Descriptive Statistics
 Now lets analyze the dataset to understand its structure.
 
-## Celle 10 — code
+## Cell 10 — code
 
-### Kildelinjer 1–2
+### Source lines 1-2
 
 ```python
 # Describe data
 df_sal.describe()
 ```
 
-## Celle 11 — markdown
+## Cell 11 — markdown
 
 #### Visualize Data Distribution
 
-## Celle 12 — markdown
+## Cell 12 — markdown
 
 We can also find how the data is distributed visually using the Seaborn displot.
 
-## Celle 13 — code
+## Cell 13 — code
 
-### Kildelinjer 1–4
+### Source lines 1-4
 
 ```python
 # Data distribution
@@ -89,19 +89,19 @@ sns.distplot(df_sal['Salary'])
 plt.show()
 ```
 
-## Celle 14 — markdown
+## Cell 14 — markdown
 
 #### Relationship between variables
 
-## Celle 15 — markdown
+## Cell 15 — markdown
 
 Visualize the relationship between "Years of Experience" and "Salary."
 A distplot shows how data is spread out. It uses a line and a histogram to display the data.
 Later, we check the relationship between Salary and Experience.
 
-## Celle 16 — code
+## Cell 16 — code
 
-### Kildelinjer 1–7
+### Source lines 1-7
 
 ```python
 # Relationship between Salary and Experience
@@ -113,18 +113,18 @@ plt.box(False)
 plt.show()
 ```
 
-## Celle 17 — markdown
+## Cell 17 — markdown
 
 ### Split the dataset into dependent/independent variables
 
-## Celle 18 — markdown
+## Cell 18 — markdown
 
 Experience (X) is the independent variable
 Salary (y) is dependent on experience
 
-## Celle 19 — code
+## Cell 19 — code
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```python
 # Splitting variables
@@ -132,34 +132,34 @@ X = df_sal.iloc[:, :1]  # independent
 y = df_sal.iloc[:, 1:]  # dependent
 ```
 
-## Celle 20 — markdown
+## Cell 20 — markdown
 
 #### Split the dataset into Training and Testing Sets
 
-## Celle 21 — markdown
+## Cell 21 — markdown
 
 Separate independent (X) and dependent (y) variables, then split into training (80%) and testing (20%) sets.
 
-## Celle 22 — code
+## Cell 22 — code
 
-### Kildelinjer 1–2
+### Source lines 1-2
 
 ```python
 # Splitting dataset into test/train
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 ```
 
-## Celle 23 — markdown
+## Cell 23 — markdown
 
 ### Fitting the Model
 
-## Celle 24 — markdown
+## Cell 24 — markdown
 
 Pass the X_train and y_train data into the regressor model by regressor fit to train the model using training data.
 
-## Celle 25 — code
+## Cell 25 — code
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```python
 # Regressor model
@@ -167,17 +167,17 @@ regressor = LinearRegression()
 regressor.fit(X_train, y_train)
 ```
 
-## Celle 26 — markdown
+## Cell 26 — markdown
 
 ### Make predictions
 
-## Celle 27 — markdown
+## Cell 27 — markdown
 
 Once the model is trained, we can use it to predict the test data.
 
-## Celle 28 — code
+## Cell 28 — code
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```python
 # Prediction result
@@ -185,25 +185,25 @@ y_pred_test = regressor.predict(X_test)     # predicted value of y_test
 y_pred_train = regressor.predict(X_train)   # predicted value of y_train
 ```
 
-## Celle 29 — markdown
+## Cell 29 — markdown
 
 ### Visualize the Results
 
-## Celle 30 — markdown
+## Cell 30 — markdown
 
 Now that we have our predictions, let's visualize the results through plotting graphs.
 
-## Celle 31 — markdown
+## Cell 31 — markdown
 
 #### Training set results
 
-## Celle 32 — markdown
+## Cell 32 — markdown
 
 Firstly, we plot the results of training sets (X_train, y_train) with X_train and the expected value of y_train (regressor.predict(X_train))
 
-## Celle 33 — code
+## Cell 33 — code
 
-### Kildelinjer 1–9
+### Source lines 1-9
 
 ```python
 # Prediction on training set
@@ -217,17 +217,17 @@ plt.box(False)
 plt.show()
 ```
 
-## Celle 34 — markdown
+## Cell 34 — markdown
 
 #### Test Set results
 
-## Celle 35 — markdown
+## Cell 35 — markdown
 
 Secondly, we plot the results of test sets (X_test, y_test) with X_train and the expected value of y_train (regressor.predict(X_train))
 
-## Celle 36 — code
+## Cell 36 — code
 
-### Kildelinjer 1–9
+### Source lines 1-9
 
 ```python
 # Prediction on test set
@@ -241,13 +241,13 @@ plt.box(False)
 plt.show()
 ```
 
-## Celle 37 — markdown
+## Cell 37 — markdown
 
 ### Coefficient and Intercept
 
-## Celle 38 — code
+## Cell 38 — code
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```python
 # Regressor coefficients and intercept

@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 6 — ingest (2) (py)
+# Week 6 — ingest (2) (py)
 
-Kilde: [week6/ingest (2).py](../../source/week6/ingest%20%282%29.py).
+Source: [week6/ingest (2).py](../../source/week6/ingest%20%282%29.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 import os
@@ -55,7 +55,7 @@ def main() -> None:
         print()
 ```
 
-### Kildelinjer 46–49
+### Source lines 46-49
 
 ```python
 

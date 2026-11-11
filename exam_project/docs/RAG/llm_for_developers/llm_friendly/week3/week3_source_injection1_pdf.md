@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Injection1 (pdf)
+# Week 3 — Injection1 (pdf)
 
-Kilde: [week3/Injection1.pdf](../../source/week3/Injection1.pdf).
+Source: [week3/Injection1.pdf](../../source/week3/Injection1.pdf).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Side 1
+## Page 1
 
 arXiv:2506.08837v3  [cs.LG]  27 Jun 2025
 
@@ -96,7 +96,7 @@ side, 2022b; Abdelnabi et al., 2023) are particularly concerning. These attacks 
 
 1
 
-## Side 2
+## Page 2
 
 malicious data, embedded within content processed by the LLM, manipulates the model’s
 behavior to perform unauthorized or unintended actions. Prompt injection attacks can have
@@ -153,7 +153,7 @@ these classes of attacks as prompt injections.
 
 2
 
-## Side 3
+## Page 3
 
 Existing Defenses can be categorized into LLM-, user-, and system-level defenses:
 
@@ -207,7 +207,7 @@ in nature—and thus inherently brittle. As long as both agents and their defens
 
 3
 
-## Side 4
+## Page 4
 
 current class of language models, we believe it is unlikely that general-purpose agents can
 provide meaningful and reliable safety guarantees.
@@ -262,7 +262,7 @@ of actions available to it, and choose an action based on the user’s query, e.
 
 4
 
-## Side 5
+## Page 5
 
 This pattern can also be effective against prompt injections in the user input, by enforcing that
 the prompt is removed before the agent replies to the user (see pattern 6)).
@@ -320,9 +320,9 @@ however, arbitrarily alter the body of the email to be sent to the user’s boss
 
 5
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 6
+## Page 6
 
 Prompt
 
@@ -390,9 +390,9 @@ aggregates all matching files and uses another LLM to write and send the email (
 
 6
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 7
+## Page 7
 
 “reduce” operation).
 
@@ -460,9 +460,9 @@ orchestrator at the time of the function call.
 
 7
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 8
+## Page 8
 
 Prompt
 
@@ -533,9 +533,9 @@ make calls to other LLMs. The code is then run on untrusted data.
 
 8
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 9
+## Page 9
 
 6)
 The Context-Minimization pattern.
@@ -590,9 +590,9 @@ well as LLM-specific best-practices (see Appendix A).
 
 9
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 10
+## Page 10
 
 Design Patterns
 
@@ -683,7 +683,7 @@ shell tool and teach it to use standard shell commands.
 
 10
 
-## Side 11
+## Page 11
 
 • Utility: Such an LLM can, in principle, solve all the tasks we consider. But the large action
 space (and their consequences) is likely to cause issues even in the absence of attacks. For
@@ -741,7 +741,7 @@ file and have the LLM output be constrained to prevent it from containing unsafe
 
 11
 
-## Side 12
+## Page 12
 
 a boolean in the case of a fuzzy search, or a predetermined category for filtering). Then, the
 controller can act on these results without ever looking at file contents.
@@ -808,9 +808,9 @@ get questions answered. This agent reasons about which databases, tables, and da
 
 12
 
-> Visuelt indhold: siden indeholder billeder eller grafik. Diagrammers betydning og formler er ikke automatisk verificeret.
+> Visual content: this page contains images or graphics. The meaning of the diagrams and formulas has not been verified automatically.
 
-## Side 13
+## Page 13
 
 in the generated SQL queries based on the input question. The agent can generate Python code
 to analyze the data obtained from the SQL queries or to visualize the data to support the answer
@@ -868,7 +868,7 @@ visualize the query results remains the same.
 
 13
 
-## Side 14
+## Page 14
 
 • Security: Preventing the data, obtained from the databases, from being processed by
 the LLM generating Python code for data analysis and visualization avoids the risk of
@@ -925,7 +925,7 @@ and calendar, and to perform email or calendar actions on the user’s behalf. T
 
 14
 
-## Side 15
+## Page 15
 
 interact with the assistant via a text chat-style interface in a desktop email application, or via a
 voice/audio interface from a mobile device or smartwatch. Examples of instructions given to
@@ -977,7 +977,7 @@ information using non-printing characters (Embrace The Red, 2024a).
 
 15
 
-## Side 16
+## Page 16
 
 4.3.3
 Possible Designs
@@ -1035,7 +1035,7 @@ data.
 
 16
 
-## Side 17
+## Page 17
 
 • Utility: Similarly to the plan-then-execute pattern above, this pattern would not decrease
 utility for most use cases because the assistant should not be receiving new instructions
@@ -1089,7 +1089,7 @@ attacks in the user’s prompt. Such attacks could cause harms in two ways:
 
 17
 
-## Side 18
+## Page 18
 
 • Data exfiltration. If an attacker tricks the customer into entering a malicious prompt, the
 prompt could trick the chatbot into querying the customer’s data and then exfiltrating this
@@ -1146,7 +1146,7 @@ execute.
 
 18
 
-## Side 19
+## Page 19
 
 3)
 The context-minimization pattern.
@@ -1202,7 +1202,7 @@ from the calendar and service providers are directly processed by the LLM.
 
 19
 
-## Side 20
+## Page 20
 
 2)
 Fuzzy action-sandboxing with a topic classifier.
@@ -1261,7 +1261,7 @@ in this category, and uses an LLM to provide a balanced overview of the benefits
 
 20
 
-## Side 21
+## Page 21
 
 of each product by analyzing the user reviews. This is a very simple application (not even
 an agent) that does not require tool use and does not support state-changing actions such as
@@ -1320,7 +1320,7 @@ unduly large effect on the recommendation of a product.
 
 21
 
-## Side 22
+## Page 22
 
 This could be achieved by processing each review with an LLM in isolation to produce a
 sanitized summary for some fixed categories (e.g., “good price”, “easy to use”, “looks nice”,
@@ -1373,7 +1373,7 @@ might not be able to effectively process more than a few dozen resumes.
 
 22
 
-## Side 23
+## Page 23
 
 2)
 Action sandboxing using RAG.
@@ -1431,7 +1431,7 @@ LLMs processing each resume individually.
 
 23
 
-## Side 24
+## Page 24
 
 • Utility: The utility of this agent relies on the quality of the LLM template, and making the
 LLM generate a high-quality template may require significant effort from the user.
@@ -1489,7 +1489,7 @@ to return illegal responses.
 
 24
 
-## Side 25
+## Page 25
 
 2)
 The context-minimization pattern.
@@ -1547,7 +1547,7 @@ can also see this text, so if the text contains something clearly malicious, the
 
 25
 
-## Side 26
+## Page 26
 
 would likely realize. But there might be ways to hide a prompt injection in a way that an
 untrained human doesn’t see, for example through ASCII smuggling (Embrace The Red,
@@ -1602,7 +1602,7 @@ rency hack9).
 
 26
 
-## Side 27
+## Page 27
 
 4.10.3
 Possible Designs
@@ -1659,7 +1659,7 @@ agents remains out of reach with current capabilities, we argue that application
 
 27
 
-## Side 28
+## Page 28
 
 can be secured through principled system design. To support this claim, we propose six design
 patterns for making AI agents resilient to prompt injection attacks. These patterns are inten-
@@ -1718,7 +1718,7 @@ non-invasive constrained generation. In ICML. OpenReview.net, 2024.
 
 28
 
-## Side 29
+## Page 29
 
 Maarten AS Boksem and Mattie Tops. Mental fatigue: costs and benefits. Brain research reviews,
 
@@ -1808,7 +1808,7 @@ SP (Workshops), pp. 132–143. IEEE, 2024.
 
 29
 
-## Side 30
+## Page 30
 
 Yupei Liu, Yuqi Jia, Runpeng Geng, Jinyuan Jia, and Neil Zhenqiang Gong. Formalizing and
 
@@ -1896,7 +1896,7 @@ net/2023/May/11/delimiters-wont-save-you/, 2023a.
 
 30
 
-## Side 31
+## Page 31
 
 Simon Willison. The Dual LLM Pattern for Building AI Assistants That Can Resist Prompt
 
@@ -1958,7 +1958,7 @@ that have the least possible privileges and side-effects (e.g., instead of givin
 
 31
 
-## Side 32
+## Page 32
 
 the find command, which can execute code on matching files, only give the agent access to a
 sanitized tool that searches for files).

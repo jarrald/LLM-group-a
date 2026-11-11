@@ -104,7 +104,7 @@ Format: context → decision → consequences. Keep entries short; link to code 
 
 ## ADR-008 — PDF → Markdown conversion tool
 
-- **Status:** Superseded by ADR-021 (2026-10-31)
+- **Status:** Superseded by ADR-023 (2026-10-31)
 - **Context:** Slides are PDFs; the RAG pipeline works on Markdown. Extraction quality
   drives everything downstream (chunking, metadata, answers). Candidates: `pypdf` (plain
   text, layout-poor), `pymupdf`/`pymupdf4llm` (layout-aware Markdown), heavier
@@ -273,14 +273,63 @@ Format: context → decision → consequences. Keep entries short; link to code 
   rebuilt with `--recreate`. The literature-review assignment file is indexed too — a
   conscious choice, reversible by curating the folder.
 
----
+## ADR-021 — Regression and notebook dependencies live in `uv` dependency groups
 
-## ADR-021 — Lokal kildekonvertering og kodebevarende chunking
+- **Status:** Accepted (2026-11-08)
+- **Context:** `regression/non-llm.ipynb` needs `matplotlib`, `scikit-learn` and a Jupyter
+  kernel, but `pyproject.toml` declared only the four app dependencies. `requirements.txt`
+  had been extended by hand with `matplotlib`/`scikit-learn`/`pandas`, yet `uv sync` reads
+  `pyproject.toml` only, so the packages were never installed in `.venv` — and every
+  `uv sync` silently *pruned* a manually installed `ipykernel`. That surfaced as
+  `ModuleNotFoundError: matplotlib` in the notebook, which was first mistaken for a Python
+  version problem. A stray `./3.10/` directory (a venv whose *name* was `3.10`, actually
+  CPython 3.12.12 — `uv venv 3.10` treats the argument as a path, not an interpreter
+  request) came from that misdiagnosis and was removed.
+- **Decision:** declare the extras in `[dependency-groups]` in `pyproject.toml`:
+  `regression = [matplotlib, scikit-learn, pandas]` and `notebook = [ipykernel]`. The `dev`
+  group includes both via `{ include-group = … }`, so a plain `uv sync` installs them and
+  the notebook runs after the documented setup. The `[project.dependencies]` list stays the
+  four app dependencies; the app still imports none of the extras. `requirements.txt`
+  mirrors the same split with a comment. Ruff ignores `F401`/`I001` for `*.ipynb` only.
+- **Consequences:** `uv sync` is the single source of truth again and no longer prunes the
+  kernel; the app's runtime dependency set is unchanged. Anyone running the notebook from a
+  terminal needs nothing beyond `uv sync`. Because `ipykernel` is now declared, the Jupyter
+  stack updates with the lockfile instead of drifting. Adding a further experiment library
+  means adding it to the `regression` group plus this log — not installing it by hand.
 
-- **Status:** Accepted (2026-10-31)
-- **Context:** Råmaterialet dækker nu uge 1, 2, 3, 4, 6, 8, 9 og 10 og indeholder PDF'er, notebooks, kode, data, diagrammer og animationer. De håndskrevne noter fra uge 1–3 skal bevares.
-- **Decision:** `scripts/convert_course_material.py` bruger PyMuPDF til sideopdelt PDF-tekst og valgfri dansk/engelsk OCR, standardbiblioteket til notebooks/data/Draw.io og FFmpeg til videometadata. Visuelle mediebeskrivelser vedligeholdes særskilt. Conversion-afhængigheder er en valgfri uv-gruppe. Hver kilde registreres med SHA-256 i manifestet. Kilder og håndskrevne noter overskrives ikke. Loaderen beskærer `source/`, miljøer og caches før gennemløb. Chunker-version 2 fortolker ikke overskrifter inde i fenced code blocks.
-- **Consequences:** 73 relevante kilder er dækket, inklusive én identisk dublet og fire visuelt beskrevne medier. 346 PDF-sider er kontrolleret for bevaret tekstlag. Korpusset er 85 dokumenter og 1.659 chunks. Eksisterende Chroma-indeks skal genopbygges med `ingest.py --recreate`. Layout/formler og OCR har dokumenterede begrænsninger; video er visuelt sammenfattet, ikke frame-for-frame-transskriberet. Uge 5 og 7 er ikke leveret.
+## ADR-022 — The regression comparison runs as a self-contained package in `regression/`
+
+- **Status:** Accepted (2026-11-08)
+- **Context:** The assignment requires a *separate* comparison experiment (linear
+  regression vs. LLM + RAG, `docs/evaluation/regression-vs-rag.md`), and the question asked
+  of it is whether a local model is useful for real development work. It needs retrieval,
+  prompts and model calls — exactly what `app/` already has — but sharing that code would
+  couple an experiment to the StudyGraph application, its SQLite schema and its Chroma
+  server on port 8000. The user also requires the experiment to stay inside `regression/`.
+- **Decision:** implement the experiment as two small modules in `regression/`: `rag.py`
+  (config via `RAG_*` variables, AST/heading chunking, index build, retrieval, one Ollama
+  call, and writing the answer to a file) and `chat.py` (a loop that takes a pasted prompt
+  and returns a `.py`, or a `.ipynb` when a notebook was asked for), and `web.py` (a Streamlit page with the same flow: paste instructions, attach text files, download the result; attached files are pasted into the prompt, never embedded). Retrieval uses an
+  in-process `PersistentClient` on `regression/.chroma` — no server, nothing shared with
+  `data/chroma` — and nothing imports from `app/`. Generated files go to `regression/out/`.
+  The first version of this experiment had ~1,300 lines (scoring harness, baseline arm,
+  task contracts, results table); it was cut back to ~400 because the only question being
+  asked is *"can I paste a prompt and get runnable code back?"* — the answer is read by
+  running the file, not by a scoring table. Ruff excludes the third-party corpus, the vector
+  store, the output folder and `*.ipynb`.
+- **Consequences:** the experiment is small enough to read in one sitting and can be deleted
+  without touching the app; it runs offline and needs no Chroma server. There is no recorded
+  measurement of code quality or timing any more — that is a deliberate trade of rigour for
+  simplicity, acceptable while the question is qualitative. If the experiment is ever used
+  for the assignment write-up, the numbers must be collected by a real run again, and
+  `docs/evaluation/` is the place for them.
+
+## ADR-023 — Local source conversion and code-preserving chunking
+
+- **Status:** Accepted (2026-10-31; renumbered from a duplicate `ADR-021` on 2026-11-09)
+- **Context:** The raw material now covers weeks 1, 2, 3, 4, 6, 8, 9 and 10 and contains PDFs, notebooks, code, data, diagrams and animations. The hand-written notes from weeks 1–3 must be preserved.
+- **Decision:** `scripts/convert_course_material.py` uses PyMuPDF for page-split PDF text and optional Danish/English OCR, the standard library for notebooks, data and Draw.io, and FFmpeg for video metadata. Visual media descriptions are maintained separately in `media-descriptions.json`. The conversion dependencies are an optional `uv` group. Every source is recorded with a SHA-256 in the manifest. Sources and hand-written notes are never overwritten. The loader prunes `source/`, environments and caches before walking. Chunker version 2 does not interpret headings inside fenced code blocks. The generated scaffolding (`# Week N`, `Source:`, `## Page N`, `### Source lines`, `## Cell N`, `- Edge:`) and the media descriptions are in English, so the indexed corpus is monolingual apart from the two deliberate language-sample corpora in `week3`.
+- **Consequences:** 73 relevant sources are covered, including one identical duplicate and four visually described media. 346 PDF pages were checked for a preserved text layer. The corpus is 85 documents and 1,660 chunks after the 2026-11-09 translation (1,659 before it). An existing Chroma index must be rebuilt with `ingest.py --recreate`. Layout, formulas and OCR have documented limitations; video is summarised visually, not transcribed frame by frame. Weeks 5 and 7 were not delivered. Translation changed chunk text, so chunk ids and distances changed: the index must be rebuilt and the retrieval checks re-run. Source digests are computed over LF-normalised bytes for text sources, so a Windows checkout that rewrites line endings does not look like changed content.
 
 ## Template for new entries
 
@@ -293,13 +342,4 @@ Format: context → decision → consequences. Keep entries short; link to code 
 - **Consequences:** What becomes easier, what becomes harder, what must be updated.
 ```
 
-
-```markdown
-## ADR-0NN — <short title>
-
-- **Status:** Proposed | Accepted | Superseded by ADR-0NN | Rejected
-- **Context:** What forces the decision (constraints, evidence, requirements).
-- **Decision:** What we do, precisely enough to implement.
-- **Consequences:** What becomes easier, what becomes harder, what must be updated.
-```
 

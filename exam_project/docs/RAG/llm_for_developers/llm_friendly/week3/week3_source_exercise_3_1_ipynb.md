@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 3 — Exercise_3.1 (ipynb)
+# Week 3 — Exercise_3.1 (ipynb)
 
-Kilde: [week3/Exercise_3.1.ipynb](../../source/week3/Exercise_3.1.ipynb).
+Source: [week3/Exercise_3.1.ipynb](../../source/week3/Exercise_3.1.ipynb).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-Kildeceller er bevaret i rækkefølge. Koden er ikke kørt. Gemte outputs, billeder og kørselsnumre er udeladt; der tilføjes ingen forsøgsresultater.
+Notebook cells are preserved in order. The code was not executed. Stored outputs, images and execution counts are omitted; no experimental results are added.
 
-## Celle 1 — markdown
+## Cell 1 — markdown
 
 ### Simple Linear Regression via Gradient Descent
 
@@ -37,13 +37,13 @@ with the package, so there is no download and no Kaggle account needed.
 >
 > The numerical results are identical.
 
-## Celle 2 — markdown
+## Cell 2 — markdown
 
 #### 0. Setup, reproducibility and output directory
 
-## Celle 3 — code
+## Cell 3 — code
 
-### Kildelinjer 1–20
+### Source lines 1-20
 
 ```python
 # %pip install numpy matplotlib scikit-learn        # uncomment if needed
@@ -68,13 +68,13 @@ os.makedirs(OUT_DIR, exist_ok=True)
 print("Outputs will be written to:", OUT_DIR)
 ```
 
-## Celle 4 — markdown
+## Cell 4 — markdown
 
 #### 1. Data collection
 
-## Celle 5 — code
+## Cell 5 — code
 
-### Kildelinjer 1–9
+### Source lines 1-9
 
 ```python
 data = load_diabetes()
@@ -88,16 +88,16 @@ print(f"x (BMI)    range: {x_raw.min():.4f} to {x_raw.max():.4f}")
 print(f"y (target) range: {y_raw.min():.1f} to {y_raw.max():.1f}")
 ```
 
-## Celle 6 — markdown
+## Cell 6 — markdown
 
 #### 2. Split into training and validation sets (80% / 20%)
 
 The split happens **before** any scaling, so the scaling statistics are computed only from the
 training data — no leakage from validation into training.
 
-## Celle 7 — code
+## Cell 7 — code
 
-### Kildelinjer 1–6
+### Source lines 1-6
 
 ```python
 x_train_raw, x_val_raw, y_train_raw, y_val_raw = train_test_split(
@@ -108,7 +108,7 @@ print(f"training:   {x_train_raw.shape[0]} samples")
 print(f"validation: {x_val_raw.shape[0]} samples")
 ```
 
-## Celle 8 — markdown
+## Cell 8 — markdown
 
 #### 3. Standardization
 
@@ -119,9 +119,9 @@ We standardize both using **training statistics only**, run gradient descent in 
 space, and convert the learned `(a, b)` back into original units at the end so that
 `f(x) = a·x + b` is directly usable on raw BMI values.
 
-## Celle 9 — code
+## Cell 9 — code
 
-### Kildelinjer 1–10
+### Source lines 1-10
 
 ```python
 x_mean, x_std = x_train_raw.mean(), x_train_raw.std()
@@ -136,7 +136,7 @@ print(f"x_train mean {x_train.mean():+.3e}   std {x_train.std():.4f}")
 print(f"y_train mean {y_train.mean():+.3e}   std {y_train.std():.4f}")
 ```
 
-## Celle 10 — markdown
+## Cell 10 — markdown
 
 #### 4. Model, loss and gradients
 
@@ -148,9 +148,9 @@ $$\frac{\partial L}{\partial a} = \frac{2}{n}\sum_i (a x_i + b - y_i)\,x_i
 \qquad\qquad
 \frac{\partial L}{\partial b} = \frac{2}{n}\sum_i (a x_i + b - y_i)$$
 
-## Celle 11 — code
+## Cell 11 — code
 
-### Kildelinjer 1–15
+### Source lines 1-15
 
 ```python
 def predict(a, b, x):
@@ -170,7 +170,7 @@ def gradients(a, b, x, y):
     return da, db
 ```
 
-## Celle 12 — markdown
+## Cell 12 — markdown
 
 #### 5. Training cycle
 
@@ -184,9 +184,9 @@ the fit is stretched over many more iterations — and therefore many more anima
 of being over in a handful of steps. Because the step is 10× smaller, training runs for 500
 iterations so the fit still has room to converge.
 
-## Celle 13 — code
+## Cell 13 — code
 
-### Kildelinjer 1–26
+### Source lines 1-26
 
 ```python
 LEARNING_RATE = 0.01   # dt_new = 0.1 * dt_old  (dt_old was 0.1)
@@ -217,7 +217,7 @@ print(f"Finished training after {N_ITERS} iterations.")
 print(f"Final (standardized-space) params: a={a:.4f}, b={b:.4f}")
 ```
 
-## Celle 14 — markdown
+## Cell 14 — markdown
 
 #### 6. Convert back to original units
 
@@ -227,9 +227,9 @@ $$y = s_y\left(a\,\frac{x - \bar{x}}{s_x} + b\right) + \bar{y}
     = \underbrace{\frac{s_y\,a}{s_x}}_{a_{\rm final}} x
     + \underbrace{\bar{y} + s_y b - \frac{s_y a \bar{x}}{s_x}}_{b_{\rm final}}$$
 
-## Celle 15 — code
+## Cell 15 — code
 
-### Kildelinjer 1–8
+### Source lines 1-8
 
 ```python
 a_final = a * (y_std / x_std)
@@ -242,13 +242,13 @@ history_a_orig = history_a * (y_std / x_std)
 history_b_orig = y_mean + y_std * history_b - history_a_orig * x_mean
 ```
 
-## Celle 16 — markdown
+## Cell 16 — markdown
 
 #### 7. Final metrics
 
-## Celle 17 — code
+## Cell 17 — code
 
-### Kildelinjer 1–25
+### Source lines 1-25
 
 ```python
 def r2_score(y_true, y_pred):
@@ -278,15 +278,15 @@ with open(metrics_path, "w") as f:
 print(open(metrics_path).read())
 ```
 
-## Celle 18 — markdown
+## Cell 18 — markdown
 
 #### 8. Final fit
 
 Training and validation points are drawn with a different colour **and** a different marker.
 
-## Celle 19 — code
+## Cell 19 — code
 
-### Kildelinjer 1–19
+### Source lines 1-19
 
 ```python
 fig_final, ax_final = plt.subplots(figsize=(7, 5))
@@ -310,13 +310,13 @@ fig_final.savefig(os.path.join(OUT_DIR, "final_fit.png"), dpi=150)
 plt.show()
 ```
 
-## Celle 20 — markdown
+## Cell 20 — markdown
 
 #### 9. Loss curve
 
-## Celle 21 — code
+## Cell 21 — code
 
-### Kildelinjer 1–12
+### Source lines 1-12
 
 ```python
 fig_loss, ax_loss = plt.subplots(figsize=(7, 5))
@@ -333,7 +333,7 @@ fig_loss.savefig(os.path.join(OUT_DIR, "loss_curve.png"), dpi=150)
 plt.show()
 ```
 
-## Celle 22 — markdown
+## Cell 22 — markdown
 
 #### 10. Animation
 
@@ -348,9 +348,9 @@ revealed — like a held-out check — rather than shown from frame one.
 The figure is built with `plt.ioff()` so the static first frame is not also displayed above the
 animation.
 
-## Celle 23 — code
+## Cell 23 — code
 
-### Kildelinjer 1–45
+### Source lines 1-45
 
 ```python
 N_FRAMES = 150
@@ -400,7 +400,7 @@ fig.tight_layout()
 def init():
 ```
 
-### Kildelinjer 46–83
+### Source lines 46-83
 
 ```python
     line_plot.set_data([], [])
@@ -443,16 +443,16 @@ ani = animation.FuncAnimation(
 print(f"Built animation with {len(frame_iters)} frames.")
 ```
 
-## Celle 24 — markdown
+## Cell 24 — markdown
 
 ##### 10a. Save to MP4
 
 Requires `ffmpeg`. If it is not installed, this cell falls back to an animated GIF via
 `PillowWriter` so the notebook still produces a file.
 
-## Celle 25 — code
+## Cell 25 — code
 
-### Kildelinjer 1–12
+### Source lines 1-12
 
 ```python
 mp4_path = os.path.join(OUT_DIR, "gradient_descent_fit.mp4")
@@ -469,7 +469,7 @@ else:
     print("To get the MP4, install ffmpeg, e.g.  conda install -c conda-forge ffmpeg")
 ```
 
-## Celle 26 — markdown
+## Cell 26 — markdown
 
 ##### 10b. Play it inline
 
@@ -477,9 +477,9 @@ else:
 needing an HTML5 video codec. (Use `ani.to_html5_video()` instead if you prefer a real video
 element and have ffmpeg.)
 
-## Celle 27 — code
+## Cell 27 — code
 
-### Kildelinjer 1–3
+### Source lines 1-3
 
 ```python
 display(HTML(ani.to_jshtml(fps=15)))
@@ -487,7 +487,7 @@ plt.close(fig)   # tidy up the figure now that the animation is rendered
 plt.ion()        # restore interactive plotting for any later cells
 ```
 
-## Celle 28 — markdown
+## Cell 28 — markdown
 
 #### 11. Summary
 
@@ -501,9 +501,9 @@ outputs/
 └── metrics.txt
 ```
 
-## Celle 29 — code
+## Cell 29 — code
 
-### Kildelinjer 1–9
+### Source lines 1-9
 
 ```python
 print("Files in", OUT_DIR)

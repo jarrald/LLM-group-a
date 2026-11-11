@@ -1,9 +1,9 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — user-stories (md)
+# Week 10 — user-stories (md)
 
-Kilde: [week10/calculator-orchestration/docs/requirements/user-stories.md](../../source/week10/calculator-orchestration/docs/requirements/user-stories.md).
+Source: [week10/calculator-orchestration/docs/requirements/user-stories.md](../../source/week10/calculator-orchestration/docs/requirements/user-stories.md).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ### Calculator user stories and acceptance criteria
 

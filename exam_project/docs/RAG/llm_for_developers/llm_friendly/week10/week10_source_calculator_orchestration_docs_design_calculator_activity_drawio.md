@@ -1,13 +1,13 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — calculator-activity (drawio)
+# Week 10 — calculator-activity (drawio)
 
-Kilde: [week10/calculator-orchestration/docs/design/calculator-activity.drawio](../../source/week10/calculator-orchestration/docs/design/calculator-activity.drawio).
+Source: [week10/calculator-orchestration/docs/design/calculator-activity.drawio](../../source/week10/calculator-orchestration/docs/design/calculator-activity.drawio).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
 ## Diagram — Console calculation activity
 
-Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet.
+Labels and edges from the diagram XML; placement and graphics are not reproduced.
 
 - Element: Start console
 
@@ -25,27 +25,27 @@ Labels og forbindelser fra diagrammets XML; placering og grafik er ikke gengivet
 
 - Element: Print Error: domain message Exit 1
 
-- Forbindelse: Start console → Read first number, operator,
+- Edge: Start console → Read first number, operator,
 second number and parse numbers. 
 
-- Forbindelse: Read first number, operator,
+- Edge: Read first number, operator,
 second number and parse numbers → Parsing
 succeeded?. 
 
-- Forbindelse: Parsing
+- Edge: Parsing
 succeeded? → Calculator.calculate. yes
 
-- Forbindelse: Parsing
+- Edge: Parsing
 succeeded? → Print Error: Invalid number
 Exit 1. no
 
-- Forbindelse: Calculator.calculate → Calculation
+- Edge: Calculator.calculate → Calculation
 succeeded?. 
 
-- Forbindelse: Calculation
+- Edge: Calculation
 succeeded? → Print Result
 Exit 0. yes
 
-- Forbindelse: Calculation
+- Edge: Calculation
 succeeded? → Print Error: domain message
 Exit 1. ValueError

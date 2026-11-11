@@ -1,11 +1,11 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 10 — workflow (py)
+# Week 10 — workflow (py)
 
-Kilde: [week10/calculator-orchestration/workflow.py](../../source/week10/calculator-orchestration/workflow.py).
+Source: [week10/calculator-orchestration/workflow.py](../../source/week10/calculator-orchestration/workflow.py).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-### Kildelinjer 1–38
+### Source lines 1-38
 
 ```python
 """Outer orchestration: code owns routing; the two agents own their tool decisions."""

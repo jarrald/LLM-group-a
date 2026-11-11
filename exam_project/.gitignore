@@ -31,6 +31,18 @@ models/
 
 # --- Experiment artifacts that are regenerated on every run ---
 experiments/**/artifacts/
+regression/images/
+regression/out/
+regression/.chroma/
+
+# --- Third-party corpus: the downloaded scikit-learn checkout (17 MB, not ours) ---
+regression/scikit-learn-main/
+
+# --- Tutorial notebooks downloaded with the corpus ---
+regression/scikit-learn-main/**/*.ipynb
+
+# --- A venv created by mistake, e.g. `uv venv 3.10` (that name is a *path*, not a version) ---
+3.10/
 
 # --- Temporary scratch scripts created for one-off checks ---
 _tmp_*.py

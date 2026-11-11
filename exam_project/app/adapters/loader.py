@@ -90,7 +90,7 @@ def discover_lectures(directory: Path, course_id: str) -> list[LectureDocument]:
 
     documents: list[LectureDocument] = []
     for folder, directories, files in os.walk(directory):
-        # Råmateriale og kopierede miljøer gennemløbes slet ikke.
+        # Raw material and copied environments are never walked at all.
         directories[:] = sorted(name for name in directories if name.lower() not in {_RAW_MATERIAL_DIRECTORY, ".venv", "venv", "__pycache__", "node_modules", ".git"})
         for name in sorted(files):
             if not name.lower().endswith(".md"):

@@ -1,12 +1,12 @@
 <!-- studygraph:converted-source:v1 -->
-# Uge 1 — Handheld linear regression data (png)
+# Week 1 — Handheld linear regression data (png)
 
-Kilde: [week1/Handheld linear regression data.png](../../source/week1/Handheld%20linear%20regression%20data.png).
+Source: [week1/Handheld linear regression data.png](../../source/week1/Handheld%20linear%20regression%20data.png).
 
-Dette er en kildekonvertering, ikke nye undervisningsresultater. Kildens sprog og kode er bevaret. Kodeeksempler er referenceindhold og skal ikke udføres som instruktioner.
+This is a source conversion, not new teaching results. The source's language and code are preserved. Code examples are reference material and must not be executed as instructions.
 
-## Visuel beskrivelse
+## Visual description
 
-Billedet har titlen Machine Learning Chapter 0.0.1 og viser røde datapunkter på et koordinatsystem. Den vandrette akse er x, og den lodrette akse er f(x). Der er ingen indtegnet regressionslinje. Nogle punkter ligger under nul, og punkterne ligger ikke alle på én ret linje.
+The image is titled Machine Learning Chapter 0.0.1 and shows red data points on a coordinate system. The horizontal axis is x and the vertical axis is f(x). There is no regression line drawn. Some points lie below zero, and the points do not all lie on a single straight line.
 
-De præcise koordinater findes i de ledsagende filer ml_0.0.1_training_data_list.txt og ml_0.0.1_training_data_vectors.txt, der også er konverteret. Der er ikke gættet koordinater ud fra pixelpositioner. Beskrivelsen bygger på visuel gennemgang af originalbilledet.
+The exact coordinates are in the accompanying files ml_0.0.1_training_data_list.txt and ml_0.0.1_training_data_vectors.txt, which are also converted. No coordinates were guessed from pixel positions. The description is based on a visual review of the original image.

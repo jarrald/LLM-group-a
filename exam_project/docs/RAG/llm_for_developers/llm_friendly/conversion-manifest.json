@@ -12,7 +12,7 @@
     },
     {
       "source": "week1/Salary_Data.csv",
-      "sha256": "901e98eb9d9a25bdb0f1a743367dbb65cc3c159d0a5f02fe77936d56f480e425",
+      "sha256": "4db29da20b5411fb12573baf86a96ba3e9520c49f2100c60d0a11edece4f1717",
       "status": "converted",
       "warnings": [],
       "output": "week1/week1_source_salary_data_csv.md",
@@ -29,7 +29,7 @@
     },
     {
       "source": "week1/ml_0.0.1_training_data_list.txt",
-      "sha256": "5dabf2b7edb9d2c79bd2eba86a6821678f9bb431d59ac63475bbbcd72a5efa6d",
+      "sha256": "138c82c5db4011382916baa265f0c602673a6f215587e2980bc0aa83003c83ea",
       "status": "converted",
       "warnings": [],
       "output": "week1/week1_source_ml_0_0_1_training_data_list_txt.md",
@@ -37,7 +37,7 @@
     },
     {
       "source": "week1/ml_0.0.1_training_data_vectors.txt",
-      "sha256": "fcb56ebf5eac5fd882f28ec97dec6b4982681b20148ee1d42f6a9454a039fee4",
+      "sha256": "a57895fb985f8d5bfcfda9291d6c90a8248c2ab8f6eec6acdef7e34f92d1d830",
       "status": "converted",
       "warnings": [],
       "output": "week1/week1_source_ml_0_0_1_training_data_vectors_txt.md",
@@ -45,7 +45,7 @@
     },
     {
       "source": "week1/simple_linear_regression.ipynb",
-      "sha256": "2629eb7c5f0454dea2cf5dbc257fe932631d666550ea9ba7aca878cbbcf2804d",
+      "sha256": "545e7b751bd8cdf82b73e7ff1d7aca9b11c8841f5acfcad4590f3d8b92e35380",
       "status": "converted",
       "warnings": [],
       "output": "week1/week1_source_simple_linear_regression_ipynb.md",
@@ -249,7 +249,7 @@
     },
     {
       "source": "week3/Exercise_3.1.ipynb",
-      "sha256": "570e6158e468f7e204b63e8ec6cb42614202cabf05fb788d9695180c5da7ea42",
+      "sha256": "1b5e34eb9b16f642c184f8192c2cf6ba5256925830cd6d1ba736e76446377bcb",
       "status": "converted",
       "warnings": [],
       "output": "week3/week3_source_exercise_3_1_ipynb.md",
@@ -278,7 +278,7 @@
       "sha256": "d361401cd618ca3dae192e2459225cb359dee48526df226becbc16e2acf940df",
       "status": "converted",
       "warnings": [
-        "Side 1: OCR anvendt; tekst kan indeholde genkendelsesfejl."
+        "Page 1: OCR used; the text may contain recognition errors."
       ],
       "pages": 1,
       "output": "week3/week3_source_handinpromptingartifacts_pdf.md",
@@ -304,7 +304,7 @@
     },
     {
       "source": "week3/PCA_for_FewerDimensions_4d_to_2d.ipynb",
-      "sha256": "6f8215fae0de8895fddffff5236a69f6784616960aa75a4ebf0360b731ac9c99",
+      "sha256": "af8b55aad138088db2e971e8afb21a943458f2767b2cda0a1abc991e6794bb75",
       "status": "converted",
       "warnings": [],
       "output": "week3/week3_source_pca_for_fewerdimensions_4d_to_2d_ipynb.md",
@@ -312,7 +312,7 @@
     },
     {
       "source": "week3/Web Resources.md",
-      "sha256": "da3bf77facf0c2a89048929a608a2a7a57add0c4deff1639707acffea9e7134f",
+      "sha256": "a62b0c03216ea7e652351f9fd091855f4e57ecc294c91ed9b59e9e279a8873dc",
       "status": "converted",
       "warnings": [],
       "output": "week3/week3_source_web_resources_md.md",
@@ -337,7 +337,7 @@
     },
     {
       "source": "week3/curriculum_embeddings.ipynb",
-      "sha256": "0f41a2d7d42a08bda55857308731c55b830f9a370d693f44914494e5d951ef42",
+      "sha256": "192b3d28c5cf8f8269f4199338e16de374da78eb6f1cb2bd308735d0e2d56b92",
       "status": "converted",
       "warnings": [],
       "output": "week3/week3_source_curriculum_embeddings_ipynb.md",
@@ -345,7 +345,7 @@
     },
     {
       "source": "week3/danish_corpus.txt",
-      "sha256": "2e6454e40c52826dede98320b91fb5da01af6095e04d07b3a66c1938df568170",
+      "sha256": "4acf7e10ca30f529464f836e787278078c017c7cac2912bef6fd3b5dc5d0e63f",
       "status": "converted",
       "warnings": [],
       "output": "week3/week3_source_danish_corpus_txt.md",
@@ -353,14 +353,14 @@
     },
     {
       "source": "week3/gradient_descent_linear_regression.ipynb",
-      "sha256": "570e6158e468f7e204b63e8ec6cb42614202cabf05fb788d9695180c5da7ea42",
+      "sha256": "1b5e34eb9b16f642c184f8192c2cf6ba5256925830cd6d1ba736e76446377bcb",
       "status": "duplicate",
       "warnings": [],
       "output": "week3/week3_source_exercise_3_1_ipynb.md"
     },
     {
       "source": "week3/train_embeddings.ipynb",
-      "sha256": "7719fee4314977cd0c74dd39665ef045a68509ccbb8c1dddb7e23850377ff2da",
+      "sha256": "a86f17706d6178a1eb6f65e1a7fb582458d3e1329ac5f4ae24efea0150e1469b",
       "status": "converted",
       "warnings": [],
       "output": "week3/week3_source_train_embeddings_ipynb.md",
@@ -574,7 +574,7 @@
       "sha256": "523b3b60fab1395cde2f1a0a0160cc30ad763d17b86039fd57d3a3cde9c4ec0f",
       "status": "converted",
       "warnings": [
-        "Side 2: OCR anvendt; tekst kan indeholde genkendelsesfejl."
+        "Page 2: OCR used; the text may contain recognition errors."
       ],
       "pages": 23,
       "output": "week9/week9_source_week9_pdf.md",

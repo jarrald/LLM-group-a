@@ -35,7 +35,7 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 | SG-023 | P0 | `scripts/ingest.py` — idempotent indexing with embedding metadata | Done | SG-022, SG-003 | Two consecutive runs: 57 chunks both times, no duplicates |
 | SG-024 | P1 | Validate the index with sample queries and `chroma browse` | Done | SG-023 | `scripts/search.py` returns the expected Week 1 sections with distances |
 | SG-025 | P1 | Add later weeks as `llm_friendly/week<N>/*.md` | Done | SG-010 | Weeks 1–3 present (8 documents); discovered without code changes (ADR-020) |
-| SG-026 | P1 | Konvertér alle uploadede uger og kontrollér kildedækning | Done | SG-025 | 73 kilder, 346 PDF-sider, 85 dokumenter og 1.659 chunks; uge 1, 2, 3, 4, 6, 8, 9, 10; genkørbart script, manifest og offline kontrol (ADR-021) |
+| SG-026 | P1 | Convert all uploaded weeks and verify source coverage | Done | SG-025 | 73 sources, 346 PDF pages, 85 documents and 1,659 chunks; weeks 1, 2, 3, 4, 6, 8, 9, 10; re-runnable script, manifest and offline check (ADR-023) |
 
 ## Phase 3 — Domain model & persistence
 
@@ -91,11 +91,13 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 
 | ID | Pri | Title | State | Depends on | Done when |
 |---|---|---|---|---|---|
-| SG-080 | P1 | Choose dataset, define input/target, split train/reference vs held-out test | Todo | — | Split stored as CSV; test targets never exposed to either approach |
-| SG-081 | P1 | scikit-learn linear regression baseline + predictions | Todo | SG-080 | Predictions and absolute error/MAE computed and recorded |
-| SG-082 | P1 | RAG collection built from the reference portion only | Todo | SG-003 | Collection documented; retrieved docs logged per test case |
-| SG-083 | P1 | LLM predictions for the same held-out inputs (no code execution) | Todo | SG-082, SG-002 | Predictions recorded verbatim with the retrieved context |
-| SG-084 | P1 | Comparison table + discussion (why they differ; when a trained model wins) | Todo | SG-081, SG-083 | Table with actual values and both error measures |
+| SG-080 | P1 | Choose dataset, define input/target, split train/reference vs held-out test | **Done** | — | Split stored as CSV; test targets never exposed to either approach |
+| SG-081 | P1 | scikit-learn linear regression baseline + predictions | **Done** | SG-080 | Predictions and absolute error/MAE computed and recorded |
+| SG-082 | P1 | RAG collection built from the reference portion only | **Done** | SG-003 | Collection documented; retrieved docs logged per test case |
+| SG-083 | P1 | LLM predictions for the same held-out inputs (no code execution) | **Done** | SG-082, SG-002 | Predictions recorded verbatim with the retrieved context |
+| SG-084 | P1 | Comparison table + discussion (why they differ; when a trained model wins) | **Done** | SG-081, SG-083 | Table with actual values and both error measures |
+| SG-085 | P1 | Evaluate the 15 recorded coding runs + cloud runs | **Done** | — | `docs/evaluation/regression-experiment.md` with the run table, failure taxonomy and conclusion |
+| SG-086 | P2 | Map the six experiment types (manual / RAG / no-RAG / cloud × code / no code) and tag what is missing | **Done** | SG-084, SG-085 | `docs/evaluation/experiment-types.md` + `runs-overview.csv`; the single gap (cloud without code, #5) is stated explicitly |
 
 ## Phase 9 — Hardening, packaging, synopsis
 

@@ -6,7 +6,13 @@
 streamlit>=1.66,<2
 chromadb>=1.5,<2
 langgraph>=1.2,<2
-ollama>=0.6
+ollama>=0.6,<1
 
-# Valgfri kildekonvertering: uv sync --group conversion
-# Pakker og versioner findes i pyproject.toml [dependency-groups].conversion og uv.lock.
+# Regression comparison experiment only (regression/*.ipynb, Phase 8).
+# In pyproject.toml these live in the `regression` dependency group (ADR-021).
+scikit-learn>=1.3,<2
+pandas>=2.1
+matplotlib>=3.8,<4
+
+# Jupyter kernel for the notebooks (`notebook` group in pyproject.toml, ADR-021).
+ipykernel>=6
