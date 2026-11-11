@@ -23,6 +23,7 @@ from app.domain.options import DEFAULT_TASK, TASK_PRESETS
 from app.domain.retrieval import RetrievedPassage
 from app.errors import ConfigError
 
+# 1. Versionsnavnene peger på Markdown-skabelonerne og følger det genererede svar.
 PROMPT_VERSION = "system_v1"
 CONTEXT_TEMPLATE_VERSION = "context_block_v1"
 
@@ -90,6 +91,7 @@ def _render_template(text: str, values: dict[str, str], template_name: str) -> s
     return rendered
 
 
+# 2. Reglen afhænger af kursustilknytning og faktisk fundne tekststykker.
 def grounding_rule(snapshot: BuddySnapshot, passage_count: int) -> str:
     """Choose the honesty rule that matches what retrieval actually produced."""
     if not snapshot.is_course_grounded:
@@ -120,6 +122,7 @@ class PromptBuilder:
 
     def build_system_prompt(self, snapshot: BuddySnapshot, task: TaskSpec, passage_count: int, course_name: str) -> tuple[str, dict[str, str]]:
         """Render the system prompt and return it with the four rendered dimensions."""
+        # 3. Hold de fire T'er adskilt, så deres bidrag kan vises og testes.
         dimensions = {
             "Task": task.render(),
             "Tone": snapshot.tone,
@@ -147,8 +150,7 @@ class PromptBuilder:
         course_name: str = "",
     ) -> PromptBundle:
         """Build the full message list: system prompt, context block, history, new question."""
-        # A conversation without a course must never receive course context, even if a
-        # caller passes passages by mistake (rag-pipeline.md §5).
+        # 4. Fjern kursuskontekst fra en generel samtale, selv hvis kalderen sender den.
         effective_passages = list(passages) if snapshot.is_course_grounded else []
         context_block = self.build_context_block(effective_passages)
         system, dimensions = self.build_system_prompt(snapshot, task, len(effective_passages), course_name)
@@ -156,6 +158,7 @@ class PromptBuilder:
         if context_block:
             system = f"{system}\n\n{context_block}"
 
+        # 5. Bevar rækkefølgen: system og kilder → historik → det nye spørgsmål.
         messages: list[dict[str, str]] = [{"role": "system", "content": system}]
         for message in history:
             if message.role is MessageRole.USER:

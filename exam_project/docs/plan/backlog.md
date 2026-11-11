@@ -119,6 +119,10 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 
 ## Additions log
 
+| ID | Pri | Title | State | Depends on | Done when |
+|---|---|---|---|---|---|
+| SG-095 | P1 | Dansk kodeguide, afsnitskommentarer og kontrol af tomme mapper | **Done** | — | `understand-the-code.md` forklarer mapper, chat, indeksering og centrale filer; centrale forløb har danske kommentarer. Chroma-intern tom mappe bevaret efter lagerreglen. |
+
 New tickets are appended with the next free number in their phase block. Do not renumber;
 cancel by setting the state to `Done` with a note, or delete only if never started.
 

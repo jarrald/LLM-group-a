@@ -34,9 +34,11 @@ class Services:
 
 def build_services(config: Config) -> Services:
     """Assemble the object graph. Also used by tests with fakes for retriever/chat model."""
+    # 1. Åbn appens lager og opret standardkursus og Buddies, hvis de mangler.
     store = SqliteStore(config.db_path)
     buddies = BuddyService(store, config)
     course = buddies.seed_defaults()
+    # 2. Saml adapterne i grafen. Interfaces gør dem udskiftelige med testobjekter.
     graph = build_study_graph(
         retriever=ChromaRetriever(config),
         chat_model=OllamaChatClient(config),
@@ -47,6 +49,7 @@ def build_services(config: Config) -> Services:
     return Services(config=config, buddies=buddies, chat=ChatService(store, graph, config), course_name=course.name, store=store)
 
 
+# 3. Genbrug services ved genkørsel af UI; samtalevalget ligger i session_state.
 @st.cache_resource(show_spinner=False)
 def get_services() -> Any:
     """Cached services for this process."""
