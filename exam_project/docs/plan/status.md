@@ -1,5 +1,23 @@
 # StudyGraph — Project Status
 
+## Kodeguide — 2026-11-11
+
+Tilføjet [dansk kodeguide](../../understand-the-code.md) med mappeoversigt, læserækkefølge,
+chatforløb, indeksering og centrale begreber (SG-095). Opstart, servicekobling, chatservice,
+graf, promptbygger og ingest har danske afsnitskommentarer; runtime-adfærd er uændret.
+Ingen tomme kildekode- eller dokumentationsmapper fundet. En tom intern Chroma-mappe
+er bevaret efter projektets lagerregel. Verifikation fra denne session står nedenfor,
+adskilt fra de historiske resultater.
+
+- `uv run pytest -q`: exitkode 0, alle 103 tests gennemført uden fejl.
+- `uv run ruff check .`: `All checks passed!`.
+- `uv run mypy app`: `Success: no issues found in 33 source files`.
+- `uv run streamlit run app/main.py --server.headless true --server.port 8511`:
+  server startet på `http://localhost:8511`. Opstart er verificeret; en rigtig
+  RAG-samtale og model-/Chroma-forbindelse er ikke afprøvet i denne session.
+- `uv run` synkroniserede det lokale miljø med eksisterende afhængigheder;
+  ingen afhængigheder eller versionskrav er tilføjet i projektfilerne.
+
 **Last updated:** 2026-11-09 (session 12) · **Branch:** `regression` ·
 **Current phase:** 7 of 9 complete (0–6, 8) — the regression comparison is done, the RAG
 evaluation (Phase 7) is next

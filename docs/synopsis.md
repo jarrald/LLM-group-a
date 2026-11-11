@@ -1,289 +1,178 @@
-# Mandatory 1 — Local Multi-LLM Coding Workflow Evaluation
+# Local Multi-LLM Coding Workflow Evaluation
 
-## 1. Objective & summary
+## Synopsis
 
-This report identifies the most viable way to run a **local, multi-LLM workflow**
-that collaboratively produces software artifacts across architecture,
-implementation, testing, documentation and deployment validation — using **local
-model backends** and **at least two separately configurable endpoints**.
+### Executive summary
 
-Two established, open-source agent harnesses are evaluated and compared:
+This project evaluates two open-source approaches for a local, multi-LLM software workflow. The selected approach is a Jupyter Notebook that orchestrates two local Ollama-compatible model endpoints through a small Python API client. The workflow is intentionally sequential: Worker 1 owns functional requirements, and Worker 2 starts only after Worker 1 has produced reviewable files and passed functional validation.
 
-1. **Hermes Agent** (Nous Research) — *recommended*.
-2. **OpenHands** (All-Hands-AI).
+The notebook is recommended because it makes every stage visible, keeps endpoint routing in configuration, produces ordinary repository artifacts, and allows a human to inspect the generated diff before accepting it. Open WebUI remains useful for manually comparing models, but it is not used as the workflow engine because repository changes, quality gates and reproducibility would require additional glue.
 
-The recommendation is **Hermes**: it satisfies the assignment's hard requirement of
-configuration-driven routing between multiple local endpoints with *first-class*
-provider routing, supports parallel work via subagent delegation, and is
-significantly lighter to run locally (no Docker).
+The main compromise is that Jupyter plus direct API calls requires custom orchestration code. That cost is acceptable for this assignment because the control flow, evidence and failure behavior are easier to demonstrate than with a more opaque UI-driven workflow.
 
----
+## 1. Assignment requirements
 
-## 2. Candidate #1 — Hermes Agent (Nous Research)
+The workflow must use at least two separate local model endpoints, route roles through configuration, and use open-source tooling. It must cover architecture, task breakdown, implementation, testing, documentation and deployment validation. It must also provide human control, Git-reviewable changes, reproducibility, context management and a security baseline that does not require a public unauthenticated endpoint.
 
-### Overview
+The implementation is available in [notebooks/local_multi_llm_workflow.ipynb](../notebooks/local_multi_llm_workflow.ipynb). It creates a small demonstration repository under `generated_workflow/demo_service` and stores quality evidence under `generated_workflow/artifacts`.
 
-[Hermes Agent](https://github.com/NousResearch/hermes-agent) is a general,
-open-source (MIT) autonomous agent. Beyond chat it provides terminal execution,
-file editing, code execution, browser automation, MCP integration, a skills system,
-persistent memory, and — most relevant here — **subagent delegation** and
-**provider routing**.
+## 2. Candidate toolchains
 
-### Setup complexity
+### Candidate 1: Jupyter Notebook plus direct Ollama APIs
 
-- **Time to first working run:** low — a one-line source installer
-  (`iex (irm https://hermes-agent.nousresearch.com/install.ps1)` on Windows), then
-  `hermes setup` to pick a model provider.
-- **Moving parts:** the Hermes CLI plus one or more Ollama/vLLM endpoints. No
-  Docker, no database, no Node toolchain.
+The notebook is the workflow manager. A configuration object maps roles to named endpoints. The notebook calls the Ollama `/api/chat` endpoint, writes model-produced files into a repository, runs validation commands, and stops when a gate fails.
 
-### Capability coverage
+Setup complexity is moderate. Python, Jupyter, Git, Ollama and two local services are required. The first working run is short once the models are downloaded, but model downloads can be large. The main moving parts are the notebook, the endpoint configuration, the repository and the local model processes.
 
-| Responsibility | Support |
-| --- | --- |
-| Architecture | Via terminal + file tools and its skills system (on-demand docs) |
-| Tech lead / task planning | Via subagent delegation (isolated, concurrent workstreams) |
-| Implementation (N ≥ 2 workers) | **Subagent delegation** — N concurrent child agents (3 by default, configurable) |
-| Testing & quality | Runs commands (`pytest`, linters) through the terminal tool |
-| Documentation | Edits files and loads project context files (`AGENTS.md`, `CLAUDE.md`, `.hermes.md`) |
-| Deployment validation | Runs scripts/commands; checkpoints + `/rollback` provide a safety net |
+Architecture and task planning are implemented through prompts and stored artifacts. Implementation is handled by Worker 1. Testing and quality gates are explicit notebook cells. Documentation and deployment validation are handled by Worker 2. The model API is native, while worker contracts, path safety, command execution and report generation are custom glue.
 
-### Multi-endpoint support
+The two endpoints are selected by `CONFIG['endpoints']`, while `CONFIG['roles']` maps `functional` and `non_functional` to endpoint names. Replacing a model server therefore changes configuration rather than worker prompts. The default mapping uses endpoint A for functional work and endpoint B for non-functional work.
 
-Hermes has **first-class provider routing**: multiple providers configured in
-`~/.hermes/config.yaml` (or `hermes model`), with priority ordering, whitelists,
-blacklists and automatic **fallback providers**. This maps directly to the hard
-requirement of routing between two separate local endpoints via configuration.
+The most likely failures are unavailable model services, malformed JSON from a model, invalid generated paths, failing tests and incomplete generated documentation. These failures are detected by endpoint health checks, JSON parsing, path validation, subprocess return codes and explicit stop conditions. Human intervention is required for model quality problems, merge decisions and environment-specific deployment issues.
 
-### Failure modes
+### Candidate 2: Open WebUI with Ollama pipelines
 
-- **Model lacks tool calling** → agent degrades to chat only (mitigate with a
-  tool-calling model such as `qwen2.5-coder:32b` or `gemma4:31b`).
-- **Context window too small** → Ollama defaults to 2048–4096 tokens; Hermes needs
-  ~64k (`OLLAMA_CONTEXT_LENGTH=64000`).
-- **Provider down** → automatic fallback to a backup provider.
+Open WebUI provides a convenient interface for local models and can be extended with pipelines or functions. It is a credible candidate because it already manages conversations, model selection and local Ollama connections.
 
-### Overall assessment
+Setup is initially simpler for interactive prompting, but a complete repository workflow requires more configuration. A pipeline or function must be added for role routing, file operations, command execution, test collection and artifact handoffs. Multiple workers and reproducible runs are possible, but they require custom code around the UI.
 
-**Strengths:** config-driven multi-endpoint routing, concurrent subagents, light
-local install. **Weaknesses:** general-purpose rather than SWE-specialised; local
-tool-calling quality depends on the model you run.
+Open WebUI supports model selection and manual switching well. Role-specific endpoint routing can be configured if the pipeline explicitly implements it. Architecture, task planning, coding, tests, quality reports and deployment validation are not one complete native workflow; they need prompts, pipeline code and external scripts.
 
----
+Failure detection is more difficult to demonstrate consistently because the workflow state is distributed between chat history, pipeline code and the repository. Context loss, incomplete tool calls and inconsistent file edits are possible. Git remains the recovery mechanism, but the human must inspect more state outside one linear execution trace.
 
-## 3. Candidate #2 — OpenHands (All-Hands-AI)
+## 3. Comparison
 
-### Overview
+| Requirement | Jupyter + Ollama API | Open WebUI + Ollama pipelines |
+|---|---|---|
+| Open-source tooling | Yes | Yes |
+| Two local endpoints | Explicit configuration | Possible with pipeline glue |
+| Configurable routing | Native in notebook config | Custom pipeline logic |
+| Role-specific models | Yes | Possible |
+| Architecture workflow | Prompt plus artifacts | Prompt or custom function |
+| Tech-lead task planning | Prompt plus task artifacts | Custom pipeline or manual |
+| Multiple coding workers | Sequential workers; easy to extend | Requires pipeline coordination |
+| Multi-file repository changes | Explicit file writer | Requires extensions/tools |
+| Tests and static checks | Explicit subprocess gates | External glue required |
+| Quality report | Generated JSON and Markdown | Custom output required |
+| Documentation | Worker 2 artifact scope | Custom workflow required |
+| Deployment validation | Dedicated validator | Custom workflow required |
+| Git and reviewable diffs | Direct repository access | External repository workflow |
+| Context management | Scoped prompts and artifacts | Depends on pipeline design |
+| Human control | Cell order and stop gates | UI approval plus custom logic |
+| Reproducibility | Versioned notebook and config | Depends on exported pipeline state |
+| Security baseline | Loopback endpoints by default | Depends on server configuration |
+| Setup complexity | Moderate | Low initially, higher for full coverage |
+| Overall suitability | Recommended | Useful interactive complement |
 
-[OpenHands](https://github.com/All-Hands-AI/OpenHands) is an open-source (MIT)
-software-engineering agent. It runs an autonomous plan → edit → run loop inside a
-Docker sandbox, aimed specifically at coding tasks in a repository.
+## 4. Recommended architecture
 
-### Setup complexity
+The recommended workflow has six stages:
 
-- **Time to first working run:** higher — Docker image(s), an agent runtime, model
-  provider wiring, and a capable local model.
-- **Moving parts:** OpenHands backend + frontend, Docker sandbox, the LLM
-  provider config, and the target repository.
+1. The user starts two local endpoints and opens the notebook.
+2. The configuration maps roles to endpoint names and models.
+3. Worker 1 receives a scoped functional prompt and writes service code, tests, architecture, an API contract and an ADR.
+4. Functional validation runs with pytest. A non-zero exit code raises an exception and prevents Worker 2 from running.
+5. Worker 2 receives the validated repository context and writes README, runbook, Dockerfile, deployment validator, Git ignore rules and quality report.
+6. Final tests, compilation checks and deployment validation run. The generated files are reviewed with Git.
 
-### Capability coverage
+The workers do not pass the entire chat history to one another. Their handoff is the repository plus the result of the functional quality gate. This makes the boundary inspectable and limits unnecessary context.
 
-- **Architecture / planning / implementation:** strong native support (autonomous
-  edit-and-run loop, multi-file changes).
-- **Testing / documentation / deployment:** covered via the agent running commands
-  in the sandbox, but role separation and reporting require configuration.
+### Endpoint architecture
 
-### Multi-endpoint support
+| Endpoint | Purpose | Default host | Default model | Role |
+|---|---|---|---|---|
+| local-a | Functional implementation | `127.0.0.1:11434` | `qwen2.5-coder:7b` | Worker 1 |
+| local-b | Non-functional hardening | `127.0.0.1:11435` | `llama3.2:3b` | Worker 2 |
 
-OpenHands connects to local servers (LM Studio, Ollama, vLLM, SGLang) through an
-OpenAI-compatible endpoint. Its **Model Routing** (SDK `Router` class) and
-**LLM Registry** allow routing different requests to different models, but the
-feature is explicitly "under active development"; the default is one LLM config per
-session, so role-specific routing across two endpoints requires a LiteLLM proxy or a
-custom router.
+The host and model values can be replaced with environment variables. The endpoint API is local HTTP and is never required to be publicly exposed. If authentication is needed by a local server, the API client should be extended with a local environment-provided token rather than committing a secret.
 
-### Failure modes
+## 5. Functional worker
 
-- **Context overflow** on large repositories (the agent loop accumulates context).
-- **Tool-calling / file-op failures** in the sandbox.
-- **Model quality** — small local models have "limited functionality" per the docs.
+Worker 1 is responsible for the demonstrator's behavior. It is asked to create a small task API with health, create, list and complete operations. It also creates functional tests, an OpenAPI contract, a system overview and an ADR describing the local workflow decision.
 
-### Overall assessment
+The worker returns structured JSON containing a summary and a list of file contents. The notebook rejects absolute paths and parent-directory traversal before writing. The tests are run immediately after the files are written. This gate is the controlling dependency: Worker 2 cannot execute if the functional tests fail.
 
-**Strengths:** mature, purpose-built SWE agent with real multi-file edits.
-**Weaknesses:** heavier Docker-based setup, and weaker first-class support for the
-assignment's central hard requirement of config-driven, role-specific routing
-between two endpoints.
+This satisfies component decomposition, interface contracts, implementation, multi-file changes and test creation. The generated service is deliberately small so that the workflow behavior remains easy to inspect during a demonstration.
 
----
+## 6. Non-functional worker
 
-## 4. Candidate comparison
+Worker 2 receives the repository produced by Worker 1. It must preserve existing behavior and add operational qualities. Its expected files are a README, runbook, Dockerfile, `.gitignore`, deployment validator and quality report.
 
-| Requirement | Hermes | OpenHands |
-| --- | --- | --- |
-| Open source | Yes (MIT) | Yes (MIT) |
-| Two local endpoints | Yes (multiple providers) | Yes (LM Studio/Ollama/vLLM/SGLang) |
-| Config-driven routing | **Yes — Provider Routing (priority/whitelist/blacklist)** | Partial — Model Routing "under development" |
-| Role-specific models | Yes | Limited (LiteLLM proxy / custom Router) |
-| Parallel workers (N ≥ 2) | **Yes — subagent delegation** | Yes — parallel tool execution / task tool |
-| Architecture / planning | Yes (terminal + file + skills) | Yes (autonomous loop) |
-| Multi-file repository changes | Yes (file editing) | Yes (native) |
-| Testing / quality | Yes (runs commands) | Yes (sandbox commands) |
-| Documentation | Yes (edits files) | Yes |
-| Deployment validation | Yes (runs scripts) | Yes |
-| Git / reviewable changes | Yes (checkpoints + `/rollback`) | Yes (agent commits) |
-| Human control | Checkpoints + rollback + diff review | Sandbox confirm mode |
-| Reproducibility | `config.yaml` + versioned prompts | `config.toml` + Docker |
-| Security baseline | Local only | Local + Docker sandbox |
-| Setup complexity | **Low (no Docker)** | High (Docker) |
-| Overall suitability | **Recommended** | Comparison candidate |
+The final validation runs pytest, Python compilation and the deployment validator. Results are stored as JSON with commands, return codes, output and known limitations. The report also records that the service uses in-memory storage, that model output is nondeterministic, and that the demonstrated workers are sequential rather than simultaneously editing the same branch.
 
----
+## 7. Control, Git and reproducibility
 
-## 5. Recommended workflow architecture
+The notebook provides plan-and-gate control. Each worker has a declared scope, and the next worker is blocked until the previous gate succeeds. The generated repository can be reviewed with `git status`, `git diff` and `git log`. The notebook, prompts and endpoint mapping are versionable files.
 
-```text
-                    ┌─────────────────────┐
-                    │     User (CLI)      │
-                    └──────────┬──────────┘
-                               │ task
-                               ▼
-                    ┌─────────────────────┐
-                    │   Hermes Agent      │
-                    │  (provider routing  │
-                    │   + subagent        │
-                    │    delegation)      │
-                    └──────────┬──────────┘
-              ┌────────────────┴────────────────┐
-              │   provider routing (config.yaml)│
-              │   A: 11434        B: 11435      │
-              └───────┬──────────────┬──────────┘
-                      ▼              ▼
-        ┌────────────────────┐  ┌────────────────────┐
-        │ Ollama host A      │  │ Ollama host B      │
-        │ 127.0.0.1:11434    │  │ 127.0.0.1:11435    │
-        └────────────────────┘  └────────────────────┘
+Repeated runs may produce different prose or implementation details because local LLM generation is nondeterministic. Comparable structure is maintained by fixed worker responsibilities, fixed output schemas, fixed artifact paths and fixed validation commands. Temperature is set low, but it is not treated as a guarantee of identical output.
+
+A recommended review procedure is:
+
+```powershell
+git status
+git diff -- generated_workflow
+git log --oneline
 ```
 
-A task is given to Hermes, which routes requests to the configured local endpoints
-(priority/whitelist/blacklist + fallback) and can spawn concurrent subagents for
-parallel workstreams. File edits, commands and tests run locally; checkpoints allow
-rolling back changes.
+No generated change should be accepted without reviewing its tests and its diff.
 
----
+## 8. Context management and scaling
 
-## 6. Local model endpoint architecture
+Each worker gets only the requirements for its responsibility. The handoff is stored in files and validation results, not in an ever-growing conversation. Architecture, API and operational documents provide durable context for later runs.
 
-| Endpoint | Purpose | Host | Model | Port | Configuration |
-| --- | --- | --- | --- | --- | --- |
-| Provider A | primary (tool-calling) | localhost | `qwen2.5-coder:32b` | 11434 | `base_url: http://localhost:11434/v1` |
-| Provider B | secondary / fallback | localhost | `qwen2.5-coder:7b` | 11435 | provider routing entry |
+For a larger repository, the same design should partition work by component and create one task file per worker. Workers should receive a file allowlist and a short task summary rather than the whole repository. Large documentation should be split by topic, and quality gates should run after each partition. Shared files such as dependency manifests should be owned by one worker or changed in a dedicated integration stage to reduce conflicts.
 
-Each endpoint is an `ollama serve` on its own port with `OLLAMA_CONTEXT_LENGTH=64000`.
-Hermes discovers endpoints via `~/.hermes/config.yaml`, selects between them through
-**Provider Routing** and fails over automatically, and can be remapped without
-changing the workflow code.
+The current notebook deliberately uses a sequential handoff. It can be extended with additional workers after Worker 1, but the repository and ownership rules should remain explicit.
 
----
-
-## 7. End-to-end demo workflow (documented reproduction)
-
-1. Install Ollama and pull a tool-calling model (`qwen2.5-coder:32b`).
-2. Start two endpoints: `ollama serve` on `11434` and `11435`, each with
-   `OLLAMA_CONTEXT_LENGTH=64000`.
-3. Install Hermes (`iex (irm https://hermes-agent.nousresearch.com/install.ps1)`).
-4. Configure `~/.hermes/config.yaml`: `provider: custom`, `base_url`, `model`, and
-   add the second endpoint under Provider Routing.
-5. Give Hermes a coding task (e.g. "add a login endpoint + tests") and review the
-   resulting file diffs and checkpoints.
-6. Run the project tests and record results.
-7. Validate deployment (scripts/checklist) and update documentation.
-
-See `docs/SETUP_GUIDE.md` for the exact commands.
-
----
-
-## 8. Functional requirement traceability
-
-| Requirement | How Hermes satisfies it | Evidence (Hermes feature / doc) |
-| --- | --- | --- |
-| Architecture | terminal + file tools + skills produce design artifacts | Skills system, file editing |
-| Component decomposition | agent writes design docs | file editing |
-| Interface contracts | agent writes OpenAPI/spec files | file editing |
-| Deployment topology | agent documents topology/constraints | file editing |
-| ADRs | agent writes ADR files | file editing |
-| Tech lead task breakdown | subagent delegation partitions work | Subagent delegation |
-| Scope / acceptance criteria / DoD | agent writes tickets | file editing |
-| Dependency ordering | task planning via skills | Skills |
-| Multiple coding workers (N ≥ 2) | concurrent subagents | Subagent delegation (3 default, configurable) |
-| Multi-file changes | agent edits multiple files | file editing |
-| Test creation + execution | agent writes + runs tests | terminal execution |
-| Quality report | agent runs linters/tests and reports | terminal execution |
-| Static checks | agent runs `ruff`/`mypy` | terminal execution |
-| Developer/user docs | agent edits README/docs | file editing |
-| API documentation | agent writes API docs | file editing |
-| Runbook | agent writes runbook | file editing |
-| Design documents | agent writes design docs | file editing |
-| Deployment validation | agent runs scripts/checklist | terminal execution |
-
----
-
-## 9. Non-functional requirement traceability
-
-| Requirement | Solution | Evidence |
-| --- | --- | --- |
-| Predictability & control | checkpoints + `/rollback` + diff review | Checkpoints & Rollback |
-| Human approval / plan + diff | review file diffs before accepting | file diffs, rollback |
-| Git / version control | changes are ordinary repo edits | file editing |
-| Reviewable changes | diffs + checkpoints | checkpoints |
-| Reproducibility | `config.yaml` + versioned prompts | `~/.hermes/config.yaml` |
-| Context management | skills (progressive disclosure), context files, subagent isolation | Skills, Context Files, Subagents |
-| Scaling with repository size | skills load on demand; subagents isolate context | Skills system |
-| Security baseline | local-only endpoints | Ollama loopback |
-| No public unauthenticated endpoint | endpoints bind localhost | local-ollama guide |
-
----
-
-## 10. Failure modes & recovery
+## 9. Failure modes and recovery
 
 | Failure | Detection | Recovery | Human intervention |
-| --- | --- | --- | --- |
-| Model lacks tool calling | tool calls degrade to text | switch to a tool-calling model | pick `qwen2.5-coder:32b`/`gemma4:31b` |
-| Context window too small | startup rejection / truncation | `OLLAMA_CONTEXT_LENGTH=64000` | set env + restart |
-| Endpoint A down | provider error | automatic fallback to provider B | restart endpoint |
-| Subagent failure | subagent returns error | retry / reduce concurrency | review task |
-| Invalid generated code | tests fail | agent re-runs; `/rollback` | review diff |
-| File op failure | tool error | checkpoint restore | review |
+|---|---|---|---|
+| Endpoint unavailable | `/api/tags` health check or request timeout | Start service or change config | Sometimes |
+| Context overflow | Incomplete or malformed response | Reduce prompt scope and retry | Usually |
+| Invalid JSON | JSON parser exception | Ask model for strict schema output | Sometimes |
+| Unsafe file path | Path validation exception | Reject output and retry | No, unless repeated |
+| Functional test failure | Non-zero pytest result | Repair Worker 1 output; do not continue | Review required |
+| Static check failure | Compilation/check return code | Worker 2 repair | Review required |
+| Merge conflict | Git status/diff | Separate ownership or resolve manually | Yes |
+| Deployment failure | Validator return code or Docker build failure | Fix configuration and rerun | Often |
+| Model quality issue | Review of code and docs | Regenerate or edit manually | Yes |
 
----
+## 10. Security and tradeoffs
 
-## 11. Tradeoffs
+The default endpoints bind to loopback addresses. This avoids making an unauthenticated model server publicly reachable. The repository should not contain tokens, personal model data or private prompts that are not intended for Git. Open WebUI and Ollama should be configured with local access boundaries appropriate to the machine.
 
-- **Specialisation vs. routing:** OpenHands is the more mature SWE agent, but its
-  model routing is still maturing; Hermes is more general but has first-class
-  multi-provider routing and concurrent subagents.
-- **Setup complexity vs. capability:** Hermes installs without Docker; OpenHands'
-  Docker sandbox is heavier but more isolated.
-- **Model quality vs. hardware:** both need a capable local model for reliable
-  tool calling (24GB+ VRAM recommended); small models work but degrade.
-- **Automation vs. control:** both offer human review (Hermes checkpoints/rollback,
-  OpenHands sandbox confirm mode).
+The central tradeoff is transparency versus convenience. A notebook requires some Python glue, but it exposes the order of operations, the exact configuration and the validation evidence. A UI-first approach is easier for manual use but needs more hidden integration code for a complete software lifecycle workflow.
 
----
+Another tradeoff is sequential safety versus parallel speed. The requested design puts Worker 2 after Worker 1, which reduces conflicting edits and gives a clear quality gate. It is slower than truly parallel workers, but it is easier to reproduce and defend in an evaluation.
 
-## 12. Recommendation
+## 11. Requirement traceability
 
-**Selected toolchain: Hermes Agent (Nous Research).**
+| Requirement | Evidence |
+|---|---|
+| Two separate local endpoints | `CONFIG['endpoints']` contains local-a and local-b |
+| Configuration-based routing | `CONFIG['roles']` maps workers to endpoint names |
+| Architecture | Worker 1 creates system overview and component artifacts |
+| Interface contract | Worker 1 creates `docs/api/openapi.yaml` |
+| Deployment topology and constraints | Architecture prompt and Worker 2 deployment documentation |
+| ADR | Worker 1 creates an ADR |
+| Task breakdown | Worker responsibilities and scoped prompts are explicit; extend with task files for a larger demo |
+| Functional implementation | Worker 1 creates service files |
+| Tests | Worker 1 creates and runs pytest tests |
+| Documentation | Worker 2 creates README and runbook |
+| Static quality | Compilation and recorded command results |
+| Deployment validation | Worker 2 creates and runs a deployment validator |
+| Human control | Stop gate plus Git diff review |
+| Reproducibility | Versioned notebook, prompts, config and artifacts |
+| Context management | Scoped prompts and repository handoff |
+| Security | Loopback defaults and no public endpoint requirement |
 
-Hermes best satisfies the assignment's hard requirement — **two separately
-configurable local endpoints with configuration-driven routing** — through its
-first-class **Provider Routing** (priority/whitelist/blacklist) and **fallback
-providers**, and it covers the "multiple workers" requirement through **subagent
-delegation**. It is also materially easier to run locally (a single installer, no
-Docker), which makes the required demo reproducible with minimal friction.
+## 12. Review of another group's work
 
-OpenHands is a stronger pure software-engineering agent and a legitimate
-alternative, but its model routing is explicitly still under active development and
-its Docker-based setup is heavier — a poorer fit for this specific requirement set.
+A review cannot be completed until another group's delivery is provided. The final submission must name the reviewed group and evaluate its endpoints, open-source tooling, architecture, implementation, testing, documentation, deployment validation, control, reproducibility, context management and security.
 
+Once the delivery is available, record three strengths, three weaknesses, a requirement table, what this group would adopt and what this group would change. This is an explicit assignment requirement and should not be silently omitted.
 
+## 13. Conclusion
+
+Jupyter plus direct local model APIs is the recommended toolchain for this assignment. It supports two configurable endpoints, makes the worker boundary visible, creates reviewable repository artifacts and provides clear validation gates. Open WebUI complements the setup for manual exploration but is less suitable as the sole orchestrator for a controlled, reproducible, multi-stage coding workflow.

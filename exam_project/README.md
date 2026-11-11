@@ -1,5 +1,7 @@
 # StudyGraph
 
+Dansk kodeguide: [Forstå arkitekturen, mapperne og de vigtigste kodeforløb](understand-the-code.md).
+
 **A local LLM-powered study assistant using Retrieval-Augmented Generation (RAG).**
 
 StudyGraph helps students understand and revise their course material through an AI assistant grounded in their actual lecture slides and notes.
