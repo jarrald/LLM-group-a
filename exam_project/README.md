@@ -138,9 +138,12 @@ source, git-ignored and therefore **downloaded** rather than committed:
 
 ```powershell
 uv run python -m regression.fetch_corpus          # ~23 MB, once
-uv run python -m regression.rag --build-index     # 962 chunks, in-process Chroma
+uv run python -m regression.rag --build-index     # source + guidance docs, in-process Chroma
 uv run python .\regression\compare-predictions.py # the comparison, RAG and no-RAG arms
 ```
+
+The index holds the scikit-learn source and the project's own guidance documents in
+`regression/rag-optimized/`; `RAG_EXTRA_CORPUS=none` builds the source-only index.
 
 `uv run python -m regression.rag --status` prints the corpus provenance and the index state.
 Details, prompts and the recorded runs: [`regression/README.md`](regression/README.md).

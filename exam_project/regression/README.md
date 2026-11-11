@@ -11,13 +11,14 @@ to be downloaded before the index can be built:
 
 ```powershell
 uv run python -m regression.fetch_corpus          # downloads scikit-learn into regression/scikit-learn-main
-uv run python -m regression.rag --build-index     # chunk + embed it: 962 chunks, nomic-embed-text
+uv run python -m regression.rag --build-index     # chunk + embed both sources, nomic-embed-text
 ```
 
 `fetch_corpus.py` downloads the repository archive (no `git` needed) and writes
 `regression/scikit-learn-main/.corpus.json` with the ref, the commit GitHub reports for it and
 the `scikit-learn.__version__` the checkout declares. The default ref is `main`; the recorded
-runs in `runs/` used a `main` checkout reporting `1.10.dev0` and 962 chunks. To pin a release
+runs in `runs/` used a `main` checkout reporting `1.10.dev0` and the source-only index
+(962 chunks — the guidance documents were added on 2026-11-11). To pin a release
 instead:
 
 ```powershell
@@ -26,6 +27,28 @@ uv run python -m regression.rag --build-index --recreate
 ```
 
 The index needs no server: it is an in-process Chroma database in `regression/.chroma`.
+
+**Two sources are indexed**, into the same collection:
+
+| Source | What | Citation path |
+|---|---|---|
+| `regression/scikit-learn-main/` | the third-party checkout, filtered by `INCLUDE` in `rag.py` | `sklearn/…`, `examples/…`, `doc/…` |
+| `regression/rag-optimized/*.md` | project-authored guidance documents (concepts, workflow, metrics, diagnostics, worked examples, small-model playbook) | `rag-optimized/<file>.md` |
+
+The guidance documents are **optional and automatic**: every `*.md` under that folder is
+chunked by heading and indexed next to the source, so a rebuild picks up edits. They are cited
+with their own path, so the run record shows whether an excerpt came from the library or from
+our own notes. The index stores a fingerprint of every indexed file, so editing a document and
+querying without rebuilding fails with the exact `--recreate` command instead of answering from
+the old text.
+
+To build the **source-only** index that the runs recorded before 2026-11-11 used, point the
+extra corpus at a path that does not exist:
+
+```powershell
+$env:RAG_EXTRA_CORPUS = "none"
+uv run python -m regression.rag --build-index --recreate
+```
 
 **Check the setup in one command:**
 
@@ -88,6 +111,7 @@ Everything is read from the environment, so an experiment can be changed without
 | `RAG_TOP_K` | `8` | excerpts per prompt (also `--top-k`; `0` = no retrieval) |
 | `RAG_COLLECTION` | `sklearn_code_v1` | collection name inside `regression/.chroma` |
 | `RAG_CORPUS_ROOT` | `regression/scikit-learn-main` | where the corpus lives |
+| `RAG_EXTRA_CORPUS` | `regression/rag-optimized` | folder of extra `*.md` guidance documents; point it at a missing path to build a source-only index |
 | `RAG_OLLAMA_URL` | `http://127.0.0.1:11434` | Ollama endpoint |
 
 **Changing the embedding model** means rebuilding the index — the stored vectors would no
@@ -192,9 +216,29 @@ The conclusion: local LLM development sometimes works, but not usefully at 8 GB 
 has to be small, the context window has to be guarded, and prompt engineering or RAG do not
 compensate. A trained model stays the right tool for the numbers themselves.
 
+## Small models and retrieval (measured 2026-11-11)
+
+`gemma3:270m` (268 M parameters) was run through this pipeline with the ice-cream prompt at
+`top_k` 0 / 2 / 4 / 8, against the index that includes the guidance documents:
+
+| `top_k` | What came back |
+|---|---|
+| 0 | 249 chars, starts a script (`pd.read_csv('/datasets/…')`) — not runnable |
+| 2 | an empty `python` code block |
+| 4 | a verbatim copy of an internal sklearn excerpt (`_parameter_constraints: dict = {…}`) |
+| 8 | an empty `python` code block |
+
+For this model the retrieved context is **counter-productive**: it either copies source code or
+emits nothing. Direct probes show why — given `Temperature`/`Revenue` and the real path it
+reuses an example's `x`/`y`, and a repair instruction returns byte-identical wrong code, so it
+cannot bind a name even when it is spelled out. `gemma3:1b` (0.8 GB) with the same prompts uses
+the real columns and the real path. Treat `gemma3:270m` as the capability floor of the
+experiment, not as a model to tune retrieval for.
+
 ## What happens
 
-1. Your prompt is embedded and matched against 962 excerpts of the scikit-learn source.
+1. Your prompt is embedded and matched against every indexed chunk: 962 pieces of the
+   scikit-learn source plus 79 from the guidance documents (state of 2026-11-11).
 2. The top 8 excerpts are put in the prompt, marked as *data, not instructions*, with
    `path:lines` citations the model is told to copy.
 3. If your prompt names a `.csv` that exists, its first lines are included so the model uses
@@ -223,6 +267,7 @@ compensate. A trained model stays the right tool for the numbers themselves.
 | `ollama-no-rag.md` | the no-retrieval baseline run, with the model's full reasoning trace |
 | `datasets/` | `ice_cream_regression.csv`, `ice_cream_polynomial.csv`, `house prices.csv` |
 | `scikit-learn-main/` | the corpus, downloaded by `fetch_corpus.py` (git-ignored, ~23 MB, `main` @ `1.10.dev0`) |
+| `rag-optimized/` | project-authored guidance Markdown, indexed alongside the corpus (ADR-026) |
 
 ## If something goes wrong
 

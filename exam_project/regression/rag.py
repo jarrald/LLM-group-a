@@ -8,10 +8,17 @@
 The index lives in ``regression/.chroma`` (in-process Chroma, no server) and every run is
 archived under ``regression/runs/rag/``. Nothing here is imported by the StudyGraph app.
 
+Two things are indexed: the scikit-learn source described by ``INCLUDE``, and every ``*.md``
+under ``regression/rag-optimized/`` (project-authored guidance documents, ADR-026). Guidance
+documents are cited as ``rag-optimized/<file>.md:lines``, so a retrieved passage shows which
+kind of material it came from. Point ``RAG_EXTRA_CORPUS`` at a path that does not exist to
+build the source-only index that the runs recorded before 2026-11-11 used.
+
 The corpus is third-party source and is git-ignored, so it is *downloaded*, never committed:
 ``regression/fetch_corpus.py`` puts it in ``regression/scikit-learn-main`` and records the
 ref and commit in ``.corpus.json``. The index stores which embedding model and chunker built
-it, so switching ``RAG_EMBED_MODEL`` cannot silently query vectors it does not match.
+it, plus a fingerprint of every indexed file, so switching ``RAG_EMBED_MODEL`` or editing a
+guidance document cannot silently query an index that no longer matches.
 """
 
 from __future__ import annotations
@@ -60,6 +67,11 @@ INCLUDE = (
     "doc/getting_started.rst",
     "examples/linear_model/*.py",
 )
+
+#: Project-authored Markdown guidance documents, indexed next to the third-party corpus
+#: (`regression/rag-optimized/`, ADR-026). Set RAG_EXTRA_CORPUS to a path that does not
+#: exist to build a source-only index that matches the runs recorded before 2026-11-11.
+EXTRA_CORPUS = Path(os.getenv("RAG_EXTRA_CORPUS", REGRESSION / "rag-optimized"))
 
 MAX_LINES = 60
 OVERLAP = 8
@@ -159,11 +171,10 @@ def list_models(chat_only: bool = True, client: ollama.Client | None = None) -> 
 
 
 def _corpus_digest() -> str:
-    """A cheap fingerprint of the corpus (path + size of every indexed file)."""
+    """A cheap fingerprint of everything indexed (path + size of every source file)."""
     hasher = hashlib.sha1()
-    for path in _iter_files():
-        relative = path.relative_to(CORPUS).as_posix()
-        hasher.update(f"{relative}|{path.stat().st_size}\n".encode())
+    for label, path in _indexable_files():
+        hasher.update(f"{label}|{path.stat().st_size}\n".encode())
     return hasher.hexdigest()[:16]
 
 
@@ -200,6 +211,8 @@ def check_index(collection: object) -> None:
 
 def _chunks_for(rel: str, source: str) -> list[dict[str, object]]:
     """Split one file into citable chunks (Python by AST, RST/Markdown by heading)."""
+    if not rel.endswith(".py"):
+        source = _strip_front_matter(source)  # guidance docs carry YAML metadata, not prose
     lines = source.splitlines()
     if not lines:
         return []
@@ -219,7 +232,7 @@ def _spans(rel: str, lines: list[str]) -> list[tuple[str, int, int]]:
     """Symbol, start and end for every section of a file; 1-based and inclusive."""
     if rel.endswith(".py"):
         return _python_spans(lines)
-    markers = [(index + 1, match.group(2).strip()) for index, line in enumerate(lines) if (match := re.match(r"^#{1,6}\s+(.+?)\s*$", line))]
+    markers = [(index + 1, match.group(1).strip()) for index, line in enumerate(lines) if (match := re.match(r"^#{1,6}\s+(.+?)\s*$", line))]
     if not markers:  # RST: a title is the line above a run of repeated punctuation
         for index, line in enumerate(lines):
             stripped = line.rstrip()
@@ -284,14 +297,38 @@ def _windows(start: int, end: int) -> list[tuple[int, int]]:
         position = window_end - OVERLAP + 1
 
 
-def _iter_files() -> list[Path]:
-    """Every file matched by INCLUDE, without duplicates."""
-    found: dict[Path, None] = {}
+def _extra_markdown_files(root: Path = EXTRA_CORPUS) -> list[Path]:
+    """Every ``*.md`` under the guidance corpus, sorted; empty when the folder is absent."""
+    if not root.is_dir():
+        return []
+    return sorted(path for path in root.rglob("*.md") if path.is_file())
+
+
+def _strip_front_matter(text: str) -> str:
+    """Drop a leading ``---`` YAML block: it is document metadata, not prose for the model."""
+    if not text.startswith("---"):
+        return text
+    lines = text.splitlines(keepends=True)
+    for index, line in enumerate(lines[1:], start=1):
+        if line.strip() == "---":
+            return "".join(lines[index + 1 :]).lstrip("\n")
+    return text
+
+
+def _indexable_files(corpus: Path = CORPUS, extras: Path = EXTRA_CORPUS) -> list[tuple[str, Path]]:
+    """``(label, path)`` for everything that becomes chunks.
+
+    The label is the citation path the model sees and part of every chunk id, so it is
+    prefixed with the guidance folder's name and stays distinct from the checkout's paths.
+    """
+    found: dict[str, Path] = {}
     for pattern in INCLUDE:
-        for path in sorted(CORPUS.glob(pattern)):
+        for path in sorted(corpus.glob(pattern)):
             if path.is_file() and path.suffix.lower() in {".py", ".rst", ".md"}:
-                found[path] = None
-    return list(found)
+                found[path.relative_to(corpus).as_posix()] = path
+    for path in _extra_markdown_files(extras):
+        found[f"{extras.name}/{path.relative_to(extras).as_posix()}"] = path
+    return sorted(found.items())
 
 
 def build_index(recreate: bool = False) -> int:
@@ -300,6 +337,11 @@ def build_index(recreate: bool = False) -> int:
     record = read_provenance(CORPUS)
     print(f"corpus: {CORPUS}")
     print(f"        ref {record.get('ref', 'unknown')}, commit {record.get('commit', 'unknown')}, scikit-learn {record.get('version', 'unknown')}")
+    extra_documents = _extra_markdown_files()
+    if extra_documents:
+        print(f"guidance: {EXTRA_CORPUS} ({len(extra_documents)} Markdown files)")
+    else:
+        print(f"guidance: none ({EXTRA_CORPUS} has no .md files, source-only index)")
     print(f"embedding model: {EMBED_MODEL}")
 
     client = chromadb.PersistentClient(path=str(CHROMA_PATH))
@@ -320,14 +362,14 @@ def build_index(recreate: bool = False) -> int:
     collection.modify(metadata=_index_metadata())
 
     rows: list[tuple[str, dict[str, object]]] = []
-    files = _iter_files()
-    if not files:
+    sources = _indexable_files()
+    if not sources:
         raise RuntimeError(f"none of the INCLUDE patterns matched a file under {CORPUS}; the checkout looks incomplete. Re-download it with: {CORPUS_HINT}")
-    for path in files:
-        rel = path.relative_to(CORPUS).as_posix()
-        for chunk in _chunks_for(rel, path.read_text(encoding="utf-8", errors="replace")):
-            rows.append((rel, chunk))
-    print(f"{len(rows)} chunks from {len(files)} files")
+    for label, path in sources:
+        for chunk in _chunks_for(label, path.read_text(encoding="utf-8", errors="replace")):
+            rows.append((label, chunk))
+    guidance = sum(1 for label, _ in sources if label.startswith(f"{EXTRA_CORPUS.name}/"))
+    print(f"{len(rows)} chunks from {len(sources)} files ({len(sources) - guidance} scikit-learn, {guidance} guidance)")
 
     client_ollama = ollama.Client(host=OLLAMA_URL, timeout=600)
     started = time.perf_counter()
@@ -573,6 +615,11 @@ def status() -> int:
         print(f"                  ref {record.get('ref', 'unknown')}, commit {record.get('commit', 'unknown')}, scikit-learn {record.get('version', 'unknown')}")
     else:
         print(f"                  MISSING ({', '.join(missing_markers(CORPUS))}) -> {CORPUS_HINT}")
+    guidance = _extra_markdown_files()
+    if guidance:
+        print(f"guidance docs   : {EXTRA_CORPUS} ({len(guidance)} Markdown files)")
+    else:
+        print(f"guidance docs   : none ({EXTRA_CORPUS} has no .md files, source-only index)")
     print(f"index           : {CHROMA_PATH}")
     try:
         collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION, embedding_function=None)

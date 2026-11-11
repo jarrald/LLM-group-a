@@ -52,6 +52,13 @@ uv run python -m regression.fetch_corpus      # ref main -> commit bf4348196, sk
 uv run python -m regression.rag --build-index
 ```
 
+Since 2026-11-11 the same collection also holds **79 chunks from seven project-authored
+guidance documents** in `regression/rag-optimized/` (concepts, scikit-learn workflow, metrics,
+diagnostics, worked examples, a small-model playbook, and a corpus guide), cited as
+`rag-optimized/<file>.md`. They are optional: `RAG_EXTRA_CORPUS` pointing at a missing path
+builds the source-only index that every run recorded before that date used, so those runs
+remain reproducible. See ADR-026.
+
 `regression/fetch_corpus.py` downloads the repository archive, checks that the paths the index
 needs are present, and writes `regression/scikit-learn-main/.corpus.json` with the ref, the
 commit GitHub reports for it, the declared `scikit-learn.__version__` and the fetch date. All
