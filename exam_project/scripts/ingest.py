@@ -15,8 +15,8 @@ import argparse
 import sys
 import time
 
-from app.adapters.chroma_client import collection_metadata, get_chroma_client
-from app.adapters.chunker import CHUNKER_VERSION, DEFAULT_MAX_CHARS, DEFAULT_OVERLAP_CHARS, Chunk, chunk_document
+from app.adapters.chroma_client import collection_metadata, get_chroma_client, index_staleness
+from app.adapters.chunker import CHUNKER_VERSION, DEFAULT_MAX_CHARS, DEFAULT_OVERLAP_CHARS, Chunk, chunk_document, chunks_digest
 from app.adapters.embedder import OllamaEmbedder
 from app.adapters.loader import discover_lectures
 from app.config import get_config
@@ -58,17 +58,31 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     chunks = [chunk for document in documents for chunk in chunk_document(document, max_chars=arguments.max_chars, overlap=arguments.overlap)]
+    digest = chunks_digest(chunks)
     print(f"Documents       : {len(documents)} " + ", ".join(f"{document.doc_id} ({document.doc_name})" for document in documents))
-    print(f"Chunks          : {len(chunks)}")
+    print(f"Chunks          : {len(chunks)} (digest {digest})")
 
     client = get_chroma_client(config)
+    existing = None
+    try:
+        existing = client.get_collection(name=config.collection_name, embedding_function=None)
+    except Exception:  # no collection yet
+        existing = None
+
     if arguments.recreate:
-        try:
+        if existing is not None:
             client.delete_collection(config.collection_name)
             print(f"Deleted         : {config.collection_name}")
-        except Exception as exc:
-            print(f"Note            : nothing to delete ({exc})")
-    collection = client.get_or_create_collection(name=config.collection_name, metadata=collection_metadata(config), embedding_function=None)
+    elif existing is not None:
+        stale = index_staleness(existing, digest)
+        if stale:
+            print(f"WARN            : {stale}")
+            print("                  chunks that no longer exist stay in the index; use --recreate for a clean rebuild")
+
+    metadata = collection_metadata(config, corpus_digest=digest)
+    collection = client.get_or_create_collection(name=config.collection_name, metadata=metadata, embedding_function=None)
+    # An existing collection keeps its old metadata, so the digest has to be written explicitly.
+    collection.modify(metadata=metadata)
 
     embedder = OllamaEmbedder(config)
     started = time.perf_counter()

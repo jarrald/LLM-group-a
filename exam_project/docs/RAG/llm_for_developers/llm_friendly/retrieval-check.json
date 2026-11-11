@@ -1,7 +1,11 @@
 {
-  "date": "2026-10-31",
+  "date": "2026-11-10",
   "collection": "llms_for_devs_v1",
-  "count": 1659,
+  "count": 1660,
+  "embedding_model": "nomic-embed-text",
+  "chunker_version": "2",
+  "top_k": 6,
+  "rule": "ok means at least one of the returned chunks comes from expected_week; distances are as retrieved",
   "checks": [
     {
       "expected_week": 4,
@@ -11,38 +15,38 @@
         {
           "doc_id": "week4_source_local_ai_week_4_pdf",
           "week": 4,
-          "section": "Side 10",
-          "distance": 0.52276194
+          "section": "Page 10",
+          "distance": 0.51236933
         },
         {
           "doc_id": "week4_source_local_ai_week_4_pdf",
           "week": 4,
-          "section": "Side 5",
-          "distance": 0.57961607
+          "section": "Page 5",
+          "distance": 0.542832
         },
         {
           "doc_id": "week4_source_local_ai_week_4_pdf",
           "week": 4,
-          "section": "Side 11",
-          "distance": 0.609499
+          "section": "Page 11",
+          "distance": 0.5659833
+        },
+        {
+          "doc_id": "week4_overview",
+          "week": 4,
+          "section": "Troubleshooting by HTTP result",
+          "distance": 0.5782174
         },
         {
           "doc_id": "week4_source_local_ai_week_4_pdf",
           "week": 4,
-          "section": "Side 1",
-          "distance": 0.61895156
+          "section": "Page 1",
+          "distance": 0.61687624
         },
         {
-          "doc_id": "week4_source_local_ai_week_4_pdf",
+          "doc_id": "week4_overview",
           "week": 4,
-          "section": "Side 8",
-          "distance": 0.6516109
-        },
-        {
-          "doc_id": "week6_source_local_rag_pdf",
-          "week": 6,
-          "section": "Side 15",
-          "distance": 0.69306934
+          "section": "OpenWebUI and the four T's",
+          "distance": 0.62254363
         }
       ]
     },
@@ -52,40 +56,40 @@
       "ok": true,
       "hits": [
         {
+          "doc_id": "week6_overview",
+          "week": 6,
+          "section": "Three packages and where the responsibility sits",
+          "distance": 0.40021646
+        },
+        {
           "doc_id": "week6_source_openwebui_demo_readme_md",
           "week": 6,
           "section": "Week 10 - Tiny website using OpenWebUI API > Goal",
-          "distance": 0.46305153
+          "distance": 0.4630601
         },
         {
           "doc_id": "week6_source_local_rag_pdf",
           "week": 6,
-          "section": "Side 16",
-          "distance": 0.50030124
+          "section": "Page 13",
+          "distance": 0.49080765
         },
         {
           "doc_id": "week6_source_local_rag_pdf",
           "week": 6,
-          "section": "Side 13",
-          "distance": 0.5067012
+          "section": "Page 16",
+          "distance": 0.5068815
         },
         {
           "doc_id": "week6_source_local_rag_pdf",
           "week": 6,
-          "section": "Side 14",
-          "distance": 0.54731476
+          "section": "Page 14",
+          "distance": 0.5437986
         },
         {
           "doc_id": "week6_source_local_rag_pdf",
           "week": 6,
-          "section": "Side 2",
-          "distance": 0.5782732
-        },
-        {
-          "doc_id": "week6_overview",
-          "week": 6,
-          "section": "Tre pakker og placering af ansvar",
-          "distance": 0.5877207
+          "section": "Page 2",
+          "distance": 0.5468728
         }
       ]
     },
@@ -97,81 +101,81 @@
         {
           "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
           "week": 8,
-          "section": "Side 2",
-          "distance": 0.31788406
+          "section": "Page 2",
+          "distance": 0.3165254
+        },
+        {
+          "doc_id": "week8_overview",
+          "week": 8,
+          "section": "The course's distinction is about control",
+          "distance": 0.35632363
         },
         {
           "doc_id": "week10_source_calculator_orchestration_readme_md",
           "week": 10,
           "section": "Agent orchestration: Calculator development > Course terminology",
-          "distance": 0.3801979
+          "distance": 0.38040572
+        },
+        {
+          "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
+          "week": 8,
+          "section": "Page 13",
+          "distance": 0.47382593
         },
         {
           "doc_id": "week10_source_agent_orchestration_lesson_1_pdf",
           "week": 10,
-          "section": "Side 3",
-          "distance": 0.457435
+          "section": "Page 3",
+          "distance": 0.48343593
         },
         {
           "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
           "week": 8,
-          "section": "Side 4",
-          "distance": 0.4628399
-        },
-        {
-          "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
-          "week": 8,
-          "section": "Side 13",
-          "distance": 0.5107566
-        },
-        {
-          "doc_id": "week8_source_week_8_llm_agents_and_agentic_llms_ek_pdf",
-          "week": 8,
-          "section": "Side 3",
-          "distance": 0.56075054
+          "section": "Page 4",
+          "distance": 0.49187845
         }
       ]
     },
     {
       "expected_week": 9,
-      "query": "Hvad viser CNN-animationen med tre tegn og tre softmax-outputhoveder?",
+      "query": "What does the CNN animation with three characters and three softmax output heads show?",
       "ok": true,
       "hits": [
         {
-          "doc_id": "week9_overview",
-          "week": 9,
-          "section": "Ikke-lineære modeller og neurale netværk",
-          "distance": 0.33435756
-        },
-        {
           "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
           "week": 9,
-          "section": "Videoens indhold",
-          "distance": 0.35297215
-        },
-        {
-          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
-          "week": 9,
-          "section": "Videoens indhold",
-          "distance": 0.5116216
-        },
-        {
-          "doc_id": "week9_source_gradient_descent_fit_mp4",
-          "week": 9,
-          "section": "Videoens indhold",
-          "distance": 0.52829826
-        },
-        {
-          "doc_id": "week9_source_kfold_fit_evolution_dual_init_mp4",
-          "week": 9,
-          "section": "Videoens indhold",
-          "distance": 0.5736376
+          "section": "Video content",
+          "distance": 0.43264374
         },
         {
           "doc_id": "week9_overview",
           "week": 9,
-          "section": "Gradient descent og initialisering",
-          "distance": 0.611825
+          "section": "Non-linear models and neural networks",
+          "distance": 0.51382387
+        },
+        {
+          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
+          "week": 9,
+          "section": "Video content",
+          "distance": 0.53914195
+        },
+        {
+          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
+          "week": 9,
+          "section": "",
+          "distance": 0.75750965
+        },
+        {
+          "doc_id": "week3_source_exercise_3_1_ipynb",
+          "week": 3,
+          "section": "Cell 22 \u2014 markdown > 10. Animation",
+          "distance": 0.7590755
+        },
+        {
+          "doc_id": "week3_source_pca_for_fewerdimensions_4d_to_2d_ipynb",
+          "week": 3,
+          "section": "Cell 1 \u2014 markdown > Collapsing four dimensions into two: PCA as an animation",
+          "distance": 0.7980184
         }
       ]
     },
@@ -181,40 +185,40 @@
       "ok": true,
       "hits": [
         {
-          "doc_id": "week10_source_agent_orchestration_lesson_1_pdf",
+          "doc_id": "week10_overview",
           "week": 10,
-          "section": "Side 4",
-          "distance": 0.5067644
+          "section": "Two agents and an orchestrator",
+          "distance": 0.4966645
         },
         {
           "doc_id": "week10_source_calculator_orchestration_readme_md",
           "week": 10,
           "section": "Agent orchestration: Calculator development > Architecture and outcome",
-          "distance": 0.52855694
+          "distance": 0.5284977
+        },
+        {
+          "doc_id": "week10_overview",
+          "week": 10,
+          "section": "A bounded review loop",
+          "distance": 0.5379974
         },
         {
           "doc_id": "week10_source_agent_orchestration_lesson_1_pdf",
           "week": 10,
-          "section": "Side 9",
-          "distance": 0.56666195
+          "section": "Page 4",
+          "distance": 0.54165214
+        },
+        {
+          "doc_id": "week10_overview",
+          "week": 10,
+          "section": "Review questions",
+          "distance": 0.5716497
         },
         {
           "doc_id": "week10_source_calculator_orchestration_docs_architecture_orchestration_drawio",
           "week": 10,
-          "section": "Diagram — Bounded coder and reviewer orchestration",
-          "distance": 0.60227096
-        },
-        {
-          "doc_id": "week10_source_calculator_orchestration_docs_architecture_orchestration_drawio",
-          "week": 10,
-          "section": "Diagram — Bounded coder and reviewer orchestration",
-          "distance": 0.6582849
-        },
-        {
-          "doc_id": "week10_source_calculator_orchestration_readme_md",
-          "week": 10,
-          "section": "Agent orchestration: Calculator development > Architecture and outcome",
-          "distance": 0.66752934
+          "section": "Diagram \u2014 Bounded coder and reviewer orchestration",
+          "distance": 0.5914439
         }
       ]
     }
@@ -223,92 +227,92 @@
     "result": {
       "expected_week": 9,
       "query": "BMI gradient descent training validation loss K fold dual initialization",
-      "ok": false,
+      "ok": true,
       "hits": [
         {
-          "doc_id": "week3_source_exercise_3_1_ipynb",
-          "week": 3,
-          "section": "Celle 8 — markdown > 3. Standardization",
-          "distance": 0.65174013
+          "doc_id": "week9_overview",
+          "week": 9,
+          "section": "Gradient descent and initialisation",
+          "distance": 0.5653522
+        },
+        {
+          "doc_id": "week9_source_kfold_fit_evolution_dual_init_mp4",
+          "week": 9,
+          "section": "Video content",
+          "distance": 0.62717986
+        },
+        {
+          "doc_id": "week9_overview",
+          "week": 9,
+          "section": "K-fold cross-validation",
+          "distance": 0.65068233
         },
         {
           "doc_id": "week3_source_week3_pdf",
           "week": 3,
-          "section": "Side 22",
-          "distance": 0.66229707
+          "section": "Page 24",
+          "distance": 0.65106374
         },
         {
           "doc_id": "week3_source_exercise_3_1_ipynb",
           "week": 3,
-          "section": "Celle 12 — markdown > 5. Training cycle",
-          "distance": 0.66957307
-        },
-        {
-          "doc_id": "week3_source_week3_pdf",
-          "week": 3,
-          "section": "Side 24",
-          "distance": 0.66957736
+          "section": "Cell 8 \u2014 markdown > 3. Standardization",
+          "distance": 0.6516808
         },
         {
           "doc_id": "week3_source_exercise_3_1_ipynb",
           "week": 3,
-          "section": "Celle 1 — markdown > Simple Linear Regression via Gradient Descent",
-          "distance": 0.6698518
-        },
-        {
-          "doc_id": "week3_gradient_descent_and_embeddings",
-          "week": 3,
-          "section": "4. Gradient descent",
-          "distance": 0.6933409
+          "section": "Cell 1 \u2014 markdown > Simple Linear Regression via Gradient Descent",
+          "distance": 0.66919434
         }
       ]
     },
-    "interpretation": "Gradient descent and validation appear in both week 3 and week 9. The broad query finds relevant week 3 notes; week 9 is therefore verified separately against the content of the CNN animation. No filter was changed."
+    "interpretation": "Gradient descent and validation appear in both week 3 and week 9. The broad query ranks week 9 first and still reaches the week 3 notes within the top six, so a broad question can draw on both weeks instead of being blocked by a filter. No filter was changed to make this check pass."
   },
   "cross_language_probe": {
     "result": {
       "expected_week": 9,
       "query": "CNN three letters mixed scripts convolution feature maps three softmax heads",
-      "ok": false,
+      "ok": true,
       "hits": [
         {
-          "doc_id": "week3_source_hallucinations1_pdf",
-          "week": 3,
-          "section": "Side 21",
-          "distance": 0.80171186
+          "doc_id": "week9_overview",
+          "week": 9,
+          "section": "Non-linear models and neural networks",
+          "distance": 0.57253855
         },
         {
-          "doc_id": "week3_source_injection2_pdf",
-          "week": 3,
-          "section": "Side 3",
-          "distance": 0.80175555
+          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
+          "week": 9,
+          "section": "Video content",
+          "distance": 0.5987638
         },
         {
-          "doc_id": "week3_source_ambiguity1_pdf",
-          "week": 3,
-          "section": "Side 13",
-          "distance": 0.8018724
+          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
+          "week": 9,
+          "section": "Video content",
+          "distance": 0.6179789
         },
         {
-          "doc_id": "week3_source_injection1_pdf",
-          "week": 3,
-          "section": "Side 30",
-          "distance": 0.8084228
+          "doc_id": "week9_source_cnn_3letter_mixed_scripts_mp4",
+          "week": 9,
+          "section": "",
+          "distance": 0.7329149
         },
         {
           "doc_id": "week1_complete_rag",
           "week": 1,
           "section": "2. Machine learning foundations > Relationship between AI, ML, and LLMs",
-          "distance": 0.81500727
+          "distance": 0.8149115
         },
         {
           "doc_id": "week1_complete_rag",
           "week": 1,
-          "section": "1. Machine Learning 0.0.1 — Hand-held training data",
-          "distance": 0.81652945
+          "section": "1. Machine Learning 0.0.1 \u2014 Hand-held training data",
+          "distance": 0.8160654
         }
       ]
     },
-    "interpretation": "The English CNN query does not find the Danish video descriptions among the first six results. A Danish question finds week 9 as the first result. Cross-language retrieval is to be assessed in phase 7; no algorithm or filtering was changed to make the check pass."
+    "interpretation": "In the pre-translation run (2026-10-31) this English query missed the week 9 material entirely. With the corpus translated to English the question and the indexed text share a language, and week 9 fills the first four hits. No filtering was added to influence it."
   }
 }

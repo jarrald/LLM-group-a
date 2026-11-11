@@ -7,6 +7,12 @@ StudyGraph app and nothing is integrated into it.
 
     uv run python .\\regression\\compare-predictions.py            # RAG and no-RAG arms
     uv run python .\\regression\\compare-predictions.py --no-rag   # only the no-retrieval arm
+    uv run python .\\regression\\compare-predictions.py --model llama3.2:3b --out regression\\runs\\predict\\llama-3b
+
+The defaults reproduce the recorded run exactly (``qwen2.5-coder:7b``, ``nomic-embed-text``,
+top 3 of 12 reference rows, temperature 0). The flags exist so the comparison can be repeated
+with another model without editing code — every run should be written to its own ``--out``
+folder when it is not the reference configuration.
 
 The split reproduces ``regression/non-llm.ipynb`` exactly (70/15/15, ``random_state=42``), so
 the held-out rows here are the rows the hand-written notebook measured once. The LLM never
@@ -182,16 +188,35 @@ def fmt(error: float | None) -> str:
     return "n/a" if error is None else f"{error:.2f}"
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     """Run both arms on three held-out rows and write the evidence."""
+    global CHAT_MODEL, EMBED_MODEL, OLLAMA_URL, TOP_K, REFERENCE_ROWS
+
     parser = argparse.ArgumentParser(description="Compare a fitted linear regression with a local LLM on the same held-out rows.")
-    parser.parse_args()
+    parser.add_argument("--no-rag", action="store_true", help="skip the retrieval arm and record only the no-retrieval predictions")
+    parser.add_argument("--model", default=CHAT_MODEL, help=f"Ollama chat model (default {CHAT_MODEL})")
+    parser.add_argument("--embed-model", default=EMBED_MODEL, help=f"Ollama embedding model for the reference rows (default {EMBED_MODEL})")
+    parser.add_argument("--ollama-url", default=OLLAMA_URL, help=f"Ollama endpoint (default {OLLAMA_URL})")
+    parser.add_argument("--top-k", type=int, default=TOP_K, help=f"reference rows given to the model (default {TOP_K})")
+    parser.add_argument("--reference-rows", type=int, default=REFERENCE_ROWS, help=f"reference rows the collection is built from (default {REFERENCE_ROWS})")
+    parser.add_argument("--out", type=Path, default=RUN_DIR, help=f"folder for results.csv, report.json and prompt.md (default {RUN_DIR})")
+    arguments = parser.parse_args(argv)
+
+    CHAT_MODEL = arguments.model
+    EMBED_MODEL = arguments.embed_model
+    OLLAMA_URL = arguments.ollama_url
+    TOP_K = arguments.top_k
+    REFERENCE_ROWS = arguments.reference_rows
+    out: Path = arguments.out
 
     print(f"data: {DATA}")
+    print(f"model: {CHAT_MODEL} | embeddings: {EMBED_MODEL} | top_k {TOP_K} | reference rows {REFERENCE_ROWS}")
+    print(f"arms: linear regression, LLM{' + RAG' if not arguments.no_rag else ' (no retrieval only)'}")
+    print(f"output: {out}")
     print("\nReproducing the split of non-llm.ipynb (70/15/15, random_state=42):")
     train, test = load_split()
     cases = pick_cases(test)
-    examples = reference_examples(train)
+    examples = reference_examples(train, REFERENCE_ROWS)
     print(f"\nreference rows visible to the LLM: {len(examples)} (training split only)")
     print("held-out temperatures: " + ", ".join(f"{row.Temperature:.2f}" for row in cases.itertuples()))
 
@@ -200,8 +225,8 @@ def main() -> int:
     intercept = float(model.intercept_)
     print(f"fitted model: revenue = {slope:.4f} * temperature + {intercept:.4f}")
 
-    collection = build_collection(examples)
-    RUN_DIR.mkdir(parents=True, exist_ok=True)
+    collection = None if arguments.no_rag else build_collection(examples)
+    out.mkdir(parents=True, exist_ok=True)
 
     rows: list[dict[str, object]] = []
     details: list[dict[str, object]] = []
@@ -211,10 +236,10 @@ def main() -> int:
         actual = float(case.Revenue)
         linear = float(model.predict(pd.DataFrame({"Temperature": [temperature]}))[0])
 
-        shown, distances = retrieve(collection, user_message(temperature, None))
+        shown, distances = ([], []) if collection is None else retrieve(collection, user_message(temperature, None))
         if position == 1:
             first_shown = shown
-        rag: Prediction = ask(temperature, shown)
+        rag: Prediction = Prediction(text="", value=None, seconds=0.0, shown=[], distances=[]) if collection is None else ask(temperature, shown)
         bare = ask(temperature, None)
 
         rag_error = abs(rag.value - actual) if rag.value is not None else None
@@ -240,18 +265,21 @@ def main() -> int:
                 "actual_revenue": round(actual, 4),
                 "linear_regression": round(linear, 4),
                 "retrieved": [{"document": text, "distance": round(distance, 4)} for text, distance in zip(shown, distances)],
-                "llm_rag": {"answer": rag.text, "value": rag.value, "seconds": round(rag.seconds, 2)},
+                "llm_rag": None if collection is None else {"answer": rag.text, "value": rag.value, "seconds": round(rag.seconds, 2)},
                 "llm_no_rag": {"answer": bare.text, "value": bare.value, "seconds": round(bare.seconds, 2)},
             }
         )
         print(f"\ncase {position}: temperature {temperature:.2f}, actual revenue {actual:.2f}")
         print(f"  linear regression   {linear:9.2f}   absolute error {abs(linear - actual):8.2f}")
-        print(f"  llm + rag           {str(rag.value):>9}   absolute error {fmt(rag_error):>8}   answer {rag.text!r}")
+        if collection is None:
+            print("  llm + rag           skipped (--no-rag)")
+        else:
+            print(f"  llm + rag           {str(rag.value):>9}   absolute error {fmt(rag_error):>8}   answer {rag.text!r}")
         print(f"  llm, no retrieval   {str(bare.value):>9}   absolute error {fmt(bare_error):>8}   answer {bare.text!r}")
 
     results = pd.DataFrame(rows)
-    results.to_csv(RUN_DIR / "results.csv", index=False, encoding="utf-8", lineterminator="\n")
-    return summarise(results, details, slope, intercept, float(cases.iloc[0].Temperature), examples, first_shown)
+    results.to_csv(out / "results.csv", index=False, encoding="utf-8", lineterminator="\n")
+    return summarise(results, details, slope, intercept, float(cases.iloc[0].Temperature), examples, first_shown, out=out, no_rag=collection is None)
 
 
 def mean_error(results: pd.DataFrame, column: str) -> float | None:
@@ -271,6 +299,8 @@ def summarise(
     first_temperature: float,
     examples: list[Example],
     first_shown: list[str],
+    out: Path = RUN_DIR,
+    no_rag: bool = False,
 ) -> int:
     """Write results.csv, report.json and prompt.md, then print the comparison."""
     summary: dict[str, object] = {
@@ -278,6 +308,7 @@ def summarise(
         "model": CHAT_MODEL,
         "embedding_model": EMBED_MODEL,
         "options": {"temperature": 0.0, "num_ctx": 4096},
+        "arms": ["linear_regression", "llm_no_rag"] if no_rag else ["linear_regression", "llm_rag", "llm_no_rag"],
         "top_k": TOP_K,
         "reference_rows": REFERENCE_ROWS,
         "collection": COLLECTION,
@@ -285,24 +316,24 @@ def summarise(
         "fitted_model": {"slope": round(slope, 6), "intercept": round(intercept, 6)},
         "mean_absolute_error": {
             "linear_regression": mean_error(results, "abs_error_linear"),
-            "llm_rag": mean_error(results, "abs_error_llm_rag"),
+            "llm_rag": None if no_rag else mean_error(results, "abs_error_llm_rag"),
             "llm_no_rag": mean_error(results, "abs_error_llm_no_rag"),
         },
         "cases": details,
     }
-    (RUN_DIR / "report.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n")
-    (RUN_DIR / "prompt.md").write_text(record(first_temperature, examples, first_shown), encoding="utf-8", newline="\n")
+    (out / "report.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n")
+    (out / "prompt.md").write_text(record(first_temperature, examples, first_shown, no_rag=no_rag), encoding="utf-8", newline="\n")
 
     errors = summary["mean_absolute_error"]
     assert isinstance(errors, dict)
     print("\nmean absolute error over three held-out rows")
     for label, key in (("linear regression", "linear_regression"), ("llm + rag", "llm_rag"), ("llm, no retrieval", "llm_no_rag")):
         print(f"  {label:<20} {'n/a' if errors[key] is None else f'{errors[key]:,.2f}'}")
-    print(f"\nwritten: {RUN_DIR}\\results.csv, report.json, prompt.md")
+    print(f"\nwritten: {out}\\results.csv, report.json, prompt.md")
     return 0
 
 
-def record(first_temperature: float, examples: list[Example], first_shown: list[str]) -> str:
+def record(first_temperature: float, examples: list[Example], first_shown: list[str], no_rag: bool = False) -> str:
     """The prompt record: system message, both user messages, and the reference table."""
     lines = [
         "# Prediction comparison - prompts sent to the local model",
@@ -311,7 +342,8 @@ def record(first_temperature: float, examples: list[Example], first_shown: list[
         f"- model: {CHAT_MODEL}",
         f"- embedding model: {EMBED_MODEL}",
         "- options: temperature 0.0, num_ctx 4096",
-        f"- retrieval: top {TOP_K} of {REFERENCE_ROWS} reference rows, training split only",
+        f"- retrieval: top {TOP_K} of {REFERENCE_ROWS} reference rows, training split only"
+        + (" (disabled: this run used --no-rag)" if no_rag else ""),
         "- the model is told not to write or run code",
         "",
         "## System prompt",
@@ -320,14 +352,19 @@ def record(first_temperature: float, examples: list[Example], first_shown: list[
         SYSTEM_PROMPT,
         "````",
         "",
-        f"## User message with retrieval (case 1, temperature {first_temperature:.2f})",
-        "",
-        "The three rows below are the ones retrieval actually returned for that question.",
-        "",
-        "````text",
-        user_message(first_temperature, first_shown),
-        "````",
-        "",
+    ]
+    if not no_rag:
+        lines += [
+            f"## User message with retrieval (case 1, temperature {first_temperature:.2f})",
+            "",
+            "The three rows below are the ones retrieval actually returned for that question.",
+            "",
+            "````text",
+            user_message(first_temperature, first_shown),
+            "````",
+            "",
+        ]
+    lines += [
         f"## User message without retrieval (case 1, temperature {first_temperature:.2f})",
         "",
         "````text",
@@ -346,5 +383,14 @@ def record(first_temperature: float, examples: list[Example], first_shown: list[
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except ConnectionError as exc:
+        print(f"FAIL cannot reach Ollama at {OLLAMA_URL}: {exc}")
+        print("     start Ollama (ollama serve), pull the model and the embedding model, then run this again")
+        raise SystemExit(2) from exc
+    except ollama.ResponseError as exc:
+        print(f"FAIL Ollama refused the request: {exc}")
+        print(f"     is '{CHAT_MODEL}' pulled? (ollama pull {CHAT_MODEL})")
+        raise SystemExit(2) from exc
 

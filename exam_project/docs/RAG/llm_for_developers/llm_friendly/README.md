@@ -20,22 +20,21 @@ The original hand-written notes from weeks 1-3 are preserved. The new `week<N>_o
 
 The document counts are unchanged since 2026-10-31; the chunk counts were measured again on
 2026-11-09 after the corpus was translated to English (`scripts/check_course_material.py`),
-which moved week 1 from 123 to 124 chunks. Chunker version 2. A Chroma index must be rebuilt
-before the app can use the corpus.
+which moved week 1 from 123 to 124 chunks. Chunker version 2.
 
-The Chroma collection was rebuilt on the development machine with 1,659 chunks on 2026-10-31,
-before the translation. `scripts/doctor.py`
-reports every check as OK. The [retrieval checks](retrieval-check.json) record concrete
-queries, document ids and distances for the newer weeks; they were captured against the
-pre-translation corpus. The checks verify that the
-material is reachable; they are not the formal RAG evaluation.
+The Chroma collection was rebuilt from the translated material on 2026-11-10: **1,660 chunks**,
+chunker version 2, `nomic-embed-text`, corpus digest `62313c4629307e08`. `scripts/doctor.py`
+reports every check as OK, including that the index still matches the material on disk. The
+[retrieval checks](retrieval-check.json) record concrete queries, document ids and distances;
+they were regenerated against that index by `scripts/check_retrieval.py` and all seven checks
+(weeks 4, 6, 8, 9, 10 plus two probes) pass. They verify that the material is reachable; they
+are not the formal RAG evaluation.
 
-A broad gradient-descent query also finds relevant week 3 material, because the topic is
-repeated in week 9. An English CNN query did not find the Danish video notes among the
-first six results, while a Danish question found week 9 at the top. Those observations were
-made against the original mixed-language corpus and are preserved in the retrieval report;
-they no longer describe the corpus after the translation to English on 2026-11-09.
-Cross-language retrieval quality is assessed in phase 7.
+A broad gradient-descent query ranks week 9 first and still reaches the week 3 notes within the
+top six, because the topic is repeated in both weeks. An English CNN query that did not find the
+Danish video notes in the pre-translation corpus (2026-10-31) now returns week 9 in its first
+four hits, as expected once question and material share a language. Cross-language retrieval
+quality is assessed in phase 7.
 ## Coverage and limitations
 
 `conversion-manifest.json` records all 73 relevant sources with SHA-256, output file, status and any OCR notes. 68 sources are text-converted, four media have visual descriptions, and one identical duplicate reuses a conversion. The 15 PDFs cover 346 pages. The check also compares the original text layer with the Markdown, so that text does not disappear silently during conversion.

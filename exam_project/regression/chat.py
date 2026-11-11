@@ -75,7 +75,8 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         except Exception as exc:  # a broken run must not kill the session
             print(f"\nFAIL {exc}")
-            print("  is Ollama running, and is the index built? (uv run python -m regression.rag --build-index)")
+            print("  is Ollama running, is the corpus downloaded and the index built?")
+            print("  uv run python -m regression.fetch_corpus ; uv run python -m regression.rag --build-index")
 
 
 if __name__ == "__main__":

@@ -44,6 +44,22 @@ The index is the scikit-learn checkout (`sklearn/linear_model/*.py`,
 embedded with `nomic-embed-text`. Default `top_k` is 8. The index lives in
 `regression/.chroma` and is queried in-process — no Chroma server is involved.
 
+The corpus is third-party source (~23 MB, 1 600+ files). It is git-ignored and is therefore
+**not** part of a clone of this repository; it is downloaded once and recorded:
+
+```powershell
+uv run python -m regression.fetch_corpus      # ref main -> commit bf4348196, sklearn 1.10.dev0
+uv run python -m regression.rag --build-index
+```
+
+`regression/fetch_corpus.py` downloads the repository archive, checks that the paths the index
+needs are present, and writes `regression/scikit-learn-main/.corpus.json` with the ref, the
+commit GitHub reports for it, the declared `scikit-learn.__version__` and the fetch date. All
+runs documented here were made against a `main` checkout reporting `1.10.dev0`, which still
+chunks into the same 962 pieces after the 2026-11-10 re-download. Pass `--ref <tag>` to pin a
+release instead; re-downloading changes the corpus, and the index records a fingerprint of it,
+so the next build refuses to mix two versions unless it is rebuilt with `--recreate`.
+
 ### 2.3 Datasets
 
 | File | Rows | Columns | Role |

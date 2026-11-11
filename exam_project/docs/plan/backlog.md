@@ -98,16 +98,21 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 | SG-084 | P1 | Comparison table + discussion (why they differ; when a trained model wins) | **Done** | SG-081, SG-083 | Table with actual values and both error measures |
 | SG-085 | P1 | Evaluate the 15 recorded coding runs + cloud runs | **Done** | — | `docs/evaluation/regression-experiment.md` with the run table, failure taxonomy and conclusion |
 | SG-086 | P2 | Map the six experiment types (manual / RAG / no-RAG / cloud × code / no code) and tag what is missing | **Done** | SG-084, SG-085 | `docs/evaluation/experiment-types.md` + `runs-overview.csv`; the single gap (cloud without code, #5) is stated explicitly |
+| SG-087 | P0 | Make the regression corpus obtainable from a fresh clone | **Done** | — | `regression/fetch_corpus.py` downloads scikit-learn into `regression/scikit-learn-main` with ref/commit provenance (`--check`, `--ref`, `--force`); `rag.py` fails with the fetch hint instead of building an empty index (ADR-024) |
+| SG-088 | P0 | Pin and validate what the regression index was built from | **Done** | SG-087 | Collection metadata records embedding model, chunker, corpus ref/commit/digest; build, query and `--status` refuse a foreign index with the rebuild command |
+| SG-089 | P1 | Make `compare-predictions.py` runnable in another configuration | **Done** | SG-080 | `--no-rag` (advertised in the docstring but not parsed before), `--model`, `--embed-model`, `--ollama-url`, `--top-k`, `--reference-rows`, `--out`; defaults unchanged and re-verified at 13.28 / 107.15 / 368.82 |
 
 ## Phase 9 — Hardening, packaging, synopsis
 
 | ID | Pri | Title | State | Depends on | Done when |
 |---|---|---|---|---|---|
 | SG-090 | P1 | Failure-mode hardening pass | Todo | SG-065 | Checklist of 8 failure modes verified by hand |
-| SG-091 | P0 | `README.md` as setup guide (prereqs, models, ingest, run, test, troubleshooting) | Todo | SG-062 | A second person reproduces the app using only the README |
+| SG-091 | P0 | `README.md` as setup guide (prereqs, models, ingest, run, test, troubleshooting) | Todo (mostly written) | SG-062 | A second person reproduces the app using only the README; the regression experiment's setup (corpus download, index status) is documented now, a second-person walkthrough is still missing |
 | SG-092 | P1 | `pytest` / `ruff` / `mypy` sweep + coverage of critical modules | Todo | SG-054, SG-066 | All three commands clean; results pasted into status.md |
 | SG-093 | P1 | Demo script rehearsal (8 min, see the plan §6) | Todo | SG-091 | Rehearsed twice, including the stopped-Ollama step |
 | SG-094 | P0 | Synopsis draft (≤ 5 pages) | Todo | SG-072, SG-084 | All five required sections present, evidence-linked |
+| SG-095 | P0 | Detect a stale course index after the material changes | **Done** | SG-067 | `ingest.py` stores `corpus_digest`; `doctor.py` fails with the `--recreate` command when the index and the material diverge; the translated corpus was re-indexed (1,660 chunks, ADR-025) |
+| SG-096 | P1 | Make the recorded retrieval checks reproducible | **Done** | SG-024 | `scripts/check_retrieval.py` re-runs the fixed query set and rewrites `retrieval-check.json`; all seven checks pass against the rebuilt index |
 
 ## Phase 10 — Optional (only after everything above)
 

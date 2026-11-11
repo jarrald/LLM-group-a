@@ -16,7 +16,8 @@ from dataclasses import dataclass
 
 import ollama
 
-from app.adapters.chroma_client import get_chroma_client, get_course_collection
+from app.adapters.chroma_client import get_chroma_client, get_course_collection, index_staleness
+from app.adapters.chunker import chunk_document, chunks_digest
 from app.adapters.loader import discover_lectures
 from app.config import Config, get_config
 
@@ -77,7 +78,32 @@ def check_chroma(config: Config) -> tuple[Check, int]:
     return Check("Course index", count > 0, f"{config.collection_name}: {count} chunks", r"uv run python .\scripts\ingest.py"), count
 
 
+def corpus_digest(config: Config) -> tuple[str, int]:
+    """Digest and chunk count of the material currently on disk."""
+    documents = discover_lectures(config.course_material_dir, config.course_id)
+    chunks = [chunk for document in documents for chunk in chunk_document(document)]
+    return chunks_digest(chunks), len(chunks)
+
+
+def check_freshness(config: Config) -> Check:
+    """Say whether the index still matches the material on disk (translation, new weeks)."""
+    try:
+        collection = get_course_collection(get_chroma_client(config), config)
+    except Exception:  # noqa: BLE001 - reported by the Chroma and index checks above
+        return Check("Index freshness", True, "not checked (Chroma server or collection unavailable)")
+    try:
+        digest, chunk_count = corpus_digest(config)
+    except FileNotFoundError:
+        return Check("Index freshness", True, "not checked (course material missing)")
+    stale = index_staleness(collection, digest)
+    if stale:
+        return Check("Index freshness", False, f"{stale}; the corpus chunks into {chunk_count}", r"uv run python .\scripts\ingest.py --recreate")
+    return Check("Index freshness", True, f"index matches the {chunk_count} chunks on disk (digest {digest})")
+
+
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # Windows consoles default to cp1252, and the hints use "→"
     config = get_config()
     material_check, document_count = check_course_material(config)
     chroma_check, chunk_count = check_chroma(config)
@@ -87,6 +113,7 @@ def main() -> int:
         material_check,
         check_models(config),
         chroma_check,
+        check_freshness(config),
     ]
 
     print(f"StudyGraph doctor — {config.ollama_base_url} | {config.chroma_url}\n")

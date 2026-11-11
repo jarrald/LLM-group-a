@@ -107,16 +107,21 @@ if generate and instructions.strip():
     if stored:
         extra += "## On-disk copies\n\n" + "\n".join(f"- {path}" for _, path in stored) + "\n\nRead the data from the path above.\n\n"
     prompt = rag.wrap_prompt(instructions, task, tone, target, traits)
-    answer = rag.ask(prompt, top_k=top_k, echo=False, on_token=on_token, extra_context=extra, model=model.strip() or None)
-    placeholder.markdown(answer.text)
+    try:
+        answer = rag.ask(prompt, top_k=top_k, echo=False, on_token=on_token, extra_context=extra, model=model.strip() or None)
+    except RuntimeError as exc:  # missing corpus/index, or one built with other settings
+        st.error(str(exc), icon="⚠️")
+        st.caption("Setup: `uv run python -m regression.fetch_corpus`, then `uv run python -m regression.rag --build-index`.")
+    else:
+        placeholder.markdown(answer.text)
 
-    speed = f" - {answer.tokens_per_second:.0f} tok/s" if answer.tokens_per_second else ""
-    st.caption(f"{answer.seconds:.1f} s{speed} - {len(answer.hits)} excerpts retrieved")
+        speed = f" - {answer.tokens_per_second:.0f} tok/s" if answer.tokens_per_second else ""
+        st.caption(f"{answer.seconds:.1f} s{speed} - {len(answer.hits)} excerpts retrieved")
 
-    saved = rag.save_file(prompt, answer, kind="ui", extra_context=extra, top_k=top_k, run_dir=run_dir)
-    st.success(f"Saved to {saved.relative_to(rag.REGRESSION.parent)}")
-    st.download_button("Download", data=saved.read_bytes(), file_name=saved.name)
+        saved = rag.save_file(prompt, answer, kind="ui", extra_context=extra, top_k=top_k, run_dir=run_dir)
+        st.success(f"Saved to {saved.relative_to(rag.REGRESSION.parent)}")
+        st.download_button("Download", data=saved.read_bytes(), file_name=saved.name)
 
-    with st.expander(f"Excerpts used ({len(answer.hits)})"):
-        for index, hit in enumerate(answer.hits, start=1):
-            st.text(f"[{index}] {hit.distance:.3f}  {hit.cite}")
+        with st.expander(f"Excerpts used ({len(answer.hits)})"):
+            for index, hit in enumerate(answer.hits, start=1):
+                st.text(f"[{index}] {hit.distance:.3f}  {hit.cite}")

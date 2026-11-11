@@ -102,11 +102,20 @@ because the record id *is* the chunk id.
 
 - Collection: **`llms_for_devs_v1`** (ADR-009).
 - Collection metadata: `course_id`, `embedding_model`, `embedding_dim`, `chunker_version`,
-  `index_version`, `created_at`.
+  `corpus_digest` (written by `ingest.py`, ADR-025).
 - Embeddings come from `app/adapters/embedder.py` (Ollama, ADR-004) and are passed to Chroma
   explicitly; Chroma's default embedding function is not used.
-- Startup validation compares configured `embedding_model`/dimension with the collection
-  metadata. Mismatch → refuse to query and tell the user to re-index (never mix dimensions).
+- Startup validation compares configured `embedding_model`/dimension and `chunker_version`
+  with the collection metadata. Mismatch → refuse to query and tell the user to re-index
+  (never mix dimensions).
+- `corpus_digest` is a 16-character SHA-1 over the sorted chunk ids, so it changes whenever
+  the material or the chunking changes (e.g. the 2026-11-09 translation). It is only compared
+  where the corpus is read (`ingest.py`, `doctor.py`), not on every query, because computing
+  it means re-chunking the corpus. `doctor.py` reports a stale index instead of letting the
+  app answer from material that no longer exists.
+- Changing the embedding model is a configuration change plus a re-index; the model and its
+  dimension must be changed together (`STUDYGRAPH_EMBED_MODEL`, `STUDYGRAPH_EMBEDDING_DIM`,
+  `uv run python .\scripts\ingest.py --recreate`, see the README).
 
 ## 6. Retrieval
 
@@ -124,8 +133,10 @@ collapses "nothing relevant" into "no retrieval happened".
 ## 7. Verification (run after every re-index)
 
 ```powershell
-uv run python .\scripts\ingest.py
-chroma browse llms_for_devs_v1 --local
+uv run python .\scripts\ingest.py --recreate
+uv run python .\scripts\check_retrieval.py          # rewrites retrieval-check.json
+uv run python .\scripts\doctor.py                   # every check OK, including freshness
+uv run python .\scripts\search.py "What is prompt injection and how can it be defended against?" --top-k 3
 ```
 
 Historical check (2026-10-30 against `llms_for_devs_v1`, weeks 1–3, chunker version 1):
@@ -142,19 +153,28 @@ Historical check (2026-10-30 against `llms_for_devs_v1`, weeks 1–3, chunker ve
 - [ ] An off-topic query must return low-relevance results so that `empty` handling can be
       exercised — still to record (belongs to the Phase 7 question set).
 
-Current indexing, 2026-10-31: `uv run python .\scripts\ingest.py --recreate` completed.
-**1,659 vectors upserted, collection count = 1,659**, chunker version 2, embeddings with
-`nomic-embed-text` (768 dimensions). Embedding on this machine's CPU took 569.1 seconds.
+Current index, rebuilt **2026-11-10** from the translated English corpus:
+`uv run python .\scripts\ingest.py --recreate` upserted **1,660 chunks** into
+`llms_for_devs_v1` (chunker version 2, `nomic-embed-text`, 768 dimensions,
+`corpus_digest 62313c4629307e08`). Embedding all 1,660 chunks took **14.0 s** on this machine;
+the 2026-10-31 run on CPU took 569.1 s for 1,659 chunks. `doctor.py` reports
+`Course index llms_for_devs_v1: 1660 chunks` and `Index freshness index matches the 1660
+chunks on disk`.
 
-The corpus was translated to English on 2026-11-09, which changes chunk text, chunk ids and
-distances. `scripts/check_course_material.py` now counts **1,660 chunks**, so the Chroma
-collection still holds the pre-translation index: it has to be rebuilt with `--recreate` and
-the retrieval checks have to be re-run.
+The retrieval checks were re-run against that index (`scripts/check_retrieval.py`,
+`retrieval-check.json`, 2026-11-10, top 6): all five week checks (weeks 4, 6, 8, 9, 10) find
+their own week, and both probes pass — the broad gradient-descent query ranks week 9 first and
+still reaches week 3 within the top six, and the English CNN query that previously missed the
+Danish video notes now returns week 9 in its first four hits. Distances are recorded exactly as
+retrieved; nothing was filtered or tuned to make a check pass.
+
+Before this rebuild the server held the 2026-10-31 index (chunker version 1, 153 chunks), so
+the chunker-version check made every grounded answer fail with a re-index hint. That is the
+failure mode the metadata validation exists for; it now also covers the corpus itself.
 
 ## 8. Open items
 
 - Visual quality check of complex PDF tables and formulas (the tool is chosen in ADR-023).
-- Re-index and re-run the retrieval checks after the 2026-11-09 translation.
 - Exact chunk size/overlap and `top_k` (to be measured, then recorded in the decision log).
 - Whether lecture PDFs contain tables/code that need special handling.
 - Whether a relevance threshold is meaningful for this corpus.

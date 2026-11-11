@@ -97,14 +97,53 @@ Chroma must be running during ingestion. `--recreate` rebuilds the course index 
 chunker version 2; raw material and conversations are preserved. The conversion uses no
 external LLM and skips `.env`, virtual environments and caches.
 
+The index records a fingerprint of the material it was built from. `doctor.py` compares it
+with what is on disk and says when the index is stale, so a translated or corrected lecture
+cannot silently be answered from the previous index:
+
+```powershell
+uv run python .\scripts\doctor.py      # "Index freshness: index matches the 1660 chunks on disk"
+```
+
+### Changing the embedding model
+
+The embedding model is configuration, not code (`STUDYGRAPH_EMBED_MODEL`, dimension
+`STUDYGRAPH_EMBEDDING_DIM`). A different model produces vectors that cannot be compared with
+an existing index, so the collection metadata pins the model and the dimension and the app
+refuses to query a mismatch. Change both and rebuild:
+
+```powershell
+$env:STUDYGRAPH_EMBED_MODEL = "nomic-embed-text"
+$env:STUDYGRAPH_EMBEDDING_DIM = "768"
+uv run python .\scripts\ingest.py --recreate
+```
+
+Rebuilding all 1,660 chunks took 14 s on this machine; the 2026-10-31 run on CPU took 569 s.
+
 ### Useful CLI equivalents
 
 ```powershell
 uv run python .\scripts\smoke_llm.py                 # are the models installed, and how fast?
 uv run python .\scripts\search.py "What is prompt injection?" --top-k 3
+uv run python .\scripts\check_retrieval.py           # re-run the recorded retrieval checks
 uv run python .\scripts\ask.py --compare "What is overfitting?"   # RAG vs non-RAG side by side
-uv run pytest -q                                     # 103 tests, no live services needed
+uv run pytest -q                                     # 119 tests, no live services needed
 ```
+
+### The separate regression experiment
+
+`regression/` holds the *other* experiment (linear regression vs. local LLM + RAG on the same
+held-out rows). It has its own corpus — a scikit-learn source checkout — which is third-party
+source, git-ignored and therefore **downloaded** rather than committed:
+
+```powershell
+uv run python -m regression.fetch_corpus          # ~23 MB, once
+uv run python -m regression.rag --build-index     # 962 chunks, in-process Chroma
+uv run python .\regression\compare-predictions.py # the comparison, RAG and no-RAG arms
+```
+
+`uv run python -m regression.rag --status` prints the corpus provenance and the index state.
+Details, prompts and the recorded runs: [`regression/README.md`](regression/README.md).
 
 ### Troubleshooting
 
@@ -112,12 +151,16 @@ uv run pytest -q                                     # 103 tests, no live servic
 |---|---|---|
 | `FAIL no Markdown found inside a week<N> directory` | no `.md` under any `week<N>` directory | put the files under `docs/RAG/llm_for_developers/llm_friendly/week<N>/` |
 | `Collection … is not available` / `0 chunks` | the material was never indexed | `uv run python .\scripts\ingest.py` |
+| `Collection … does not match the current configuration` | the index was built with another chunker/embedding model | `uv run python .\scripts\ingest.py --recreate` |
+| `Index freshness … index holds chunks from different material` | the material changed after the last indexing run (e.g. the English translation) | `uv run python .\scripts\ingest.py --recreate` |
 | `Cannot reach the Chroma server` | server not running | `uv run chroma run --path .\data\chroma` in its own terminal |
 | `chroma: command not found` | the CLI lives in `.venv\Scripts` | use `uv run chroma …` (never a bare `chroma`) |
 | `Cannot reach the model …` in the chat | Ollama stopped or model missing | start Ollama, `uv run python .\scripts\smoke_llm.py` |
 | `STUDYGRAPH_EMBEDDING_DIM` mismatch | different embedding model than the index | set the dimension, then `uv run python .\scripts\ingest.py --recreate` |
 | `ModuleNotFoundError: matplotlib` / `sklearn` in `regression/*.ipynb` | `uv sync` installs only what `pyproject.toml` declares, and prunes everything else | `uv sync`, then restart the kernel (ADR-021) |
-| Answers say "retrieval failed" | Chroma down, or collection missing | see the two rows above |
+| `the scikit-learn corpus is missing` (regression) | the third-party corpus is git-ignored and was never downloaded | `uv run python -m regression.fetch_corpus` |
+| `the index in …\.chroma does not match the corpus/settings` (regression) | new corpus, ref or `RAG_EMBED_MODEL` | `uv run python -m regression.rag --build-index --recreate` |
+| Answers say "retrieval failed" | Chroma down, or collection missing | see the rows above |
 
 Local data lives in `data/` (`studygraph.db`, `chroma/`) and is git-ignored. Delete
 `data/studygraph.db` to start with a fresh database and the seeded Buddy pair.
@@ -141,7 +184,8 @@ StudyGraph is an educational software prototype exploring local LLMs and Retriev
 Generation for course-specific study assistance.
 
 Current state: the application is working — three Streamlit pages on top of the same services the
-CLI uses, 103 passing tests and an 85-document course corpus (1,660 chunks). The corpus was
-translated to English on 2026-11-09, so the Chroma index has to be rebuilt with
-`uv run python .\scripts\ingest.py --recreate` before the app answers from it. See
+CLI uses, 119 passing tests and an 85-document course corpus (1,660 chunks). The Chroma index was
+rebuilt from the translated English corpus on 2026-11-10 (`llms_for_devs_v1`, 1,660 chunks,
+corpus digest `62313c4629307e08`), so course-grounded answers come from the current material;
+`doctor.py` now reports when the index and the material on disk diverge. See
 [`docs/plan/status.md`](docs/plan/status.md) for the live status, blockers and next steps.

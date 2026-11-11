@@ -1,6 +1,6 @@
 # StudyGraph — Project Status
 
-**Last updated:** 2026-11-09 (session 12) · **Branch:** `regression` ·
+**Last updated:** 2026-11-10 (session 14) · **Branch:** `regression` ·
 **Current phase:** 7 of 9 complete (0–6, 8) — the regression comparison is done, the RAG
 evaluation (Phase 7) is next
 
@@ -13,9 +13,12 @@ same services the CLI uses: a Buddy is created with the three T's (Traits, Tone,
 optional course material, a conversation freezes that configuration, the Task is chosen per
 message, answers stream token by token, and a course-grounded answer lists the retrieved
 chunks with their distances while a general answer says so explicitly. Verified in the browser
-on 2026-10-30. 103 tests pass; ruff and mypy are clean. What remains: the formal RAG
-evaluation (Phase 7) and packaging + synopsis (Phase 9). The linear-regression comparison
-(Phase 8) is finished and documented in `docs/evaluation/`.
+on 2026-10-30 and again through the CLI on 2026-11-10, after the index was rebuilt from the
+translated English corpus (1,660 chunks): a course Buddy retrieves 4 passages with chunk ids and
+distances, a Buddy without a course reports `skipped` and lists no sources. 119 tests pass; ruff
+and mypy are clean. What remains: the formal RAG evaluation (Phase 7) and packaging + synopsis
+(Phase 9). The linear-regression comparison (Phase 8) is finished and documented in
+`docs/evaluation/`.
 
 ## 2. What exists today
 
@@ -27,13 +30,14 @@ evaluation (Phase 7) and packaging + synopsis (Phase 9). The linear-regression c
 | Regression/notebook extras | **Done** — `regression` + `notebook` dependency groups (matplotlib 3.11.2, scikit-learn 1.9.1, ipykernel 7.4.0) installed by a plain `uv sync` (ADR-021) |
 | Domain model, snapshots, SQLite persistence | **Done** |
 | Prompt construction (three T's + Task, versioned templates) | **Done** |
-| Course material and chunking (**1,660 chunks**, 85 documents) | **Done** — 73 sources covered, weeks 1, 2, 3, 4, 6, 8, 9, 10 (ADR-023); the Chroma collection still holds the pre-translation 1,659 chunks |
+| Course material and chunking (**1,660 chunks**, 85 documents) | **Done** — 73 sources covered, weeks 1, 2, 3, 4, 6, 8, 9, 10 (ADR-023); the Chroma collection was rebuilt from the translated corpus on 2026-11-10 and records `corpus_digest 62313c4629307e08` (ADR-025) |
 | LangGraph chat flow (batch + streaming) | **Done** |
 | Services (Buddy, Chat) + seeded default Buddy pair | **Done** |
 | **Streamlit UI: Chat, Buddies, About** | **Done** — streaming, mode badge, sources expander |
-| CLI tools (`smoke_llm`, `ingest`, `search`, `ask`) | **Done** |
+| CLI tools (`smoke_llm`, `ingest`, `search`, `ask`, `check_retrieval`, `doctor`) | **Done** — `check_retrieval.py` makes the recorded retrieval checks reproducible |
+| Regression corpus (`regression/scikit-learn-main`) | **Downloaded, not committed** — `uv run python -m regression.fetch_corpus` (ADR-024); ref `main`, commit `bf4348196…`, sklearn `1.10.dev0`, 962 chunks |
 | Evaluation results | RAG comparison still a template; the regression experiment is **done** — `docs/evaluation/regression-experiment.md` (all runs), `experiment-types.md` (the six experiment types + coverage), `regression-vs-rag.md` (the required comparison), backed by `regression/runs/` |
-| Tests | **103 passing** (unit, integration, UI via `AppTest`) |
+| Tests | **119 passing** (unit, integration, UI via `AppTest`) |
 
 ## 3. Environment verified on 2026-10-30
 
@@ -44,22 +48,38 @@ evaluation (Phase 7) and packaging + synopsis (Phase 9). The linear-regression c
 | `uv run pytest` | 103 passed |
 | `uv run ruff check .` / `uv run mypy app` | clean / clean |
 | Ollama | `llama3.2:3b` (2.9 s short answer), `nomic-embed-text` (768 d) |
-| Chroma | `http://localhost:8000`, `llms_for_devs_v1`, **153 chunks** at that time (weeks 1–3, 8 documents); the current corpus is 1,659 chunks (see below) |
+| Chroma | `http://localhost:8000`, `llms_for_devs_v1`, **153 chunks** at that time (weeks 1–3, 8 documents); the current index is 1,660 chunks (see below) |
 | Doctor | `uv run python .\scripts\doctor.py` → all checks pass (also verified to fail loudly with a hint when the collection is missing) |
+
+The table above is the 2026-10-30 record. Current state, 2026-11-10:
 | App | `uv run streamlit run app/main.py` → `http://localhost:8501`, dark theme |
 | Browser run | Buddy created with course → 📚 Course-grounded + `Sources (4)` (0.425/0.689/0.793/0.794); Buddy without course → 🧠 General, no sources |
 
-Current material check, 2026-10-31: `uv run --group conversion python .\scripts\check_course_material.py --verify-pdfs`
-reported 0 errors. `uv run python .\scripts\ingest.py --recreate` rebuilt `llms_for_devs_v1`
-with **1,659 chunks**, the embedding model `nomic-embed-text` and chunker version 2. Embedding on
-this machine's CPU took **569.1 seconds**. The table above is historical environment evidence from 2026-10-30.
-`doctor.py` reports every check as OK with 85 documents and 1,659 indexed chunks.
-Concrete retrieval samples and limitations are stored in
-`docs/RAG/llm_for_developers/llm_friendly/retrieval-check.json`; in particular cross-language
-retrieval between English questions and Danish media notes needed review in phase 7. The corpus
-was translated to English on 2026-11-09, so that cross-language difference no longer applies;
-`check_course_material.py` now counts 1,660 chunks, so the index and the retrieval samples
-still have to be regenerated.
+Re-indexed on 2026-11-10: `uv run python .\scripts\ingest.py --recreate` rebuilt
+`llms_for_devs_v1` with **1,660 chunks**, embedding model `nomic-embed-text`, chunker version 2
+and `corpus_digest 62313c4629307e08`; embedding took **14.0 s** on this machine (the 2026-10-31
+run on CPU took 569.1 s for 1,659 chunks).
+Before this run the server still held the 2026-10-31 index (chunker version 1, 153 chunks), so
+`validate_collection_metadata` rejected it and every grounded answer failed — the app was
+correctly refusing to answer, but nothing compared the index with the material on disk. That gap
+is closed by the freshness check (ADR-025). `doctor.py` now reports:
+
+```text
+[OK  ] Course index     llms_for_devs_v1: 1660 chunks
+[OK  ] Index freshness  index matches the 1660 chunks on disk (digest 62313c4629307e08)
+```
+
+`scripts/check_retrieval.py` regenerated `retrieval-check.json`: weeks 4, 6, 8, 9 and 10 are
+each found for their own query and both probes pass (the English CNN query that missed the
+Danish video notes before the translation now returns week 9 four times). Retrieval samples and
+limitations stay in `docs/RAG/llm_for_developers/llm_friendly/retrieval-check.json`.
+
+The regression experiment's corpus is not committed. `uv run python -m regression.fetch_corpus`
+downloaded it on 2026-11-10 (ref `main`, commit `bf4348196…`, scikit-learn `1.10.dev0`,
+`regression/.corpus.json`) and `uv run python -m regression.rag --build-index --recreate`
+re-indexed **962 chunks** with the same chunker and embedding model as the recorded runs, so
+those results remain reproducible. `python -m regression.rag --status` reports corpus, index
+and models in one screen.
 
 ## 4. Open decisions
 
@@ -87,13 +107,15 @@ alone, and `scripts/doctor.py` reports every prerequisite with a fix hint.
 
 1. **Phase 7 — evaluation** (`SG-070` … `SG-072`): 8–10 questions (including 2–3 the slides do
    not cover), answers from the app or `ask.py --compare`, ratings filled into
-   `docs/evaluation/rag-comparison-results.md`.
+   `docs/evaluation/rag-comparison-results.md`. The index now matches the translated material,
+   so these answers come from the current corpus.
 2. **Phase 9 — packaging** (`SG-090` … `SG-094`): failure-mode pass, README polish, demo
    rehearsal, synopsis (≤ 5 pages). The regression material for the synopsis is ready to quote:
    §12 of `docs/evaluation/regression-experiment.md` is a 200-word draft and §7–§9 hold the
    measured tables.
-3. **Rebuild the corpus index** (`uv run python .\scripts\ingest.py --recreate`) before the
-   Phase 7 questions are answered, so they come from the translated English material.
+3. **Optional — the last unrun experiment type**: a cloud model asked for a prediction *without*
+   generating code (`experiment-types.md` §3.5 holds a ready-to-paste prompt). Small effort, it
+   closes the only documented gap in the type matrix.
 
 ## 7. Resume checklist for a new session or agent
 
@@ -122,4 +144,6 @@ alone, and `scripts/doctor.py` reports every prerequisite with a fix hint.
 | 2026-11-09 (12) | Evaluation of the regression exercise (Phase 8 complete) | Wrote the missing LLM arm of the comparison and then the two evaluation documents. New `regression/compare-predictions.py` reproduces the 70/15/15 split of `non-llm.ipynb` exactly (train/val/test R2 0.9799/0.9819/0.9764 reproduce to four decimals), fits least squares on the 361 training rows, builds an in-memory Chroma collection from **12 reference rows of the training split only**, and asks `qwen2.5-coder:7b` for three held-out predictions both **with** and **without** retrieval — it is told not to write or execute code. Measured MAE over the three held-out rows: linear regression **13.28**, LLM + RAG **107.15**, LLM without retrieval **368.82**; with retrieval the model copied the nearest retrieved revenue verbatim (55.39, 552.82) and missed the case where no warm reference row was retrieved (630 against 918), because embeddings rank by wording, not by numerical distance (distances 0.485–0.535, nearly flat). Evidence in `regression/runs/predict/{results.csv,report.json,prompt.md}`. Documentation: new `docs/evaluation/regression-experiment.md` (every one of the 15 local runs + 3 cloud runs, a five-way failure taxonomy, the prompt-framing/`top_k` comparison, limitations, conclusion and a ready-to-paste synopsis paragraph), `docs/evaluation/regression-vs-rag.md` filled in with real numbers, `regression/README.md` corrected (the house-price notebook lives in `runs/cloud/deepseek/`, not at the folder root; `runs/cloud/` and `runs/predict/` documented) and `chat.py`'s docstring fixed (files go to `runs/rag/cmd/<n>/`, not `out/`). Re-executed `cmd/5` (alpha 0.001, coef 21.44362486, R2 0.9797) and `ui/7` (fails as recorded) to verify the archive. Nothing under `app/` was touched; the StudyGraph suite is unchanged. |
 
 | 2026-11-09 (13) | Coverage map of the six experiment types | New `docs/evaluation/experiment-types.md` + `docs/evaluation/runs-overview.csv`: the six experiment types the group set out to compare (1 manual, 2 LLM + RAG with code, 3 LLM without RAG and without code, 4 LLM without RAG with code, 5 cloud without code, 6 cloud with code) laid out as a retrieval × code-generation matrix. Re-verified the artefacts it quotes by re-executing `cmd/4`, `ui/1` and `ui/2` (`cmd/4` coef 21.44362551; `ui/2` MSE 623.0964; `ui/1` `FileNotFoundError: data.csv`). Findings: types 1–4 and 6 all have evidence (1 of 1, 6 of 13, 2 of 2, 0 of 2, 1 of 3 usable), the "without code" question *was* tried twice — `ui/8` (top_k 0, explicitly "no code", but the system prompt forced a python block so the answer raised `SyntaxError`) and the `compare-predictions.py` no-retrieval arm (MAE 368.82) — and there is also an unlisted but useful quadrant, LLM **+ RAG without code** (MAE 107.15). The single real gap is **#5, a cloud model asked for a prediction without code: never run**; §3.5 of the document holds a ready-to-paste prompt with the exact reference rows and the two scoring targets so it can be filled in by hand. No code changed except documentation; tests, ruff and mypy untouched (103 passed earlier this session). |
+
+| 2026-11-10 (14) | Setup repair: regression corpus, index freshness, translated-corpus re-index | Found and fixed three setup defects. **(1) The regression corpus could not be obtained from the repository.** `regression/scikit-learn-main` is git-ignored, so a fresh clone failed `--build-index` with "0 chunks from 0 files" and no error. New `regression/fetch_corpus.py` (`uv run python -m regression.fetch_corpus`) downloads the archive for a ref (default `main`), verifies the paths the index patterns need, stages the download before replacing the corpus, and records ref/commit/version/date in `.corpus.json` (ADR-024). `rag.py` now fails with that hint, records `embedding_model`, `chunker_version`, `corpus_ref`, `corpus_commit` and a corpus fingerprint in the collection metadata, refuses to query an index built by another model/chunker/corpus, and has `--status`. Verified live: download → `main`, commit `bf4348196…`, sklearn `1.10.dev0`; `--build-index --recreate` re-indexed **962 chunks** in 16.4 s, matching the recorded runs; a retrieval query returned `sklearn/linear_model/_base.py:634-647` at 0.583. **(2) The RAG index was stale and unusable.** The running Chroma server held the 2026-10-31 index (chunker 1, **153 chunks**), so `validate_collection_metadata` made every grounded answer fail as "retrieval failed" — the app was correct but nothing compared the index with the material on disk. `ingest.py` now stores `corpus_digest` (SHA-1 over sorted chunk ids) and `doctor.py` gained an "Index freshness" check (ADR-025). Rebuilt from the translated English corpus: **1,660 chunks**, digest `62313c4629307e08`, 14.0 s; `doctor.py` all green; `ask.py --compare` shows the course arm with `ok` + 4 cited chunks (0.556–0.871) and the general arm with `skipped` and no sources. **(3) The recorded retrieval evidence was pre-translation.** New `scripts/check_retrieval.py` re-runs the fixed query set and rewrites `retrieval-check.json`; all seven checks pass, and the English CNN query that missed the Danish video notes now returns week 9 four times. Docs updated (README with a "Changing the embedding model" section and the regression setup, `regression/README.md`, `knowledge-base.md` §5/§7, `regression-experiment.md` §2.2, status, ADR-024/025); **119 tests** pass (16 new: corpus digest, collection metadata/staleness, downloader checks), ruff and mypy clean. Follow-up in the same session: `regression/compare-predictions.py` advertised `--no-rag` in its docstring but `main()` parsed no arguments at all, so that flag crashed; it now has `--no-rag`, `--model`, `--embed-model`, `--ollama-url`, `--top-k`, `--reference-rows` and `--out`, a readable failure when Ollama is down, and unchanged defaults — re-ran both arms into a throw-away folder and got the recorded **13.28 / 107.15 / 368.82** again (temp output deleted, `runs/predict/` untouched). Also fixed `scripts/doctor.py`, which crashed with `UnicodeEncodeError` on the `→` hint whenever a check failed on a cp1252 console (so the stopped-Chroma path printed a traceback instead of the fix); it now reconfigures stdout to UTF-8 like the other scripts, verified on both the green path and a deliberately wrong Chroma port. |
 

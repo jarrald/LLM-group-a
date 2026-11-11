@@ -29,7 +29,12 @@ only after both predictions have been produced.
 uv run python .\regression\compare-predictions.py
 ```
 
-One command runs both approaches. `sklearn.linear_model.LinearRegression` fitted on the 361
+One command runs both approaches. `--no-rag` records only the no-retrieval arm, `--model` and
+`--top-k` re-run the LLM arm with another configuration, and `--out <folder>` keeps a
+non-default run away from the reference evidence in `regression/runs/predict/`. Running the
+defaults again after the 2026-11-10 refactor reproduced 13.28 / 107.15 / 368.82 exactly.
+
+`sklearn.linear_model.LinearRegression` fitted on the 361
 training rows only:
 
 ```text

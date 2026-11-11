@@ -1,11 +1,17 @@
 """Minimal local RAG over the scikit-learn checkout: prompt in, runnable file out.
 
-    uv run python -m regression.rag --build-index    # once, ~15 s (962 chunks)
-    uv run python -m regression.chat                 # paste a prompt, get a file back
-    uv run streamlit run regression/web.py           # same thing in a browser
+    uv run python -m regression.fetch_corpus          # once: download scikit-learn (~23 MB)
+    uv run python -m regression.rag --build-index     # once, ~15 s (962 chunks)
+    uv run python -m regression.chat                  # paste a prompt, get a file back
+    uv run streamlit run regression/web.py            # same thing in a browser
 
 The index lives in ``regression/.chroma`` (in-process Chroma, no server) and every run is
 archived under ``regression/runs/rag/``. Nothing here is imported by the StudyGraph app.
+
+The corpus is third-party source and is git-ignored, so it is *downloaded*, never committed:
+``regression/fetch_corpus.py`` puts it in ``regression/scikit-learn-main`` and records the
+ref and commit in ``.corpus.json``. The index stores which embedding model and chunker built
+it, so switching ``RAG_EMBED_MODEL`` cannot silently query vectors it does not match.
 """
 
 from __future__ import annotations
@@ -25,11 +31,12 @@ from pathlib import Path
 import chromadb
 import ollama
 
+from regression.fetch_corpus import CORPUS, corpus_ready, missing_markers, read_provenance
+
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 REGRESSION = Path(__file__).resolve().parent
-CORPUS = Path(os.getenv("RAG_CORPUS_ROOT", REGRESSION / "scikit-learn-main"))
 CHROMA_PATH = REGRESSION / ".chroma"
 RUNS_DIR = REGRESSION / "runs"
 
@@ -38,6 +45,9 @@ CHAT_MODEL = os.getenv("RAG_CHAT_MODEL", "qwen2.5-coder:7b")
 EMBED_MODEL = os.getenv("RAG_EMBED_MODEL", "nomic-embed-text")
 COLLECTION = os.getenv("RAG_COLLECTION", "sklearn_code_v1")
 TOP_K = int(os.getenv("RAG_TOP_K", "8"))
+
+CORPUS_HINT = "uv run python -m regression.fetch_corpus"
+REBUILD_HINT = "uv run python -m regression.rag --build-index --recreate"
 
 #: What gets indexed. Small on purpose: these are the files that answer "write me a regression".
 INCLUDE = (
@@ -93,6 +103,46 @@ class Answer:
     hits: list[Hit]
     seconds: float
     tokens_per_second: float | None
+
+
+def _corpus_digest() -> str:
+    """A cheap fingerprint of the corpus (path + size of every indexed file)."""
+    hasher = hashlib.sha1()
+    for path in _iter_files():
+        relative = path.relative_to(CORPUS).as_posix()
+        hasher.update(f"{relative}|{path.stat().st_size}\n".encode())
+    return hasher.hexdigest()[:16]
+
+
+def _index_metadata() -> dict[str, str]:
+    """Collection metadata that pins what built the index (model, chunker, corpus)."""
+    record = read_provenance(CORPUS)
+    metadata = {
+        "embedding_model": EMBED_MODEL,
+        "chunker_version": CHUNKER_VERSION,
+        "corpus_ref": str(record.get("ref") or "unknown"),
+        "corpus_commit": str(record.get("commit") or "unknown"),
+    }
+    if corpus_ready(CORPUS):
+        metadata["corpus_digest"] = _corpus_digest()
+    return metadata
+
+
+def require_corpus() -> None:
+    """Fail with a copy-pasteable hint when the third-party corpus has not been downloaded."""
+    if corpus_ready(CORPUS):
+        return
+    raise RuntimeError(f"the scikit-learn corpus is missing at {CORPUS}. Download it once with: {CORPUS_HINT}")
+
+
+def check_index(collection: object) -> None:
+    """Refuse to query an index that another model, chunker or corpus built."""
+    stored = getattr(collection, "metadata", None) or {}
+    expected = {key: value for key, value in _index_metadata().items() if key in {"embedding_model", "chunker_version", "corpus_digest"}}
+    mismatched = {key: (stored.get(key), value) for key, value in expected.items() if str(stored.get(key)) != str(value)}
+    if mismatched:
+        details = ", ".join(f"{key}: index={old!r} now={new!r}" for key, (old, new) in mismatched.items())
+        raise RuntimeError(f"the index in {CHROMA_PATH} does not match the corpus/settings ({details}). Rebuild it with: {REBUILD_HINT}")
 
 
 def _chunks_for(rel: str, source: str) -> list[dict[str, object]]:
@@ -193,16 +243,33 @@ def _iter_files() -> list[Path]:
 
 def build_index(recreate: bool = False) -> int:
     """Chunk and embed the corpus into the local Chroma directory; idempotent."""
+    require_corpus()
+    record = read_provenance(CORPUS)
+    print(f"corpus: {CORPUS}")
+    print(f"        ref {record.get('ref', 'unknown')}, commit {record.get('commit', 'unknown')}, scikit-learn {record.get('version', 'unknown')}")
+    print(f"embedding model: {EMBED_MODEL}")
+
     client = chromadb.PersistentClient(path=str(CHROMA_PATH))
     if recreate:
         try:
             client.delete_collection(COLLECTION)
         except Exception:  # nothing to delete
             pass
-    collection = client.get_or_create_collection(COLLECTION, embedding_function=None)
+    else:
+        try:
+            check_index(client.get_collection(COLLECTION, embedding_function=None))
+        except RuntimeError:
+            raise
+        except Exception:  # no collection yet
+            pass
+    collection = client.get_or_create_collection(COLLECTION, metadata=_index_metadata(), embedding_function=None)
+    # An existing collection keeps its old metadata, so the provenance/digest is written explicitly.
+    collection.modify(metadata=_index_metadata())
 
     rows: list[tuple[str, dict[str, object]]] = []
     files = _iter_files()
+    if not files:
+        raise RuntimeError(f"none of the INCLUDE patterns matched a file under {CORPUS}; the checkout looks incomplete. Re-download it with: {CORPUS_HINT}")
     for path in files:
         rel = path.relative_to(CORPUS).as_posix()
         for chunk in _chunks_for(rel, path.read_text(encoding="utf-8", errors="replace")):
@@ -231,7 +298,11 @@ def retrieve(query: str, top_k: int = TOP_K) -> list[Hit]:
     if top_k < 1:
         return []
     vector = ollama.Client(host=OLLAMA_URL, timeout=600).embed(model=EMBED_MODEL, input=[query], truncate=True).embeddings[0]
-    collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION, embedding_function=None)
+    try:
+        collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION, embedding_function=None)
+    except Exception as exc:
+        raise RuntimeError(f"no index in {CHROMA_PATH} ({exc}). Build it with: uv run python -m regression.rag --build-index") from exc
+    check_index(collection)
     result = collection.query(query_embeddings=[list(vector)], n_results=top_k, include=["documents", "metadatas", "distances"])
     return [
         Hit(path=str(metadata["path"]), symbol=str(metadata["symbol"]), start=int(metadata["start_line"]), end=int(metadata["end_line"]), distance=float(distance), text=str(text))
@@ -440,18 +511,49 @@ def _cell(source: str) -> dict[str, object]:
     return {"cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [], "source": source.splitlines(keepends=True)}
 
 
+def status() -> int:
+    """Print what the experiment is set up with: corpus, index, models, chunker."""
+    record = read_provenance(CORPUS)
+    print(f"corpus          : {CORPUS}")
+    if corpus_ready(CORPUS):
+        print(f"                  ref {record.get('ref', 'unknown')}, commit {record.get('commit', 'unknown')}, scikit-learn {record.get('version', 'unknown')}")
+    else:
+        print(f"                  MISSING ({', '.join(missing_markers(CORPUS))}) -> {CORPUS_HINT}")
+    print(f"index           : {CHROMA_PATH}")
+    try:
+        collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION, embedding_function=None)
+    except Exception:
+        print(f"                  collection '{COLLECTION}' not built yet -> uv run python -m regression.rag --build-index")
+    else:
+        print(f"                  collection '{COLLECTION}': {collection.count()} chunks, metadata {collection.metadata}")
+        try:
+            check_index(collection)
+        except RuntimeError as exc:
+            print(f"                  STALE: {exc}")
+    print(f"chat model      : {CHAT_MODEL} at {OLLAMA_URL}")
+    print(f"embedding model : {EMBED_MODEL} (chunker {CHUNKER_VERSION}, top_k {TOP_K})")
+    return 0
+
+
 def main() -> int:
-    """CLI for (re)building the index."""
+    """CLI for (re)building the index and inspecting the setup."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Build the local scikit-learn index used by regression/chat.py and regression/web.py.")
     parser.add_argument("--build-index", action="store_true", help="chunk and embed the INCLUDE patterns")
     parser.add_argument("--recreate", action="store_true", help="delete the existing collection first")
+    parser.add_argument("--status", action="store_true", help="print the corpus, index and model settings and exit")
     args = parser.parse_args()
+    if args.status:
+        return status()
     if not args.build_index:
         parser.print_help()
         return 0
-    build_index(recreate=args.recreate)
+    try:
+        build_index(recreate=args.recreate)
+    except RuntimeError as exc:
+        print(f"FAIL {exc}")
+        return 1
     return 0
 
 

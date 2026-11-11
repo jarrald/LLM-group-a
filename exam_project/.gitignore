@@ -35,8 +35,10 @@ regression/images/
 regression/out/
 regression/.chroma/
 
-# --- Third-party corpus: the downloaded scikit-learn checkout (17 MB, not ours) ---
+# --- Third-party corpus: the downloaded scikit-learn checkout (~23 MB, not ours) ---
 regression/scikit-learn-main/
+# Staging directory of regression/fetch_corpus.py; only exists during a download.
+regression/.scikit-learn-main.download/
 
 # --- Tutorial notebooks downloaded with the corpus ---
 regression/scikit-learn-main/**/*.ipynb

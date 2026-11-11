@@ -3,14 +3,39 @@
 Paste a prompt about scikit-learn, get a runnable file back. That is the whole experiment:
 is a local model + retrieval good enough to write code you can actually use?
 
-## Setup (once, ~20 s)
+## Setup (once, ~1–2 minutes)
+
+The retrieval corpus is a **third-party scikit-learn source checkout**. It is git-ignored
+(~23 MB, 1 600+ files), so a fresh clone of this repository does **not** contain it — it has
+to be downloaded before the index can be built:
 
 ```powershell
-uv run python -m regression.rag --build-index
+uv run python -m regression.fetch_corpus          # downloads scikit-learn into regression/scikit-learn-main
+uv run python -m regression.rag --build-index     # chunk + embed it: 962 chunks, nomic-embed-text
 ```
 
-Indexes the scikit-learn checkout into `regression/.chroma` (962 chunks, `nomic-embed-text`).
-No server needed — it runs in-process.
+`fetch_corpus.py` downloads the repository archive (no `git` needed) and writes
+`regression/scikit-learn-main/.corpus.json` with the ref, the commit GitHub reports for it and
+the `scikit-learn.__version__` the checkout declares. The default ref is `main`; the recorded
+runs in `runs/` used a `main` checkout reporting `1.10.dev0` and 962 chunks. To pin a release
+instead:
+
+```powershell
+uv run python -m regression.fetch_corpus --ref 1.6.1 --force
+uv run python -m regression.rag --build-index --recreate
+```
+
+The index needs no server: it is an in-process Chroma database in `regression/.chroma`.
+
+**Check the setup in one command:**
+
+```powershell
+uv run python -m regression.rag --status
+```
+
+It prints the corpus path and provenance, the collection with its chunk count and metadata,
+and the chat/embedding models. A stale or foreign index is reported as `STALE:` with the
+command that rebuilds it.
 
 ## Use
 
@@ -42,6 +67,31 @@ The answer streams in, is saved to `regression/runs/rag/ui/<n>/`, and can be dow
 Attached files are **not** embedded: their text goes into the prompt in full, because a small
 file loses more than it gains from top-k retrieval. Above 20,000 characters the page warns you
 and sends only what fits. Nothing is kept between sessions. Each run folder also receives a copy of the attached files and its path is given to the model, so generated code can read the data instead of inventing a placeholder path.
+
+## Configuration
+
+Everything is read from the environment, so an experiment can be changed without editing code:
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `RAG_CHAT_MODEL` | `qwen2.5-coder:7b` | Ollama chat model (also `--model` on `chat.py`) |
+| `RAG_EMBED_MODEL` | `nomic-embed-text` | embedding model for the corpus and the query |
+| `RAG_TOP_K` | `8` | excerpts per prompt (also `--top-k`; `0` = no retrieval) |
+| `RAG_COLLECTION` | `sklearn_code_v1` | collection name inside `regression/.chroma` |
+| `RAG_CORPUS_ROOT` | `regression/scikit-learn-main` | where the corpus lives |
+| `RAG_OLLAMA_URL` | `http://127.0.0.1:11434` | Ollama endpoint |
+
+**Changing the embedding model** means rebuilding the index — the stored vectors would no
+longer match the query vectors:
+
+```powershell
+$env:RAG_EMBED_MODEL = "embeddinggemma"
+uv run python -m regression.rag --build-index --recreate
+```
+
+The collection records the model, the chunker version and a fingerprint of the corpus it was
+built from. Building, querying or `--status` on an index that was made by something else
+fails with the exact rebuild command instead of returning meaningless neighbours.
 
 ## The four T's
 
@@ -118,8 +168,16 @@ Prediction comparison, three held-out rows of `datasets/ice_cream_regression.csv
 | Local LLM, no retrieval | 368.82 |
 
 ```powershell
-uv run python .\regression\compare-predictions.py
+uv run python .\regression\compare-predictions.py                      # both arms, the recorded configuration
+uv run python .\regression\compare-predictions.py --no-rag             # only the no-retrieval arm
+uv run python .\regression\compare-predictions.py --model llama3.2:3b --out .\regression\runs\predict\llama-3b
 ```
+
+The defaults reproduce the table above exactly (`qwen2.5-coder:7b`, `nomic-embed-text`, top 3 of
+12 reference rows). `--top-k`, `--reference-rows` and `--embed-model` are available too; write a
+non-default run to its own `--out` folder so the reference evidence in `runs/predict/` stays
+intact. Every run writes `results.csv`, `report.json` (each answer, the retrieved rows with
+distances, timings) and `prompt.md` (the exact prompts).
 
 The conclusion: local LLM development sometimes works, but not usefully at 8 GB VRAM — the model
 has to be small, the context window has to be guarded, and prompt engineering or RAG do not
@@ -139,7 +197,8 @@ compensate. A trained model stays the right tool for the numbers themselves.
 
 | Path | What |
 |---|---|
-| `rag.py` | index build, retrieval, one Ollama call, writing the file |
+| `fetch_corpus.py` | downloads the scikit-learn corpus (git-ignored) and records its provenance |
+| `rag.py` | index build, index checks, retrieval, one Ollama call, writing the file; `--status` |
 | `chat.py` | the prompt loop |
 | `web.py` | the Streamlit page (attachments, 0–12 excerpts, streaming, download) |
 | `compare-predictions.py` | the comparison exercise: linear regression vs. local LLM + RAG on the same held-out rows |
@@ -154,13 +213,16 @@ compensate. A trained model stays the right tool for the numbers themselves.
 | `non-llm.ipynb` | the hand-written ice-cream regression (70/15/15 split, three plots) |
 | `ollama-no-rag.md` | the no-retrieval baseline run, with the model's full reasoning trace |
 | `datasets/` | `ice_cream_regression.csv`, `ice_cream_polynomial.csv`, `house prices.csv` |
-| `scikit-learn-main/` | the corpus (git-ignored, 17 MB) |
+| `scikit-learn-main/` | the corpus, downloaded by `fetch_corpus.py` (git-ignored, ~23 MB, `main` @ `1.10.dev0`) |
 
 ## If something goes wrong
 
 | Symptom | Fix |
 |---|---|
-| `Collection ... not found` | `uv run python -m regression.rag --build-index` |
+| `the scikit-learn corpus is missing` | `uv run python -m regression.fetch_corpus` |
+| `no index in …\.chroma` | `uv run python -m regression.rag --build-index` |
+| `does not match the corpus/settings` | `uv run python -m regression.rag --build-index --recreate` (new corpus, ref or embedding model) |
+| `cannot download …` in `fetch_corpus.py` | no network, or a ref that does not exist: retry, or use `--ref main` |
 | Generation hangs | another model may be loading: check `ollama ps` |
 | Code has wrong column names | include the CSV path in the prompt so it sees the header |
 | Nothing relevant retrieved | ask with more scikit-learn words (`LinearRegression`, `train_test_split`, …) |
