@@ -41,6 +41,7 @@ command that rebuilds it.
 
 ```powershell
 uv run python -m regression.chat
+uv run python -m regression.chat --list-models     # what is installed, and what can chat
 ```
 
 - Paste your prompt. It can span several lines — press Enter on an empty line to send.
@@ -63,6 +64,14 @@ uv run streamlit run regression\web.py
 Opens `http://localhost:8501`. Paste instructions, attach any text file you want the model to
 read, pick how many scikit-learn excerpts to include (0 = only your files), press Generate.
 The answer streams in, is saved to `regression/runs/rag/ui/<n>/`, and can be downloaded.
+
+The sidebar **lists the chat models installed in Ollama** (embedding-only models such as
+`nomic-embed-text` are filtered out using each model's capabilities) and starts on
+`RAG_CHAT_MODEL`. Switch models between runs without editing anything; **Refresh model list**
+re-reads Ollama after a `ollama pull`. The model that actually answered is shown under the
+result and recorded as `- model:` in the run's `prompt.md`, so runs made with different models
+stay distinguishable. If Ollama is not running, the picker says so and falls back to a text
+field instead of breaking the page.
 
 Attached files are **not** embedded: their text goes into the prompt in full, because a small
 file loses more than it gains from top-k retrieval. Above 20,000 characters the page warns you
@@ -198,9 +207,9 @@ compensate. A trained model stays the right tool for the numbers themselves.
 | Path | What |
 |---|---|
 | `fetch_corpus.py` | downloads the scikit-learn corpus (git-ignored) and records its provenance |
-| `rag.py` | index build, index checks, retrieval, one Ollama call, writing the file; `--status` |
-| `chat.py` | the prompt loop |
-| `web.py` | the Streamlit page (attachments, 0–12 excerpts, streaming, download) |
+| `rag.py` | index build, index checks, retrieval, model listing, one Ollama call, writing the file; `--status` |
+| `chat.py` | the prompt loop (`--list-models`, `--model`) |
+| `web.py` | the Streamlit page (model picker, attachments, 0–12 excerpts, streaming, download) |
 | `compare-predictions.py` | the comparison exercise: linear regression vs. local LLM + RAG on the same held-out rows |
 | `PROMPTS.md` | every prompt the model sees, plus the ones already run |
 | `.chroma/` | the index (git-ignored) |

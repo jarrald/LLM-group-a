@@ -90,6 +90,9 @@ StudyGraph app and every measured local number in this document come from the lo
    the run folder; the prompt then names that on-disk path.
 5. The answer's single fenced Python block is written to `output.py`, or to `output.ipynb`
    when a notebook was requested. Every run is archived with the full prompt it received.
+6. The chat model is chosen at run time from the models installed in Ollama (the web page's
+   sidebar lists them, `--model` does the same on the CLI), and the model that answered is
+   written into the run record. The recorded runs all used `qwen2.5-coder:7b`.
 
 Each run folder therefore contains the instruction, the retrieved excerpts with distances, the
 complete system + user prompt, and the exact file the model produced.

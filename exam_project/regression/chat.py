@@ -2,9 +2,12 @@
 
     uv run python -m regression.chat
     uv run python -m regression.chat --model llama3.2:3b --ask "make a script that ..."
+    uv run python -m regression.chat --list-models
 
 A prompt may span several lines: press Enter on an empty line to send it. The generated
 file is written to ``regression/runs/rag/cmd/<n>/`` (``.ipynb`` when you ask for a notebook).
+``--list-models`` prints every model installed in Ollama and marks the ones that cannot chat
+(embedding-only models); the model that actually answered is recorded in ``prompt.md``.
 """
 
 from __future__ import annotations
@@ -55,7 +58,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--ask", help="answer one prompt and exit (scriptable)")
     parser.add_argument("--model", default=None, help=f"Ollama model (default {rag.CHAT_MODEL})")
     parser.add_argument("--top-k", type=int, default=rag.TOP_K, help=f"excerpts per prompt (default {rag.TOP_K})")
+    parser.add_argument("--list-models", action="store_true", help="print the models installed in Ollama and exit")
     args = parser.parse_args(argv)
+
+    if args.list_models:
+        try:
+            installed = rag.list_models(chat_only=False)
+        except Exception as exc:  # noqa: BLE001 - any failure means "cannot ask Ollama"
+            print(f"FAIL cannot reach Ollama at {rag.OLLAMA_URL}: {exc}")
+            return 1
+        print(f"{len(installed)} model(s) in {rag.OLLAMA_URL}:")
+        for item in installed:
+            kind = "chat" if item.can_chat else "not a chat model"
+            print(f"  {item.name:<30} {kind:<17} {item.detail}")
+        return 0
+
     if args.model:
         rag.CHAT_MODEL = args.model
 

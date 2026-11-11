@@ -101,6 +101,7 @@ Legend: **Pri** P0 (mandatory) / P1 (needed for a credible demo or synopsis) / P
 | SG-087 | P0 | Make the regression corpus obtainable from a fresh clone | **Done** | — | `regression/fetch_corpus.py` downloads scikit-learn into `regression/scikit-learn-main` with ref/commit provenance (`--check`, `--ref`, `--force`); `rag.py` fails with the fetch hint instead of building an empty index (ADR-024) |
 | SG-088 | P0 | Pin and validate what the regression index was built from | **Done** | SG-087 | Collection metadata records embedding model, chunker, corpus ref/commit/digest; build, query and `--status` refuse a foreign index with the rebuild command |
 | SG-089 | P1 | Make `compare-predictions.py` runnable in another configuration | **Done** | SG-080 | `--no-rag` (advertised in the docstring but not parsed before), `--model`, `--embed-model`, `--ollama-url`, `--top-k`, `--reference-rows`, `--out`; defaults unchanged and re-verified at 13.28 / 107.15 / 368.82 |
+| SG-097 | P1 | Choose the chat model from the ones installed in Ollama | **Done** | SG-087 | `rag.list_models()` reads `/api/tags` + `/api/show` and hides embedding-only models; the web page sidebar is a model picker with a refresh button, shows the model details, records the model that answered in `prompt.md`, and falls back to a text field when Ollama is down; `chat.py --list-models`; 5 fake-client tests |
 
 ## Phase 9 — Hardening, packaging, synopsis
 

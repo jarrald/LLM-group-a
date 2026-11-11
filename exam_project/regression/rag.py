@@ -97,12 +97,65 @@ class Hit:
 
 @dataclass(frozen=True, slots=True)
 class Answer:
-    """The model answer plus what it was shown."""
+    """The model answer plus what it was shown and which model produced it."""
 
     text: str
     hits: list[Hit]
     seconds: float
     tokens_per_second: float | None
+    model: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class LocalModel:
+    """One model installed in Ollama, with what the chat interfaces present."""
+
+    name: str
+    size_gb: float
+    family: str
+    parameter_size: str
+    can_chat: bool
+
+    @property
+    def detail(self) -> str:
+        """``family · parameter size · size`` for a caption under the model picker."""
+        parts = (self.family, self.parameter_size, f"{self.size_gb:.1f} GB" if self.size_gb else "")
+        return " · ".join(part for part in parts if part)
+
+
+def list_models(chat_only: bool = True, client: ollama.Client | None = None) -> list[LocalModel]:
+    """Models installed in Ollama, annotated with whether they can answer a prompt.
+
+    ``/api/show`` reports capabilities, so embedding-only models (``embedding``) are not
+    offered as chat models. A model whose capabilities cannot be read is kept and treated as
+    chat-capable: the server is the authority, and hiding a usable model is worse than
+    offering one that fails with a clear message.
+
+    A connection error is *not* swallowed, so the caller can tell "Ollama is not running"
+    from "no models are installed". ``client`` exists so tests can inject a fake.
+    """
+    ollama_client = client or ollama.Client(host=OLLAMA_URL, timeout=60)
+    models: list[LocalModel] = []
+    for listed in ollama_client.list().models:
+        name = str(getattr(listed, "model", "") or getattr(listed, "name", "") or "")
+        if not name:
+            continue
+        try:
+            capabilities = tuple(ollama_client.show(name).capabilities or ())
+        except Exception:  # metadata is a nicety; the chat call is the real test
+            capabilities = ()
+        details = getattr(listed, "details", None)
+        models.append(
+            LocalModel(
+                name=name,
+                size_gb=round((listed.size or 0) / 1_000_000_000, 2),
+                family=str(getattr(details, "family", "") or ""),
+                parameter_size=str(getattr(details, "parameter_size", "") or ""),
+                can_chat=not capabilities or "completion" in capabilities,
+            )
+        )
+    models.sort(key=lambda model: model.name)
+    return [model for model in models if model.can_chat] if chat_only else models
 
 
 def _corpus_digest() -> str:
@@ -324,11 +377,12 @@ def ask(
     on_token receives each piece as it arrives, which is how the web page streams.
     """
     hits = retrieve(prompt, top_k)
+    used_model = model or CHAT_MODEL
     messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": _user_message(prompt, hits, extra_context)}]
     final = None
     parts: list[str] = []
     started = time.perf_counter()
-    for chunk in ollama.Client(host=OLLAMA_URL, timeout=600).chat(model=model or CHAT_MODEL, messages=messages, stream=True, options={"temperature": 0.2, "num_ctx": 8192}):
+    for chunk in ollama.Client(host=OLLAMA_URL, timeout=600).chat(model=used_model, messages=messages, stream=True, options={"temperature": 0.2, "num_ctx": 8192}):
         if getattr(chunk, "done", False):
             final = chunk
             continue
@@ -344,7 +398,7 @@ def ask(
     speed = None
     if final is not None and final.eval_count and final.eval_duration:
         speed = final.eval_count / (final.eval_duration / 1_000_000_000)
-    return Answer(text="".join(parts).strip(), hits=hits, seconds=seconds, tokens_per_second=speed)
+    return Answer(text="".join(parts).strip(), hits=hits, seconds=seconds, tokens_per_second=speed, model=used_model)
 
 
 def _user_message(prompt: str, hits: list[Hit], extra_context: str = "") -> str:
@@ -443,7 +497,7 @@ def _prompt_record(prompt: str, answer: Answer, kind: str, extra_context: str, t
         "",
         f"- created: {created}",
         f"- interface: {interface}",
-        f"- model: {CHAT_MODEL}",
+        f"- model: {answer.model or CHAT_MODEL}",
         f"- excerpts retrieved: {len(answer.hits)} (top_k {top_k if top_k is not None else TOP_K})",
         f"- answer time: {answer.seconds:.1f} s, {speed}",
         "",

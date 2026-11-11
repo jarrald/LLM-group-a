@@ -56,11 +56,47 @@ def attachments_block(files: list[tuple[str, str]], budget: int = MAX_ATTACH_CHA
     return "## Attached files (given in full; they are not embedded)\n\n" + "\n\n".join(parts) + "\n\n"
 
 
+@st.cache_data(ttl=20, show_spinner=False)
+def installed_models() -> list[rag.LocalModel]:
+    """Chat-capable models installed in Ollama (cached: one ``show`` call per model)."""
+    return rag.list_models()
+
+
+def model_picker() -> str:
+    """Sidebar picker over the models Ollama reports; returns the chosen model name.
+
+    Falls back to a text field when the list cannot be read, so the page still renders and
+    can be used (or repaired) while Ollama is starting.
+    """
+    st.markdown("#### Model")
+    try:
+        models = installed_models()
+    except Exception as exc:  # noqa: BLE001 - the page must render while Ollama is down
+        st.error(f"Cannot reach Ollama at {rag.OLLAMA_URL}. {exc}")
+        st.caption("Start it with `ollama serve`, then press **Refresh model list**.")
+        return st.text_input("Model name", rag.CHAT_MODEL, help="Any model pulled in Ollama")
+
+    if not models:
+        st.warning("Ollama reports no chat model.")
+        st.caption(f"Pull one, for example `ollama pull {rag.CHAT_MODEL}`.")
+        return st.text_input("Model name", rag.CHAT_MODEL)
+
+    names = [model.name for model in models]
+    default = names.index(rag.CHAT_MODEL) if rag.CHAT_MODEL in names else 0
+    name = st.selectbox("Model", names, index=default, help="Every chat-capable model installed in Ollama. The pick is what the run records in prompt.md.")
+    st.caption(models[names.index(name)].detail or "no model details reported")
+    if st.button("Refresh model list", use_container_width=True):
+        installed_models.clear()
+        st.rerun()
+    return name
+
+
 st.set_page_config(page_title="scikit-learn helper", layout="centered")
 
 with st.sidebar:
-    model = st.text_input("Model", rag.CHAT_MODEL, help="Any model pulled in Ollama")
+    model_name = model_picker()
     top_k = st.slider("scikit-learn excerpts", 0, 12, rag.TOP_K, help="0 = ignore the index and only read what you attach")
+    st.caption(f"Ollama: `{rag.OLLAMA_URL}`")
 
 st.title("Ask for code")
 st.caption("Instructions + attached files + the closest scikit-learn excerpts -> one runnable file.")
@@ -107,8 +143,9 @@ if generate and instructions.strip():
     if stored:
         extra += "## On-disk copies\n\n" + "\n".join(f"- {path}" for _, path in stored) + "\n\nRead the data from the path above.\n\n"
     prompt = rag.wrap_prompt(instructions, task, tone, target, traits)
+    selected_model = model_name.strip() or rag.CHAT_MODEL
     try:
-        answer = rag.ask(prompt, top_k=top_k, echo=False, on_token=on_token, extra_context=extra, model=model.strip() or None)
+        answer = rag.ask(prompt, top_k=top_k, echo=False, on_token=on_token, extra_context=extra, model=selected_model)
     except RuntimeError as exc:  # missing corpus/index, or one built with other settings
         st.error(str(exc), icon="⚠️")
         st.caption("Setup: `uv run python -m regression.fetch_corpus`, then `uv run python -m regression.rag --build-index`.")
@@ -116,7 +153,7 @@ if generate and instructions.strip():
         placeholder.markdown(answer.text)
 
         speed = f" - {answer.tokens_per_second:.0f} tok/s" if answer.tokens_per_second else ""
-        st.caption(f"{answer.seconds:.1f} s{speed} - {len(answer.hits)} excerpts retrieved")
+        st.caption(f"{answer.seconds:.1f} s{speed} - {len(answer.hits)} excerpts retrieved - `{answer.model}`")
 
         saved = rag.save_file(prompt, answer, kind="ui", extra_context=extra, top_k=top_k, run_dir=run_dir)
         st.success(f"Saved to {saved.relative_to(rag.REGRESSION.parent)}")
