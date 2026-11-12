@@ -132,8 +132,6 @@ Another important decision was to save a snapshot of the Buddy configuration whe
 
 The project also deliberately separates RAG and non-RAG execution while retaining the same prompt construction process. This makes it possible to investigate the contribution of retrieval without unnecessarily changing other prompt-engineering variables.
 
-Finally, local processing was prioritised to reduce reliance on external APIs and improve control over application data.
-
 4. Relevant Machine Learning Concepts, Data Preparation and Retrieval Choices
 
 StudyGraph combines several important machine learning and natural language processing concepts.
@@ -164,9 +162,7 @@ The original documents are converted from PDF into Markdown. This makes the cont
 
 The documents are cleaned, divided into chunks and associated with metadata that allows retrieved passages to be traced to their sources.
 
-The current corpus covers weeks 1, 2, 3, 4, 6, 8, 9 and 10. Weeks 5 and 7 were not available.
-
-An important preparation decision was translating the course corpus into English to align the material with the language used by the embedding model.
+The current corpus covers weeks 1, 2, 3, 4, 6, 8, 9 and 10, from our LLM course. Weeks 5 and 7 were empty.
 
 Retrieval choices
 
