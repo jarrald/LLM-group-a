@@ -477,7 +477,12 @@ def wrap_prompt(instruction: str, task: str = "", tone: str = "", target: str = 
 
 
 def extract_code(answer: str) -> str | None:
-    """The first fenced python block, falling back to any fenced block."""
+    """The first fenced python block, falling back to any fenced block or an unclosed fence.
+
+    A local model can stop mid-stream and never close its fence; that code is still what the
+    user asked for, so it is kept instead of being thrown away (which used to save the raw
+    answer as ``output.md``).
+    """
     blocks = re.findall(r"```(\w*)\n(.*?)```", answer, re.DOTALL)
     for language, body in blocks:
         if language.lower() in {"python", "py", "python3"} and body.strip():
@@ -485,16 +490,29 @@ def extract_code(answer: str) -> str | None:
     for _, body in blocks:
         if body.strip():
             return body.strip() + "\n"
+    open_fence = re.search(r"```(?:python|py|python3)?\s*\n(?P<body>.*)$", answer, re.DOTALL)
+    if open_fence:
+        body = open_fence.group("body").strip()
+        if body and not body.lstrip().startswith("```"):
+            return body + "\n"
     return None
+
+
+_NOTEBOOK_HINT = re.compile(r"\.ipynb\b|notebook|jupyter", re.IGNORECASE)
+
+
+def wants_notebook(prompt: str) -> bool:
+    """True when the instruction asks for a notebook in any of the usual phrasings."""
+    return bool(_NOTEBOOK_HINT.search(prompt))
 
 
 def save_file(prompt: str, answer: Answer, kind: str = "cmd", extra_context: str = "", top_k: int | None = None, run_dir: Path | None = None) -> Path:
     """Archive one run: runs/rag/<kind>/<n>/prompt.md plus output.py, .ipynb or .md."""
     code = extract_code(answer.text)
-    wants_notebook = "notebook" in prompt.lower() or prompt.lower().endswith(".ipynb")
+    notebook_requested = wants_notebook(prompt)
     run_dir = run_dir or _next_run_dir(kind)
     (run_dir / "prompt.md").write_text(_prompt_record(prompt, answer, kind, extra_context, top_k), encoding="utf-8", newline="\n")
-    if code and wants_notebook:
+    if code and notebook_requested:
         _write_notebook(prompt, code, run_dir / "output.ipynb")
         return run_dir / "output.ipynb"
     if code:
