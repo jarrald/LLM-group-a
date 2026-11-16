@@ -52,16 +52,19 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Collection      : {config.collection_name} on {config.chroma_url}")
     print(f"Embedding model : {config.embed_model} ({config.embedding_dim} dims)")
 
+    # 1. Læs Markdown fra week<N>-mapperne; rå PDF'er bruges ikke direkte her.
     documents = discover_lectures(config.course_material_dir, config.course_id)
     if not documents:
         print(f"FAIL  no Markdown found inside a week<N> directory under {config.course_material_dir}")
         return 1
 
+    # 2. Opdel dokumenter med overlap og stabile id'er, så gentagelser ikke dubleres.
     chunks = [chunk for document in documents for chunk in chunk_document(document, max_chars=arguments.max_chars, overlap=arguments.overlap)]
     digest = chunks_digest(chunks)
     print(f"Documents       : {len(documents)} " + ", ".join(f"{document.doc_id} ({document.doc_name})" for document in documents))
     print(f"Chunks          : {len(chunks)} (digest {digest})")
 
+    # 3. Brug Chroma-serveren. Kun --recreate sletter den eksisterende collection.
     client = get_chroma_client(config)
     existing = None
     try:
@@ -84,11 +87,13 @@ def main(argv: list[str] | None = None) -> int:
     # An existing collection keeps its old metadata, so the digest has to be written explicitly.
     collection.modify(metadata=metadata)
 
+    # 4. Beregn tekstvektorer lokalt i Ollama, før de sendes til Chroma.
     embedder = OllamaEmbedder(config)
     started = time.perf_counter()
     vectors = embedder.embed_documents([chunk.text for chunk in chunks])
     print(f"Embedded        : {len(vectors)} vectors in {time.perf_counter() - started:.1f}s")
 
+    # 5. Gem tekst, vektorer og kildemetadata sammen i portioner.
     for start in range(0, len(chunks), UPSERT_BATCH_SIZE):
         batch = chunks[start : start + UPSERT_BATCH_SIZE]
         collection.upsert(

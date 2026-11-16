@@ -16,6 +16,7 @@ from app.errors import ValidationError
 SNAPSHOT_VERSION = 1
 
 
+# 1. Valider og normaliser input, før en Buddy gemmes af servicen.
 def validate_buddy_name(name: str) -> str:
     """Return a normalised Buddy name or raise :class:`ValidationError`."""
     cleaned = " ".join(name.split())
@@ -56,6 +57,7 @@ def validate_dimension(value: str, field_name: str) -> str:
 class Buddy:
     """A reusable teaching configuration."""
 
+    # 2. Den genbrugelige konfiguration; ændringer gælder kommende samtaler.
     id: str
     name: str
     target: str
@@ -74,6 +76,7 @@ class Buddy:
 class BuddySnapshot:
     """The configuration a conversation was created with."""
 
+    # 3. Samtalens faste kopi; JSON og version gør den uafhængig af Buddy-rækken.
     snapshot_version: int
     buddy_id: str
     buddy_name: str

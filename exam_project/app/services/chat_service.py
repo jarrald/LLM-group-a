@@ -44,6 +44,7 @@ class ChatService:
         """Create a conversation and freeze the Buddy configuration into a snapshot."""
         from app.domain.buddy import BuddySnapshot
 
+        # Frys Buddyens indstillinger, så senere redigeringer ikke ændrer denne samtale.
         now = utc_now()
         conversation = Conversation(
             id=new_id(),
@@ -72,10 +73,12 @@ class ChatService:
         ``on_token`` streams the answer to a UI callback; the stored message is identical
         either way.
         """
+        # 1. Valider input og hent den gemte samtales snapshot og historik.
         cleaned = validate_message_content(content)
         conversation = self._store.get_conversation(conversation_id)
         history = self._store.list_messages(conversation_id)
 
+        # 2. Grafen får Task for denne besked og de tre andre T'er fra snapshot.
         state: dict[str, object] = {
             "snapshot": conversation.buddy_snapshot,
             "task": task or TaskSpec.from_preset(),
@@ -86,6 +89,7 @@ class ChatService:
             state["on_token"] = on_token
         final_state: dict[str, object] = self._graph.invoke(state)
 
+        # 3. Hent svar og sporbarhed fra grafens sluttilstand.
         prompt = final_state["prompt"]
         answer = str(final_state["answer"])
         retrieval = final_state.get("retrieval") or RetrievalResult.skipped()
@@ -105,6 +109,8 @@ class ChatService:
             prompt_version=prompt.prompt_version,
             retrieval_top_k=retrieval.top_k or None,
         )
+        # 4. Gem først efter generering. De to lagerkald er separate transaktioner;
+        # en skrivefejl mellem dem kan derfor efterlade kun brugerens besked.
         self._store.add_message(user_message)
         self._store.add_message(assistant_message)
 

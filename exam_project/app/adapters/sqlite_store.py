@@ -23,6 +23,7 @@ from app.errors import PersistenceError, ValidationError
 
 logger = logging.getLogger(__name__)
 
+# 1. Appdata ligger i fire tabeller. Vektorer og kursustekst ligger separat i Chroma.
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS courses (
     id              TEXT PRIMARY KEY,
@@ -121,7 +122,7 @@ class SqliteStore:
         finally:
             connection.close()
 
-    # --- courses -------------------------------------------------------------------
+    # 2. Kurser: forbind kursusidentiteten med navnet på Chroma-collectionen.
 
     def upsert_course(self, course: Course) -> None:
         with self._connect() as connection:
@@ -136,7 +137,7 @@ class SqliteStore:
             rows = connection.execute("SELECT * FROM courses ORDER BY name").fetchall()
         return [Course(id=row["id"], name=row["name"], description=row["description"], collection_name=row["collection_name"]) for row in rows]
 
-    # --- buddies -------------------------------------------------------------------
+    # 3. Buddies: gem og rediger de genbrugelige undervisningsindstillinger.
 
     def create_buddy(self, buddy: Buddy) -> None:
         with self._connect() as connection:
@@ -187,7 +188,7 @@ class SqliteStore:
             updated_at=datetime.fromisoformat(row["updated_at"]),
         )
 
-    # --- conversations -------------------------------------------------------------
+    # 4. Samtaler: gem snapshot som selvstændig JSON, ikke kun en Buddy-reference.
 
     def create_conversation(self, conversation: Conversation) -> None:
         snapshot = conversation.buddy_snapshot
@@ -232,7 +233,7 @@ class SqliteStore:
             updated_at=datetime.fromisoformat(row["updated_at"]),
         )
 
-    # --- messages ------------------------------------------------------------------
+    # 5. Beskeder: bevar rækkefølge, kilder, retrievalstatus og modelmetadata.
 
     def add_message(self, message: Message) -> None:
         """Append a message to its conversation and bump the conversation's timestamp."""

@@ -20,6 +20,7 @@ from app.graph.state import StudyGraphState
 from app.prompts.builder import PromptBuilder
 
 
+# 1. Snapshot bestemmer RAG-ruten; Buddyens navn og prompttekst har ingen betydning.
 def route_by_snapshot(state: StudyGraphState) -> str:
     """Pure routing decision: course-associated conversations retrieve, others never do."""
     return "retrieve" if state["snapshot"].is_course_grounded else "build_prompt"
@@ -35,6 +36,7 @@ def build_study_graph(
 ) -> Any:
     """Compile the chat graph for one process."""
 
+    # 2. Noder returnerer kun deres ændringer til den fælles StudyGraphState.
     def route_node(state: StudyGraphState) -> dict[str, object]:
         if state["snapshot"].is_course_grounded:
             return {}
@@ -55,6 +57,7 @@ def build_study_graph(
         )
         return {"prompt": bundle}
 
+    # 3. Samme prompt kan generere et samlet svar eller streame tekst til UI.
     def generate_node(state: StudyGraphState) -> dict[str, object]:
         bundle = state["prompt"]
         on_token = state.get("on_token")
@@ -67,6 +70,7 @@ def build_study_graph(
             on_token(token)
         return {"answer": "".join(pieces).strip(), "model": chat_model.model_name}
 
+    # 4. Forbind trinene: route → retrieve? → build_prompt → generate → slut.
     graph: StateGraph = StateGraph(StudyGraphState)
     graph.add_node("route", route_node)
     graph.add_node("retrieve", retrieve_node)
