@@ -43,7 +43,7 @@ def handle(prompt: str, top_k: int) -> None:
     print(f"  answered in {answer.seconds:.1f} s{speed}")
 
     try:
-        path = rag.save_file(prompt, answer)
+        path = rag.save_file(prompt, answer, top_k=top_k)
     except ValueError as exc:
         print(f"\n  no file written: {exc}")
         return
