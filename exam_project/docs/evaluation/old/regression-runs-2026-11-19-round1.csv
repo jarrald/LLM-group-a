@@ -1,0 +1,7 @@
+run,model,dataset,top_k,excerpts,answer_bytes,screenshot,notes
+ui/1,gemma3:270m,ice_cream_regression.csv,0,0,993,screenshot.png,"malformed imports; undefined y_train; not scored"
+ui/2,gemma3:270m,ice_cream_regression.csv,4,4,893,screenshot.png,"copied data.csv template; undefined feature lists; not scored"
+ui/3,gemma3:1b,ice_cream_regression.csv,0,0,870,screenshot.png,"correct path; y undefined; R2 computed as MSE; not scored"
+ui/4,gemma3:1b,ice_cream_regression.csv,4,4,733,screenshot.png,"data.csv placeholder; mean_squared_error not imported; not scored"
+ui/5,gemma3:1b,house prices.csv,0,0,946,screenshot.png,"correct path; y undefined; invalid median_imputer import; not scored"
+ui/6,gemma3:1b,house prices.csv,4,4,1093,screenshot.png,"data.csv placeholder; no ColumnTransformer; mean_squared_error not imported; not scored"

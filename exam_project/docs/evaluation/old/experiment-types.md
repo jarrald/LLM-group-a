@@ -1,12 +1,25 @@
 # Experiment types — coverage, statistics and models
 
+> **Historical archive index (superseded 2026-11-19).** The counts and the six-type matrix below
+> describe the **qwen-era archive** (runs made before 2026-11-11). They do **not** include the
+> `gemma3:270m` runs `ui/11`–`ui/15`, the clean controlled sweep `cmd/6`–`cmd/9`, or the
+> guidance-document corpus (1,041 chunks). They also mix local ice-cream runs with cloud
+> house-price runs, which are not comparable.
+>
+> **For the report, use [regression-summary.md](regression-summary.md).** It names the three
+> defensible comparisons and lists what to drop. This file is kept only so the older run history
+> remains traceable.
+
 Overview of the six experiment types the project set out to compare, what evidence exists for
 each one, and which regression models were involved. It is an index over the run archive, not a
 second analysis: the discussion lives in
 [regression-experiment.md](regression-experiment.md) and the assignment's required
 linear-regression comparison in [regression-vs-rag.md](regression-vs-rag.md).
 
-Machine-readable version of every row below: [runs-overview.csv](runs-overview.csv) (23 records).
+Machine-readable version: [runs-overview.csv](runs-overview.csv) — 32 records, including
+`cmd/6`–`cmd/9` and `ui/11`–`ui/15`, with a `use_in_report` column (`cite` / `support` /
+`context` / `no`). The older rows still carry the qwen-era experiment numbers, so read the
+`use_in_report` value before quoting anything.
 
 **Reading the tables:** `PASS` means *the run produced a runnable artefact, or the number it was
 asked for*. It does **not** mean the number was accurate — accuracy is in the MAE columns only.
@@ -28,9 +41,13 @@ asked for*. It does **not** mean the number was accurate — accuracy is in the 
 The six types are really a 2 × 2 design (retrieval on/off × code/no code) with a manual row and a
 cloud row on top. Plotting it that way shows the only real hole:
 
+> **Do not use the cloud row as a comparison arm.** It uses a different dataset (4,600 × 18 house
+> prices vs 500 × 2 ice cream), a different prompt and no local RAG. See
+> [regression-summary.md](regression-summary.md) §3 for the evidence that is comparable.
+
 | | Model writes code | Model writes no code |
 |---|---|---|
-| **Local + RAG** (962 scikit-learn chunks) | **#2** — 13 runs, 6 usable: `cmd/1-5`, `ui/1-4`, `ui/6`, `ui/7`, `ui/9`, `ui/10` | **extra** — `predictions/rag`, MAE **107.15** |
+| **Local + RAG** (962 scikit-learn chunks) | **#2** — 13 runs, **6 usable**: `cmd/3`, `cmd/4`, `cmd/5`, `ui/2`, `ui/3`, `ui/9` (an earlier list wrongly counted `ui/7`, which fails on re-execution) | **extra** — `predictions/rag`, MAE **107.15** |
 | **Local, no RAG** | **#4** — 2 runs, 0 usable: `ollama-no-rag.md`, `ui/5` | **#3** — `predictions/no-rag` MAE **368.82**; `ui/8` (failed) |
 | **Cloud** | **#6** — 3 runs, 1 usable: `cloud/1`, `cloud/2`, `cloud/deepseek` | **#5** — **empty** |
 | **Manual** | **#1** — `non-llm.ipynb`, test R² **0.9764** | not applicable (a human writes code too) |
@@ -56,7 +73,7 @@ cloud row on top. Plotting it that way shows the only real hole:
 |---|---|
 | Interface | `regression/chat.py` (CLI, 5 runs) and `regression/web.py` (Streamlit, 10 runs) |
 | Model | `qwen2.5-coder:7b`, `temperature` 0.2, `num_ctx` 8192 |
-| Retrieval | top 8 of 962 chunks of the scikit-learn source (`nomic-embed-text`) |
+| Retrieval (qwen era) | top 8 of 962 chunks of the scikit-learn source (`nomic-embed-text`); the 2026-11-19 sweep `cmd/6`–`cmd/9` uses the guide-inclusive 1,041-chunk index |
 | What is asked | "make a notebook/script that does a linear regression on `<csv>`" |
 | Artefact | `output.ipynb` / `output.py` in `regression/runs/rag/<kind>/<n>/` |
 | Result | **6 of 13 produced a file that ran**: `cmd/3` (MSE 652.52), `cmd/4` (coef 21.44362551), `cmd/5` (RidgeCV, R² 0.9797), `ui/2` (MSE 623.10), `ui/3` and `ui/9` (MAE 19.5859, R² 0.9797) |
@@ -81,7 +98,7 @@ instruction. The numeric guess was confidently wrong.
 | Run | Setup | Result |
 |---|---|---|
 | [`ollama-no-rag.md`](../../regression/ollama-no-rag.md) | Qwen2.5:9B, the whole CSV pasted into the prompt, no index | **not runnable.** 34.9 s of "thinking", then it asked what the user wanted and returned a script with the data pasted into a triple-quoted placeholder. It also read a data row as part of the header |
-| [`ui/5`](../../regression/runs/rag/ui/5/output.ipynb) | `qwen2.5-coder:7b`, **excerpts slider at 0**, CSV attached | `path_to_your_csv_file.csv` → `FileNotFoundError` — identical output to `ui/4`, which had 8 excerpts |
+| [`ui/5`](../../regression/runs/rag/ui/5/output.ipynb) | `qwen2.5-coder:7b`, **excerpts slider at 0**, **no CSV attached** (the instruction says "read the attached CSV") | `path_to_your_csv_file.csv` → `FileNotFoundError` — identical output to `ui/4`, which had 8 excerpts |
 
 0 of 2 usable. The comparison against `ui/4` (8 excerpts) and `ui/6` (12 excerpts) is the cleanest
 controlled result in the project: **retrieval volume made no difference to this failure.**
@@ -151,24 +168,18 @@ fitted model's 13.28.
 
 ## 4. Statistics
 
-| Measure | Value |
-|---|---|
-| Recorded runs in total | 23 records in `runs-overview.csv`, of which 22 were executed (one is the never-run #5) |
-| Local runs | 18 (1 manual + 15 code generation + 2 no-code prediction arms) |
-| Cloud runs | 3 |
-| Runs that produced a usable artefact or number | **10 of 22** |
-| Local code generation, RAG on | 6 of 13 |
-| Local code generation, RAG off | 0 of 2 |
-| Local no-code prediction | 2 of 3 produced a usable answer; `ui/8` emitted its answer as code and raised `SyntaxError` |
-| Most common failure | placeholder path (5 runs), then invented column names (4 runs) |
-| Model generations per run | 1 (no chat history, one prompt, one file) |
-| Throughput, local | 58–68 tok/s across every run |
-| Slowest local answer | `ui/10`, 12.0 s (house prices, 8 excerpts) |
-| Fastest local answer | `ui/8`, 2.2 s (no excerpts, no code) |
-| Embedding cost of the index | 962 chunks through `nomic-embed-text`, built once |
+The old counts in this section (23 records, 15 code-generation runs, "10 of 22 usable") were true
+only for the qwen-era archive. They are no longer authoritative: `cmd/6`–`cmd/9` and
+`ui/11`–`ui/15` add six local coding runs and one empty answer, and the earlier "usable" count
+included `ui/7`, which fails on re-execution. Use the evidence table in
+[regression-summary.md](regression-summary.md) instead of quoting these totals.
 
-Time and speed did **not** depend on how much was retrieved: 0, 8 and 12 excerpts answered in
-4.7–6.0 s at 58–65 tok/s. The bottleneck was always the model, never the retrieval.
+What is still true for the qwen-era local runs:
+
+- one generation per run (no chat history, one prompt, one file);
+- throughput 58–68 tok/s on the 7B model with the model resident;
+- retrieval volume 0 / 8 / 12 did not change the `ui/4`–`ui/6` failure;
+- a placeholder path was the most common failure, followed by invented column names.
 
 ## 5. Models used
 
@@ -176,7 +187,8 @@ Time and speed did **not** depend on how much was retrieved: 0, 8 and 12 excerpt
 
 | Model | Size | Role | Used in |
 |---|---|---|---|
-| `qwen2.5-coder:7b` | 4.7 GB | the local chat model for every coding and prediction run | the 15 `cmd/1-5` + `ui/1-10` runs (including the no-retrieval `ui/5` and `ui/8`), plus both `compare-predictions.py` arms |
+| `qwen2.5-coder:7b` | 4.7 GB | the local chat model for the qwen-era coding and prediction runs | the 15 `cmd/1-5` + `ui/1-10` runs (including the no-retrieval `ui/5` and `ui/8`), plus both `compare-predictions.py` arms, plus the `cmd/8`/`cmd/9` control |
+| `gemma3:270m` | 291 MB | the small-model experiment; did not produce a regression | `ui/11`–`ui/15` (original observation) and `cmd/6`/`cmd/7` (clean control) |
 | `nomic-embed-text` | 274 MB, 768-d | embeddings for the scikit-learn index and the 12-row prediction collection | all retrieval |
 | Qwen2.5:9B | not verified | the single no-RAG code-generation baseline | [`ollama-no-rag.md`](../../regression/ollama-no-rag.md) only |
 | Leanstral-1-5 | cloud, 262.1k context | cloud coding agent (free zero-knowledge European provider) | `cloud/1`, `cloud/2` |

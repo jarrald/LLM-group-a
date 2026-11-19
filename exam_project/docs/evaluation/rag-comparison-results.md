@@ -1,113 +1,79 @@
-# StudyGraph — RAG vs. Non-RAG Evaluation
+# StudyGraph — RAG vs. non-RAG comparison
 
-Template and protocol for the applied comparison required by the assignment
-("be able to demonstrate how retrieval affects an answer") and described in
-[../design/rag-comparison.md](../design/rag-comparison.md).
+**Status:** one recorded comparison, used as an exploratory demonstration. This is **not** the
+planned 8-question evaluation; it is the one real paired run we have, and it is enough to show that
+retrieval changes the answer. No new runs were made for this document.
 
-**Status:** not run yet. Fill every `TBD` from an actual run; never estimate a value.
+## 1. Fixed configuration
 
-## 1. Fixed configuration (must be identical in both arms)
+Both answers used the same model, 4T configuration, question and prompt version. The only
+difference was the course association, which controls whether retrieval runs.
 
 | Setting | Value |
 |---|---|
-| Chat model | TBD (ADR-007) |
-| Embedding model | TBD (ADR-007b) |
-| Collection | `llms_for_devs_v1` |
+| Chat model | `llama3.2:3b` |
+| Embedding model | `nomic-embed-text` (768-d) |
+| Collection at the time of the run | `llms_for_devs_v1`, 57 chunks |
 | `prompt_version` | `system_v1` |
-| Target / Tone / Traits | Beginner / Friendly and encouraging / Patient, explanatory |
 | Task | Explain a concept |
-| `temperature`, `num_ctx` | TBD from config |
+| Tone | Friendly and conversational |
+| Traits | Patient, Analytical |
+| Target | Student familiar with the fundamentals |
 | `top_k` | 4 |
-| History | none (fresh conversation per question, single turn) |
+| History | none (single turn) |
+| Question | “What is overfitting?” |
 
-The **only** intended difference: Buddy `A` has course = *LLMs for Developers*, Buddy `B`
-has no course. Names are for identification only and are not injected into the prompt.
+The collection has since grown to the full course corpus; this document records the run as it was
+made, not a re-run against the current index.
 
-Command used (once the app exists):
+## 2. What retrieval returned
+
+The course-grounded arm retrieved four passages:
+
+- `week-1:0017` — Overfitting (distance 0.472)
+- `week-1:0018` — Outliers (0.912)
+- `week-1:0016` — In-class exercise 1.2, fit a model using a spreadsheet (0.962)
+- `week-1:0014` — What does “training” mean? (0.978)
+
+The general arm skipped retrieval and received no course passages.
+
+
+## 3. Observed difference
+
+| Aspect | Course-grounded (RAG) | General (no retrieval) |
+|---|---|---|
+| Retrieval | 4 course passages, top hit Overfitting at 0.472 | skipped, 0 passages |
+| Definition | Used the course's informal definition: a model that is “too sensitive and wrong” | Generic definition: too closely fitted to training data, poor generalisation |
+| Example | Referred to the course's first-degree vs eighth-degree illustration and the in-class spreadsheet exercise | Used a leaf-recognition analogy and a house-price example |
+| Course alignment | High — it used the lecture's own framing and terms | Low — correct ML explanation, but not tied to the course |
+| Grounding claim | Presented the answer as based on the retrieved course material | Explicitly answered from general knowledge, with no course claim |
+
+The RAG answer did not merely sound different; it reused the specific material that retrieval
+returned. The general answer was still substantially correct, but it could have been written
+without the course.
+
+## 4. Conclusion
+
+This single paired run demonstrates the intended RAG effect: with retrieval, the answer follows the
+course's own definition, example and terminology; without retrieval, the model falls back to a
+generic explanation. It does **not** establish how often this happens, and it is not a full
+evaluation.
+
+## 5. Limitations
+
+- One question, one model, one configuration and one corpus snapshot.
+- The collection at the time held 57 chunks; the current course index is larger.
+- LLM output is non-deterministic even with fixed parameters.
+- The non-RAG model may already know “overfitting” from pretraining, so a good general answer is
+  not evidence against retrieval.
+- No numeric rating was assigned; the comparison is qualitative.
+
+## 6. Raw evidence
+
+The complete paired output, both rendered prompts and the retrieved sources are in
+[`prompt-examples.md`](prompt-examples.md). The command used was:
 
 ```powershell
-uv run python .\scripts\run_evaluation.py --questions .\docs\evaluation\questions.csv
+uv run python .\scripts\ask.py --compare --show-prompt "What is overfitting?"
 ```
 
-## 2. Question set
-
-| ID | Question | Expected to be covered by the slides? | Note |
-|---|---|---|---|
-| Q1 | TBD | yes | a definition question |
-| Q2 | TBD | yes | an "explain the mechanism" question |
-| Q3 | TBD | yes | a terminology question specific to the course |
-| Q4 | TBD | yes | a question whose answer spans two lectures |
-| Q5 | TBD | yes | a "how does X differ from Y" question |
-| Q6 | TBD | yes | a practical/example question |
-| Q7 | TBD | **no** | outside the course material — tests honest uncertainty |
-| Q8 | TBD | **no** | plausible but not in the slides — tests hallucination control |
-
-## 3. Results
-
-| ID | Mode | Answer (verbatim, trimmed) | Retrieved sources | Factual correctness (1–5) | Course alignment (1–5) | Relevance (1–5) | Grounding (1–5) | Uncertainty handling | Notes |
-|---|---|---|---|---|---|---|---|---|---|
-| Q1 | RAG | TBD | TBD | TBD | TBD | TBD | TBD | TBD | |
-| Q1 | non-RAG | TBD | — (skipped) | TBD | TBD | TBD | — | TBD | |
-| Q2 | RAG | TBD | TBD | TBD | TBD | TBD | TBD | TBD | |
-| Q2 | non-RAG | TBD | — (skipped) | TBD | TBD | TBD | — | TBD | |
-| … | | | | | | | | | |
-| Q7 | RAG | TBD | TBD (expected low relevance) | TBD | TBD | TBD | TBD | TBD | must not claim course support |
-| Q7 | non-RAG | TBD | — | TBD | TBD | TBD | — | TBD | |
-
-Rating scale: 1 = clearly wrong/unsupported … 5 = fully correct and fully supported.
-
-Summary per mode (fill after rating):
-
-| Mode | Mean factual | Mean course alignment | Mean relevance | Mean grounding | Answers presented as grounded when not |
-|---|---|---|---|---|---|
-| RAG | TBD | TBD | TBD | TBD | TBD |
-| non-RAG | TBD | TBD | TBD | n/a | TBD |
-
-## 4. Observations (2–3 concrete examples)
-
-For each observation, record the question, what retrieval returned, and how the two answers
-differed. Example structure:
-
-> **Q3 (RAG vs non-RAG).** Retrieval returned `lecture-0X:…` and `lecture-0Y:…`. The RAG
-> answer used the course's own term "<term>"; the non-RAG answer used the generic term
-> "<term>" and TBD. Neither answer was wrong, but only the RAG answer aligned with the
-> slides.
-
-## Appendix A — exploratory run (not the evaluation)
-
-Recorded 2026-10-30 to prove the pipeline end to end. It is **not** the evaluation of §3: it
-is a single question, not the 8–10 question set, and the answers are not rated.
-
-| Field | Value |
-|---|---|
-| Command | `uv run python .\scripts\ask.py --compare "What is overfitting, and how does the course suggest spotting it?"` |
-| Model / embeddings | `llama3.2:3b` / `nomic-embed-text` (768-d) |
-| Collection | `llms_for_devs_v1`, 57 chunks |
-| 4T configuration | Target = *Student familiar with the fundamentals*, Tone = *Friendly and conversational*, Traits = *Patient, Analytical*, Task = *Explain a concept* |
-| RAG arm retrieval | `ok`, 4 passages; top hits `week-1:0017` (0.416), `week-1:0018` (0.747), `week-1:0015` (0.809), `week-1:0016` (0.817) |
-| non-RAG arm retrieval | `skipped`, 0 passages |
-| Verbatim output | [prompt-examples.md](prompt-examples.md) |
-
-Observed difference (useful for the synopsis, but not a rating):
-
-- The grounded answer used the lecture's own material: the course's informal definition
-  ("too sensitive and wrong"), the course's diagnostic questions ("Is the model wrong?",
-  "Is the data wrong?", "Is a better model needed?"…) and referred to the in-class exercises.
-- The general answer was a correct but generic ML explanation (test set, large weights,
-  regularisation, early stopping) that never mentions the lecture and never claims to.
-- Both used the same prompt configuration, so the visible difference comes from retrieval.
-
-## Appendix B — planned off-topic probe
-
-Still to run: one question that the course material does not cover (e.g. a question about
-another course's topic) to confirm the `empty`/low-relevance path in the UI. Belongs in the
-evaluation question set as Q7/Q8.
-
-## 5. Limitations to state in the synopsis
-
-- Small, hand-written question set and subjective ratings.
-- One model, one configuration, one corpus; results are not generalisable.
-- LLM output is non-deterministic even with fixed parameters.
-- Retrieval quality is bounded by PDF→Markdown conversion and chunking.
-- The non-RAG arm may still know the material from pretraining, so a "good" non-RAG answer
-  is not evidence against RAG.

@@ -17,7 +17,10 @@ what is decided, and what is true right now. The `docs/design`, `docs/architectu
 | [../architecture/tech-stack.md](../architecture/tech-stack.md) | Chosen stack, versions, runtime topology, open items | when a library/model/port changes |
 | [../RAG/knowledge-base.md](../RAG/knowledge-base.md) | How course material is prepared, chunked, indexed and retrieved | when the pipeline changes |
 | [../evaluation/rag-comparison-results.md](../evaluation/rag-comparison-results.md) | RAG vs. non-RAG evaluation template and results | after each evaluation run |
-| [../evaluation/regression-vs-rag.md](../evaluation/regression-vs-rag.md) | Required comparison exercise: linear regression vs. local LLM + RAG | its own small track |
+| [../evaluation/regression-experiment-2026-11-19.md](../evaluation/regression-experiment-2026-11-19.md) | Current six-run regression code-generation experiment | current regression track |
+| [../evaluation/regression-evaluation-2026-11-19.md](../evaluation/regression-evaluation-2026-11-19.md) | Current execution evaluation and progression narrative | current regression track |
+| [../evaluation/old/regression-vs-rag.md](../evaluation/old/regression-vs-rag.md) | Archived old prediction comparison (qwen 7B); historical only | archived |
+| [../evaluation/regression-vs-rag.md](../evaluation/regression-vs-rag.md) | Teacher-approved small-model regression comparison (270M/1B, no RAG vs RAG) | current regression track |
 
 ## How to use these documents
 

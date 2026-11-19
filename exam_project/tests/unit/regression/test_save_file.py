@@ -44,6 +44,20 @@ def test_save_file_writes_a_notebook_for_an_ipynb_request(tmp_path: Path) -> Non
     sources = "".join("".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "code")
     assert "LinearRegression().fit" in sources
     assert (tmp_path / "prompt.md").is_file()
+    assert (tmp_path / "answer.md").is_file()
+
+
+def test_save_file_keeps_the_raw_answer_next_to_the_extracted_code(tmp_path: Path) -> None:
+    raw = f"I will use the retrieved guide.\n\n```python\n{CODE}```\n\nThis came from the guide."
+    answer = make_answer(raw)
+
+    saved = save_file("write a python script please", answer, run_dir=tmp_path)
+
+    assert saved.name == "output.py"
+    assert "LinearRegression().fit" in saved.read_text(encoding="utf-8")
+    recorded = (tmp_path / "answer.md").read_text(encoding="utf-8")
+    assert "I will use the retrieved guide." in recorded
+    assert "This came from the guide." in recorded
 
 
 def test_save_file_writes_a_script_when_no_notebook_is_requested(tmp_path: Path) -> None:
