@@ -1,11 +1,24 @@
 """Minimal local RAG over the scikit-learn checkout: prompt in, runnable file out.
 
-    uv run python -m regression.rag --build-index    # once, ~15 s (962 chunks)
-    uv run python -m regression.chat                 # paste a prompt, get a file back
-    uv run streamlit run regression/web.py           # same thing in a browser
+    uv run python -m regression.fetch_corpus          # once: download scikit-learn (~23 MB)
+    uv run python -m regression.rag --build-index     # once, ~15 s (962 chunks)
+    uv run python -m regression.chat                  # paste a prompt, get a file back
+    uv run streamlit run regression/web.py            # same thing in a browser
 
 The index lives in ``regression/.chroma`` (in-process Chroma, no server) and every run is
 archived under ``regression/runs/rag/``. Nothing here is imported by the StudyGraph app.
+
+Two things are indexed: the scikit-learn source described by ``INCLUDE``, and every ``*.md``
+under ``regression/rag-optimized/`` (project-authored guidance documents, ADR-026). Guidance
+documents are cited as ``rag-optimized/<file>.md:lines``, so a retrieved passage shows which
+kind of material it came from. Point ``RAG_EXTRA_CORPUS`` at a path that does not exist to
+build the source-only index that the runs recorded before 2026-11-11 used.
+
+The corpus is third-party source and is git-ignored, so it is *downloaded*, never committed:
+``regression/fetch_corpus.py`` puts it in ``regression/scikit-learn-main`` and records the
+ref and commit in ``.corpus.json``. The index stores which embedding model and chunker built
+it, plus a fingerprint of every indexed file, so switching ``RAG_EMBED_MODEL`` or editing a
+guidance document cannot silently query an index that no longer matches.
 """
 
 from __future__ import annotations
@@ -25,11 +38,12 @@ from pathlib import Path
 import chromadb
 import ollama
 
+from regression.fetch_corpus import CORPUS, corpus_ready, missing_markers, read_provenance
+
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 REGRESSION = Path(__file__).resolve().parent
-CORPUS = Path(os.getenv("RAG_CORPUS_ROOT", REGRESSION / "scikit-learn-main"))
 CHROMA_PATH = REGRESSION / ".chroma"
 RUNS_DIR = REGRESSION / "runs"
 
@@ -38,6 +52,9 @@ CHAT_MODEL = os.getenv("RAG_CHAT_MODEL", "qwen2.5-coder:7b")
 EMBED_MODEL = os.getenv("RAG_EMBED_MODEL", "nomic-embed-text")
 COLLECTION = os.getenv("RAG_COLLECTION", "sklearn_code_v1")
 TOP_K = int(os.getenv("RAG_TOP_K", "8"))
+
+CORPUS_HINT = "uv run python -m regression.fetch_corpus"
+REBUILD_HINT = "uv run python -m regression.rag --build-index --recreate"
 
 #: What gets indexed. Small on purpose: these are the files that answer "write me a regression".
 INCLUDE = (
@@ -50,6 +67,11 @@ INCLUDE = (
     "doc/getting_started.rst",
     "examples/linear_model/*.py",
 )
+
+#: Project-authored Markdown guidance documents, indexed next to the third-party corpus
+#: (`regression/rag-optimized/`, ADR-026). Set RAG_EXTRA_CORPUS to a path that does not
+#: exist to build a source-only index that matches the runs recorded before 2026-11-11.
+EXTRA_CORPUS = Path(os.getenv("RAG_EXTRA_CORPUS", REGRESSION / "rag-optimized"))
 
 MAX_LINES = 60
 OVERLAP = 8
@@ -87,16 +109,110 @@ class Hit:
 
 @dataclass(frozen=True, slots=True)
 class Answer:
-    """The model answer plus what it was shown."""
+    """The model answer plus what it was shown and which model produced it."""
 
     text: str
     hits: list[Hit]
     seconds: float
     tokens_per_second: float | None
+    model: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class LocalModel:
+    """One model installed in Ollama, with what the chat interfaces present."""
+
+    name: str
+    size_gb: float
+    family: str
+    parameter_size: str
+    can_chat: bool
+
+    @property
+    def detail(self) -> str:
+        """``family · parameter size · size`` for a caption under the model picker."""
+        parts = (self.family, self.parameter_size, f"{self.size_gb:.1f} GB" if self.size_gb else "")
+        return " · ".join(part for part in parts if part)
+
+
+def list_models(chat_only: bool = True, client: ollama.Client | None = None) -> list[LocalModel]:
+    """Models installed in Ollama, annotated with whether they can answer a prompt.
+
+    ``/api/show`` reports capabilities, so embedding-only models (``embedding``) are not
+    offered as chat models. A model whose capabilities cannot be read is kept and treated as
+    chat-capable: the server is the authority, and hiding a usable model is worse than
+    offering one that fails with a clear message.
+
+    A connection error is *not* swallowed, so the caller can tell "Ollama is not running"
+    from "no models are installed". ``client`` exists so tests can inject a fake.
+    """
+    ollama_client = client or ollama.Client(host=OLLAMA_URL, timeout=60)
+    models: list[LocalModel] = []
+    for listed in ollama_client.list().models:
+        name = str(getattr(listed, "model", "") or getattr(listed, "name", "") or "")
+        if not name:
+            continue
+        try:
+            capabilities = tuple(ollama_client.show(name).capabilities or ())
+        except Exception:  # metadata is a nicety; the chat call is the real test
+            capabilities = ()
+        details = getattr(listed, "details", None)
+        models.append(
+            LocalModel(
+                name=name,
+                size_gb=round((listed.size or 0) / 1_000_000_000, 2),
+                family=str(getattr(details, "family", "") or ""),
+                parameter_size=str(getattr(details, "parameter_size", "") or ""),
+                can_chat=not capabilities or "completion" in capabilities,
+            )
+        )
+    models.sort(key=lambda model: model.name)
+    return [model for model in models if model.can_chat] if chat_only else models
+
+
+def _corpus_digest() -> str:
+    """A cheap fingerprint of everything indexed (path + size of every source file)."""
+    hasher = hashlib.sha1()
+    for label, path in _indexable_files():
+        hasher.update(f"{label}|{path.stat().st_size}\n".encode())
+    return hasher.hexdigest()[:16]
+
+
+def _index_metadata() -> dict[str, str]:
+    """Collection metadata that pins what built the index (model, chunker, corpus)."""
+    record = read_provenance(CORPUS)
+    metadata = {
+        "embedding_model": EMBED_MODEL,
+        "chunker_version": CHUNKER_VERSION,
+        "corpus_ref": str(record.get("ref") or "unknown"),
+        "corpus_commit": str(record.get("commit") or "unknown"),
+    }
+    if corpus_ready(CORPUS):
+        metadata["corpus_digest"] = _corpus_digest()
+    return metadata
+
+
+def require_corpus() -> None:
+    """Fail with a copy-pasteable hint when the third-party corpus has not been downloaded."""
+    if corpus_ready(CORPUS):
+        return
+    raise RuntimeError(f"the scikit-learn corpus is missing at {CORPUS}. Download it once with: {CORPUS_HINT}")
+
+
+def check_index(collection: object) -> None:
+    """Refuse to query an index that another model, chunker or corpus built."""
+    stored = getattr(collection, "metadata", None) or {}
+    expected = {key: value for key, value in _index_metadata().items() if key in {"embedding_model", "chunker_version", "corpus_digest"}}
+    mismatched = {key: (stored.get(key), value) for key, value in expected.items() if str(stored.get(key)) != str(value)}
+    if mismatched:
+        details = ", ".join(f"{key}: index={old!r} now={new!r}" for key, (old, new) in mismatched.items())
+        raise RuntimeError(f"the index in {CHROMA_PATH} does not match the corpus/settings ({details}). Rebuild it with: {REBUILD_HINT}")
 
 
 def _chunks_for(rel: str, source: str) -> list[dict[str, object]]:
     """Split one file into citable chunks (Python by AST, RST/Markdown by heading)."""
+    if not rel.endswith(".py"):
+        source = _strip_front_matter(source)  # guidance docs carry YAML metadata, not prose
     lines = source.splitlines()
     if not lines:
         return []
@@ -116,7 +232,7 @@ def _spans(rel: str, lines: list[str]) -> list[tuple[str, int, int]]:
     """Symbol, start and end for every section of a file; 1-based and inclusive."""
     if rel.endswith(".py"):
         return _python_spans(lines)
-    markers = [(index + 1, match.group(2).strip()) for index, line in enumerate(lines) if (match := re.match(r"^#{1,6}\s+(.+?)\s*$", line))]
+    markers = [(index + 1, match.group(1).strip()) for index, line in enumerate(lines) if (match := re.match(r"^#{1,6}\s+(.+?)\s*$", line))]
     if not markers:  # RST: a title is the line above a run of repeated punctuation
         for index, line in enumerate(lines):
             stripped = line.rstrip()
@@ -181,33 +297,79 @@ def _windows(start: int, end: int) -> list[tuple[int, int]]:
         position = window_end - OVERLAP + 1
 
 
-def _iter_files() -> list[Path]:
-    """Every file matched by INCLUDE, without duplicates."""
-    found: dict[Path, None] = {}
+def _extra_markdown_files(root: Path = EXTRA_CORPUS) -> list[Path]:
+    """Every ``*.md`` under the guidance corpus, sorted; empty when the folder is absent."""
+    if not root.is_dir():
+        return []
+    return sorted(path for path in root.rglob("*.md") if path.is_file())
+
+
+def _strip_front_matter(text: str) -> str:
+    """Drop a leading ``---`` YAML block: it is document metadata, not prose for the model."""
+    if not text.startswith("---"):
+        return text
+    lines = text.splitlines(keepends=True)
+    for index, line in enumerate(lines[1:], start=1):
+        if line.strip() == "---":
+            return "".join(lines[index + 1 :]).lstrip("\n")
+    return text
+
+
+def _indexable_files(corpus: Path = CORPUS, extras: Path = EXTRA_CORPUS) -> list[tuple[str, Path]]:
+    """``(label, path)`` for everything that becomes chunks.
+
+    The label is the citation path the model sees and part of every chunk id, so it is
+    prefixed with the guidance folder's name and stays distinct from the checkout's paths.
+    """
+    found: dict[str, Path] = {}
     for pattern in INCLUDE:
-        for path in sorted(CORPUS.glob(pattern)):
+        for path in sorted(corpus.glob(pattern)):
             if path.is_file() and path.suffix.lower() in {".py", ".rst", ".md"}:
-                found[path] = None
-    return list(found)
+                found[path.relative_to(corpus).as_posix()] = path
+    for path in _extra_markdown_files(extras):
+        found[f"{extras.name}/{path.relative_to(extras).as_posix()}"] = path
+    return sorted(found.items())
 
 
 def build_index(recreate: bool = False) -> int:
     """Chunk and embed the corpus into the local Chroma directory; idempotent."""
+    require_corpus()
+    record = read_provenance(CORPUS)
+    print(f"corpus: {CORPUS}")
+    print(f"        ref {record.get('ref', 'unknown')}, commit {record.get('commit', 'unknown')}, scikit-learn {record.get('version', 'unknown')}")
+    extra_documents = _extra_markdown_files()
+    if extra_documents:
+        print(f"guidance: {EXTRA_CORPUS} ({len(extra_documents)} Markdown files)")
+    else:
+        print(f"guidance: none ({EXTRA_CORPUS} has no .md files, source-only index)")
+    print(f"embedding model: {EMBED_MODEL}")
+
     client = chromadb.PersistentClient(path=str(CHROMA_PATH))
     if recreate:
         try:
             client.delete_collection(COLLECTION)
         except Exception:  # nothing to delete
             pass
-    collection = client.get_or_create_collection(COLLECTION, embedding_function=None)
+    else:
+        try:
+            check_index(client.get_collection(COLLECTION, embedding_function=None))
+        except RuntimeError:
+            raise
+        except Exception:  # no collection yet
+            pass
+    collection = client.get_or_create_collection(COLLECTION, metadata=_index_metadata(), embedding_function=None)
+    # An existing collection keeps its old metadata, so the provenance/digest is written explicitly.
+    collection.modify(metadata=_index_metadata())
 
     rows: list[tuple[str, dict[str, object]]] = []
-    files = _iter_files()
-    for path in files:
-        rel = path.relative_to(CORPUS).as_posix()
-        for chunk in _chunks_for(rel, path.read_text(encoding="utf-8", errors="replace")):
-            rows.append((rel, chunk))
-    print(f"{len(rows)} chunks from {len(files)} files")
+    sources = _indexable_files()
+    if not sources:
+        raise RuntimeError(f"none of the INCLUDE patterns matched a file under {CORPUS}; the checkout looks incomplete. Re-download it with: {CORPUS_HINT}")
+    for label, path in sources:
+        for chunk in _chunks_for(label, path.read_text(encoding="utf-8", errors="replace")):
+            rows.append((label, chunk))
+    guidance = sum(1 for label, _ in sources if label.startswith(f"{EXTRA_CORPUS.name}/"))
+    print(f"{len(rows)} chunks from {len(sources)} files ({len(sources) - guidance} scikit-learn, {guidance} guidance)")
 
     client_ollama = ollama.Client(host=OLLAMA_URL, timeout=600)
     started = time.perf_counter()
@@ -231,7 +393,11 @@ def retrieve(query: str, top_k: int = TOP_K) -> list[Hit]:
     if top_k < 1:
         return []
     vector = ollama.Client(host=OLLAMA_URL, timeout=600).embed(model=EMBED_MODEL, input=[query], truncate=True).embeddings[0]
-    collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION, embedding_function=None)
+    try:
+        collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION, embedding_function=None)
+    except Exception as exc:
+        raise RuntimeError(f"no index in {CHROMA_PATH} ({exc}). Build it with: uv run python -m regression.rag --build-index") from exc
+    check_index(collection)
     result = collection.query(query_embeddings=[list(vector)], n_results=top_k, include=["documents", "metadatas", "distances"])
     return [
         Hit(path=str(metadata["path"]), symbol=str(metadata["symbol"]), start=int(metadata["start_line"]), end=int(metadata["end_line"]), distance=float(distance), text=str(text))
@@ -253,11 +419,12 @@ def ask(
     on_token receives each piece as it arrives, which is how the web page streams.
     """
     hits = retrieve(prompt, top_k)
+    used_model = model or CHAT_MODEL
     messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": _user_message(prompt, hits, extra_context)}]
     final = None
     parts: list[str] = []
     started = time.perf_counter()
-    for chunk in ollama.Client(host=OLLAMA_URL, timeout=600).chat(model=model or CHAT_MODEL, messages=messages, stream=True, options={"temperature": 0.2, "num_ctx": 8192}):
+    for chunk in ollama.Client(host=OLLAMA_URL, timeout=600).chat(model=used_model, messages=messages, stream=True, options={"temperature": 0.2, "num_ctx": 8192}):
         if getattr(chunk, "done", False):
             final = chunk
             continue
@@ -273,7 +440,7 @@ def ask(
     speed = None
     if final is not None and final.eval_count and final.eval_duration:
         speed = final.eval_count / (final.eval_duration / 1_000_000_000)
-    return Answer(text="".join(parts).strip(), hits=hits, seconds=seconds, tokens_per_second=speed)
+    return Answer(text="".join(parts).strip(), hits=hits, seconds=seconds, tokens_per_second=speed, model=used_model)
 
 
 def _user_message(prompt: str, hits: list[Hit], extra_context: str = "") -> str:
@@ -310,7 +477,12 @@ def wrap_prompt(instruction: str, task: str = "", tone: str = "", target: str = 
 
 
 def extract_code(answer: str) -> str | None:
-    """The first fenced python block, falling back to any fenced block."""
+    """The first fenced python block, falling back to any fenced block or an unclosed fence.
+
+    A local model can stop mid-stream and never close its fence; that code is still what the
+    user asked for, so it is kept instead of being thrown away (which used to save the raw
+    answer as ``output.md``).
+    """
     blocks = re.findall(r"```(\w*)\n(.*?)```", answer, re.DOTALL)
     for language, body in blocks:
         if language.lower() in {"python", "py", "python3"} and body.strip():
@@ -318,16 +490,29 @@ def extract_code(answer: str) -> str | None:
     for _, body in blocks:
         if body.strip():
             return body.strip() + "\n"
+    open_fence = re.search(r"```(?:python|py|python3)?\s*\n(?P<body>.*)$", answer, re.DOTALL)
+    if open_fence:
+        body = open_fence.group("body").strip()
+        if body and not body.lstrip().startswith("```"):
+            return body + "\n"
     return None
+
+
+_NOTEBOOK_HINT = re.compile(r"\.ipynb\b|notebook|jupyter", re.IGNORECASE)
+
+
+def wants_notebook(prompt: str) -> bool:
+    """True when the instruction asks for a notebook in any of the usual phrasings."""
+    return bool(_NOTEBOOK_HINT.search(prompt))
 
 
 def save_file(prompt: str, answer: Answer, kind: str = "cmd", extra_context: str = "", top_k: int | None = None, run_dir: Path | None = None) -> Path:
     """Archive one run: runs/rag/<kind>/<n>/prompt.md plus output.py, .ipynb or .md."""
     code = extract_code(answer.text)
-    wants_notebook = "notebook" in prompt.lower() or prompt.lower().endswith(".ipynb")
+    notebook_requested = wants_notebook(prompt)
     run_dir = run_dir or _next_run_dir(kind)
     (run_dir / "prompt.md").write_text(_prompt_record(prompt, answer, kind, extra_context, top_k), encoding="utf-8", newline="\n")
-    if code and wants_notebook:
+    if code and notebook_requested:
         _write_notebook(prompt, code, run_dir / "output.ipynb")
         return run_dir / "output.ipynb"
     if code:
@@ -372,7 +557,7 @@ def _prompt_record(prompt: str, answer: Answer, kind: str, extra_context: str, t
         "",
         f"- created: {created}",
         f"- interface: {interface}",
-        f"- model: {CHAT_MODEL}",
+        f"- model: {answer.model or CHAT_MODEL}",
         f"- excerpts retrieved: {len(answer.hits)} (top_k {top_k if top_k is not None else TOP_K})",
         f"- answer time: {answer.seconds:.1f} s, {speed}",
         "",
@@ -440,18 +625,54 @@ def _cell(source: str) -> dict[str, object]:
     return {"cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [], "source": source.splitlines(keepends=True)}
 
 
+def status() -> int:
+    """Print what the experiment is set up with: corpus, index, models, chunker."""
+    record = read_provenance(CORPUS)
+    print(f"corpus          : {CORPUS}")
+    if corpus_ready(CORPUS):
+        print(f"                  ref {record.get('ref', 'unknown')}, commit {record.get('commit', 'unknown')}, scikit-learn {record.get('version', 'unknown')}")
+    else:
+        print(f"                  MISSING ({', '.join(missing_markers(CORPUS))}) -> {CORPUS_HINT}")
+    guidance = _extra_markdown_files()
+    if guidance:
+        print(f"guidance docs   : {EXTRA_CORPUS} ({len(guidance)} Markdown files)")
+    else:
+        print(f"guidance docs   : none ({EXTRA_CORPUS} has no .md files, source-only index)")
+    print(f"index           : {CHROMA_PATH}")
+    try:
+        collection = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_collection(COLLECTION, embedding_function=None)
+    except Exception:
+        print(f"                  collection '{COLLECTION}' not built yet -> uv run python -m regression.rag --build-index")
+    else:
+        print(f"                  collection '{COLLECTION}': {collection.count()} chunks, metadata {collection.metadata}")
+        try:
+            check_index(collection)
+        except RuntimeError as exc:
+            print(f"                  STALE: {exc}")
+    print(f"chat model      : {CHAT_MODEL} at {OLLAMA_URL}")
+    print(f"embedding model : {EMBED_MODEL} (chunker {CHUNKER_VERSION}, top_k {TOP_K})")
+    return 0
+
+
 def main() -> int:
-    """CLI for (re)building the index."""
+    """CLI for (re)building the index and inspecting the setup."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Build the local scikit-learn index used by regression/chat.py and regression/web.py.")
     parser.add_argument("--build-index", action="store_true", help="chunk and embed the INCLUDE patterns")
     parser.add_argument("--recreate", action="store_true", help="delete the existing collection first")
+    parser.add_argument("--status", action="store_true", help="print the corpus, index and model settings and exit")
     args = parser.parse_args()
+    if args.status:
+        return status()
     if not args.build_index:
         parser.print_help()
         return 0
-    build_index(recreate=args.recreate)
+    try:
+        build_index(recreate=args.recreate)
+    except RuntimeError as exc:
+        print(f"FAIL {exc}")
+        return 1
     return 0
 
 

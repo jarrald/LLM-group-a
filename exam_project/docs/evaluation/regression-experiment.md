@@ -44,6 +44,29 @@ The index is the scikit-learn checkout (`sklearn/linear_model/*.py`,
 embedded with `nomic-embed-text`. Default `top_k` is 8. The index lives in
 `regression/.chroma` and is queried in-process — no Chroma server is involved.
 
+The corpus is third-party source (~23 MB, 1 600+ files). It is git-ignored and is therefore
+**not** part of a clone of this repository; it is downloaded once and recorded:
+
+```powershell
+uv run python -m regression.fetch_corpus      # ref main -> commit bf4348196, sklearn 1.10.dev0
+uv run python -m regression.rag --build-index
+```
+
+Since 2026-11-11 the same collection also holds **79 chunks from seven project-authored
+guidance documents** in `regression/rag-optimized/` (concepts, scikit-learn workflow, metrics,
+diagnostics, worked examples, a small-model playbook, and a corpus guide), cited as
+`rag-optimized/<file>.md`. They are optional: `RAG_EXTRA_CORPUS` pointing at a missing path
+builds the source-only index that every run recorded before that date used, so those runs
+remain reproducible. See ADR-026.
+
+`regression/fetch_corpus.py` downloads the repository archive, checks that the paths the index
+needs are present, and writes `regression/scikit-learn-main/.corpus.json` with the ref, the
+commit GitHub reports for it, the declared `scikit-learn.__version__` and the fetch date. All
+runs documented here were made against a `main` checkout reporting `1.10.dev0`, which still
+chunks into the same 962 pieces after the 2026-11-10 re-download. Pass `--ref <tag>` to pin a
+release instead; re-downloading changes the corpus, and the index records a fingerprint of it,
+so the next build refuses to mix two versions unless it is rebuilt with `--recreate`.
+
 ### 2.3 Datasets
 
 | File | Rows | Columns | Role |
@@ -74,6 +97,9 @@ StudyGraph app and every measured local number in this document come from the lo
    the run folder; the prompt then names that on-disk path.
 5. The answer's single fenced Python block is written to `output.py`, or to `output.ipynb`
    when a notebook was requested. Every run is archived with the full prompt it received.
+6. The chat model is chosen at run time from the models installed in Ollama (the web page's
+   sidebar lists them, `--model` does the same on the CLI), and the model that answered is
+   written into the run record. The recorded runs all used `qwen2.5-coder:7b`.
 
 Each run folder therefore contains the instruction, the retrieved excerpts with distances, the
 complete system + user prompt, and the exact file the model produced.
