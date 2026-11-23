@@ -1,281 +1,204 @@
-Synopsis – StudyGraph: A Local LLM-Powered Study Assistant
-1. Problem, Target Users, Purpose and MVP Scope
+# Synopsis – StudyGraph: A Local LLM-Powered Study Assistant
 
-Students often work with large amounts of course material distributed across lecture slides, notes and supplementary documents. Finding relevant information, understanding difficult concepts and preparing effectively for examinations can be time-consuming. General-purpose AI assistants can help explain concepts, but their answers are not necessarily grounded in the specific material taught in a course. This can result in inaccurate explanations, hallucinations or answers that do not reflect the course curriculum.
+## 1. Problem, Target Users, Purpose and MVP Scope
 
-StudyGraph addresses this problem by providing a locally running AI study assistant that combines a Large Language Model (LLM) with Retrieval-Augmented Generation (RAG). Instead of relying exclusively on the language model's pretrained knowledge, the application retrieves relevant passages from course materials and supplies them as context when generating answers.
+Students often work with large amounts of course material distributed across lecture slides, notes and supplementary documents. Finding relevant information, understanding difficult concepts and preparing for examinations can be time-consuming. While general-purpose AI assistants can help explain concepts, their responses are not necessarily grounded in the material taught in a specific course. This can lead to inaccurate explanations, hallucinations or answers that do not reflect the curriculum.
 
-The primary target users are university students who want assistance understanding and revising their course material. The application is particularly relevant to students who want personalised explanations, summaries, practice questions and interactive study support.
+StudyGraph addresses this problem by combining a locally running Large Language Model (LLM) with Retrieval-Augmented Generation (RAG). Rather than relying solely on the model's pretrained knowledge, the application retrieves relevant information from course materials and uses it as context when generating responses.
 
-The purpose is to investigate whether a local LLM combined with RAG can provide useful, course-specific learning assistance while maintaining privacy and reducing dependence on external AI services. Another objective is to explore how prompt engineering and retrieval influence the quality and reliability of generated responses.
+The primary target users are university students who want assistance understanding and revising their course material. The purpose of the project is to investigate whether a local LLM combined with RAG can provide useful, course-specific learning assistance while maintaining privacy and reducing dependence on external AI services. The project also explores how prompt engineering and retrieval influence the quality and reliability of generated responses.
 
-The MVP focuses on one predefined course, LLMs for Developers. Its main features are:
+### MVP Scope
 
-A conversational interface for interacting with the AI assistant.
-Reusable study profiles, called Buddies, with configurable teaching characteristics.
-Persistent conversations and conversation history.
-A locally running language model through Ollama.
-Retrieval of relevant course material using ChromaDB.
-References to retrieved course material to improve transparency.
-An alternative general-chat mode without course-specific retrieval.
-The ability to request explanations, summaries and practice questions.
+The Minimum Viable Product (MVP) focuses on one predefined course, *LLMs for Developers*, and includes the following features:
 
-The application also includes an About page for inspecting model information, index size and data locations.
+- A conversational interface for interacting with the AI assistant.
+- Reusable assistant profiles, called Buddies, with configurable teaching characteristics.
+- Persistent conversations and conversation history.
+- Local language model inference through Ollama.
+- Retrieval of course material using ChromaDB, including source references.
+- A general-chat mode without course-specific retrieval.
+- Support for explanations, summaries and practice questions.
 
-The MVP deliberately limits the number of supported courses and does not attempt to become a complete learning management system. Features such as unrestricted course management and supplementary document uploads are outside the essential initial scope.
+An About page also provides information about the models, knowledge-base index and local data storage.
 
-2. Architecture and Implementation
-2.1 Overall architecture
+The MVP deliberately focuses on a limited scope rather than becoming a complete learning management system. Features such as unrestricted course management and supplementary document uploads are outside the initial scope.
 
-StudyGraph is implemented in Python 3.12 and uses a modular architecture that separates the user interface, application services, domain models, prompt construction, retrieval, language model integration and persistence.
+## 2. Architecture and Implementation
+
+### 2.1 Overall Architecture
+
+StudyGraph is implemented in Python 3.12 using a modular architecture that separates the user interface, application services, domain models, prompt construction, retrieval, language model integration and persistence.
 
 The main technologies are:
 
-Streamlit: Provides the multi-page web interface.
-LangGraph: Orchestrates the conversation workflow and controls the RAG and non-RAG execution paths.
-Ollama: Runs the local language model and embedding model.
-ChromaDB: Stores and retrieves embedded course-material chunks.
-SQLite: Persists Buddies, conversations, messages and configuration snapshots.
-Python and uv: Provide the application environment and dependency management.
+| Technology | Purpose |
+|---|---|
+| Streamlit | Multi-page web interface |
+| LangGraph | Conversation workflow and RAG orchestration |
+| Ollama | Local language model and embedding model |
+| ChromaDB | Storage and retrieval of embedded course material |
+| SQLite | Persistence of Buddies, conversations, messages and configuration snapshots |
+| Python and uv | Application development and dependency management |
 
-The selected chat model is llama3.2:3b, while nomic-embed-text generates 768-dimensional embeddings. The models run locally through Ollama.
+The selected chat model is `llama3.2:3b`, while `nomic-embed-text` generates 768-dimensional embeddings. Both models run locally through Ollama, allowing the application's core functionality to operate without external hosted LLM APIs.
 
-2.2 Application flow
+### 2.2 Application Flow
 
-The application is organised into three main pages:
+The application consists of three main pages:
 
-Chat: Students select a Buddy, start conversations, submit questions and receive streaming responses. Retrieved sources can be inspected alongside the answers.
-Buddies: Students create and edit reusable assistant profiles by configuring their preferred teaching style and intended audience.
-About: Displays information about the models, knowledge-base index and local data storage.
+- **Chat:** Students select a Buddy, start conversations, submit questions and receive streaming responses. Retrieved sources can be inspected alongside the answers.
+- **Buddies:** Students create and configure reusable assistant profiles based on their preferred teaching style and knowledge level.
+- **About:** Displays information about the models, knowledge-base index and local storage.
 
-A typical interaction follows this sequence:
+When a student starts a conversation, the application saves a snapshot of the selected Buddy's configuration. The student can then submit a question and select the desired Task.
 
-The student selects an existing Buddy and starts a conversation.
-The application creates a conversation and saves a snapshot of the Buddy configuration.
-The student submits a message and selects the desired Task.
-The application retrieves the conversation history and configuration.
-The prompt builder combines the four T's with the current message and relevant history.
-If the Buddy is associated with a course, LangGraph executes the retrieval branch.
-The retrieval component searches ChromaDB for relevant course-material chunks.
-Retrieved passages and their source information are supplied to the language model.
-Ollama generates the response, which is streamed to the interface.
-The response and user message are persisted in SQLite.
+The application retrieves the conversation history and constructs a prompt using the four T's, the current message and relevant previous messages. LangGraph determines whether the conversation requires course-specific retrieval.
 
-If the Buddy has no associated course, the retrieval step is skipped. The same prompt-engineering configuration is retained, allowing a comparison between general LLM responses and RAG-supported responses.
+For course-related conversations, ChromaDB retrieves relevant passages from the indexed material. These passages are included in the prompt sent to Ollama, which generates and streams the response to the interface. Both the user's message and the generated response are stored in SQLite.
 
-2.3 Local LLM and RAG implementation
+For general-chat conversations, the retrieval step is skipped while the same prompt-engineering configuration is maintained. This separation allows the application to support both RAG-based and general LLM interactions.
 
-The local-first approach means that core inference does not depend on an external hosted LLM API. Ollama provides the runtime for both text generation and embeddings.
+### 2.3 Local LLM and RAG Implementation
 
-The chat model generates natural-language explanations, while the embedding model transforms text into numerical vector representations that capture semantic information.
+StudyGraph uses RAG to provide the language model with relevant information from the course material. The pipeline consists of two main stages: indexing and retrieval.
 
-RAG consists of two main stages:
+**Indexing:** Course documents are collected, converted from PDF to Markdown and cleaned to correct extraction artifacts. The documents are then divided into smaller chunks, transformed into embeddings and stored in ChromaDB together with their source metadata.
 
-Indexing stage:
+**Retrieval:** When a student submits a question, the application generates an embedding of the query and searches ChromaDB for semantically similar chunks. Relevant passages are included in the LLM prompt, allowing the model to generate responses informed by course-specific material.
 
-Course documents are collected from lecture materials.
-Original PDF material is converted into Markdown.
-Extraction artifacts are checked and corrected where necessary.
-Documents are divided into smaller, meaningful chunks.
-Source metadata is retained.
-Each chunk is converted into an embedding.
-Embeddings and associated text are stored in ChromaDB.
+The current knowledge base contains 85 Markdown documents and approximately 1,660 chunks, covering eight available teaching weeks. The application uses a heading-first chunking strategy with a configured chunk size of 900 and an overlap of 120 to preserve contextual relationships between passages.
 
-Query stage:
+The system also distinguishes between retrieval failures and successful retrieval that produces no sufficiently relevant results. This distinction is important because the assistant should not present an answer as course-grounded when retrieval has failed.
 
-The student's question is converted into an embedding.
-ChromaDB searches for semantically similar chunks.
-The most relevant passages are returned.
-Retrieved content is inserted into the LLM prompt as contextual information.
-The LLM generates an answer based on the question and retrieved material.
-Available source references are presented to the student.
+## 3. Application of the Four T's and Key Design Decisions
 
-The current course corpus contains 85 Markdown documents and approximately 1,660 chunks, covering eight available teaching weeks. The material is written in English to align with the embedding model.
+A central design principle of StudyGraph is the application of the four T's: Task, Tone, Traits and Target. These dimensions provide a structured approach to prompt engineering, allowing students to customise how the assistant behaves and communicates.
 
-The application uses a heading-first chunking strategy with a configured chunk size of 900 and an overlap of 120. This aims to preserve contextual relationships while avoiding chunks that are unnecessarily large.
+- **Task:** Defines what the assistant should do, such as explaining concepts, summarising lectures, generating practice questions or reviewing answers.
+- **Tone:** Determines the communication style, such as friendly, formal, encouraging or academic.
+- **Traits:** Describes behavioural characteristics, such as being patient, analytical, critical or Socratic.
+- **Target:** Specifies the intended audience and knowledge level, ranging from beginners to students preparing for examinations.
 
-The architecture also distinguishes between retrieval failure and successful retrieval that produces no sufficiently relevant results. This is important because the assistant should not claim that an answer is course-grounded when the retrieval process has failed.
+These dimensions are implemented through reusable assistant profiles called Buddies. Each Buddy stores its Tone, Traits and Target, while Task is selected independently for each message. This allows students to perform different learning activities without creating separate profiles for every task.
 
-3. Application of the Four T's and Key Design Decisions
+Another important design decision is saving a snapshot of the Buddy configuration when a conversation begins. Consequently, editing a Buddy does not automatically change the behaviour of existing conversations. This improves consistency and makes comparisons more reproducible.
 
-An important design principle in StudyGraph is the use of the four T's: Task, Tone, Traits and Target. These dimensions provide a structured approach to prompt engineering and allow students to customise the assistant without having to understand the technical details of prompt construction.
+The application also separates RAG and non-RAG execution while retaining the same prompt construction process. This makes it possible to investigate the contribution of retrieval without unnecessarily changing other prompt-engineering variables.
 
-Task – What should the AI do?
+## 4. Machine Learning Concepts, Data Preparation and Retrieval Choices
 
-Task defines the activity requested in an individual interaction. Examples include explaining a concept, summarising a lecture, generating practice questions, comparing concepts or reviewing a student's answer.
+StudyGraph applies several concepts from machine learning and natural language processing, particularly embeddings, semantic similarity and Retrieval-Augmented Generation.
 
-Task is selected separately for each message. This allows students to reuse the same Buddy for different learning activities.
+### Embeddings and Semantic Retrieval
 
-Tone – How should the AI communicate?
+An embedding model transforms text into numerical vectors that represent semantic information. Texts with similar meanings generally have vectors that are closer together in the embedding space.
 
-Tone defines the communication style. Examples include friendly, formal, encouraging, concise or academic.
+StudyGraph uses `nomic-embed-text` to generate 768-dimensional embeddings for both course-material chunks and student questions. This enables the system to retrieve relevant information even when a student uses different wording from the original lecture material.
 
-This helps adapt the assistant's responses to the student's preferred learning experience.
+ChromaDB was selected as the vector database because it provides a straightforward local solution for semantic search and supports metadata filtering.
 
-Traits – What characteristics should the AI exhibit?
+### Data Preparation and Retrieval Strategy
 
-Traits describe the assistant's behavioural characteristics. Examples include being patient, analytical, critical, supportive or Socratic.
+The dataset consists of lecture materials from the *LLMs for Developers* course, covering weeks 1, 2, 3, 4, 6, 8, 9 and 10. Weeks 5 and 7 contained no material.
 
-Multiple traits can be combined to create different teaching approaches.
+The original PDF documents are converted into Markdown to make them easier to process while preserving headings and textual structure. The extracted content is cleaned, divided into chunks and associated with metadata so retrieved passages can be traced to their original sources.
 
-Target – Who is the AI communicating with?
+A heading-first chunking strategy is used to preserve the relationship between headings and their content. Overlapping chunks help reduce the risk of losing information at chunk boundaries.
 
-Target defines the intended audience or knowledge level. For example, the assistant can be configured to explain concepts to beginners, students with fundamental knowledge or students preparing for an examination.
+The application currently retrieves semantically similar chunks and supplies them to the language model as contextual information. However, the optimal number of retrieved chunks and an appropriate relevance threshold remain subject to further evaluation.
 
-Key design decisions
+Although RAG can improve the relevance of generated responses, it does not guarantee correctness. The quality of the results depends on the source material, chunking strategy, embedding model, retrieval process and language model.
 
-The four T's are implemented through reusable Buddies. Each Buddy stores its Tone, Traits and Target, while Task is selected independently for each message.
+## 5. Results and Reflection: Linear Regression versus Local LLM + RAG
 
-This separation was an important architectural decision because it avoids requiring students to create a new assistant every time they want to perform a different learning activity.
+### 5.1 Experimental Setup
 
-Another important decision was to save a snapshot of the Buddy configuration when a conversation starts. Consequently, editing a Buddy does not silently change the behaviour of existing conversations. This improves consistency and makes comparisons more reproducible.
+A separate experiment was conducted to compare a traditional machine learning model with a local LLM using RAG. The objective was to predict the daily revenue of an ice-cream stand based on temperature.
 
-The project also deliberately separates RAG and non-RAG execution while retaining the same prompt construction process. This makes it possible to investigate the contribution of retrieval without unnecessarily changing other prompt-engineering variables.
+The dataset contained 500 observations with two variables: temperature as the input feature and revenue as the prediction target.
 
-4. Relevant Machine Learning Concepts, Data Preparation and Retrieval Choices
+The data was divided into training, validation and test sets using a 70/15/15 split with `random_state=42`, resulting in 361 training observations, 64 validation observations and 75 test observations.
 
-StudyGraph combines several important machine learning and natural language processing concepts.
+Three held-out test observations were selected to represent the coldest, median and warmest temperatures. Their actual revenue values were hidden from both prediction approaches until evaluation.
 
-Embeddings and semantic similarity
+### 5.2 Prediction Approaches
 
-An embedding model transforms text into a numerical vector. Text with similar semantic meaning should generally have vectors that are closer together in the embedding space.
+**Linear Regression**
 
-StudyGraph uses nomic-embed-text to represent both course-material chunks and student questions as 768-dimensional vectors.
+The first approach used Scikit-learn's `LinearRegression`, trained on the 361 training observations.
 
-This makes it possible to retrieve relevant passages even when the student uses different wording from the original lecture material.
+The fitted regression equation was:
 
-Retrieval-Augmented Generation
+**Revenue = 21.2581 × Temperature + 49.8138**
 
-RAG combines information retrieval with generative AI.
+Linear regression learns the relationship between temperature and revenue by minimising the sum of squared residuals. It provides an interpretable and relatively simple prediction model for this numerical task.
 
-A conventional LLM generates responses primarily from its pretrained parameters and the supplied prompt. RAG supplements this process with information retrieved from an external knowledge base.
+**Local LLM with RAG**
 
-The principal advantage is that responses can be grounded in specific course material rather than relying exclusively on potentially incomplete or outdated pretrained knowledge.
+The second approach used `qwen2.5-coder:7b` through Ollama, together with `nomic-embed-text` for embeddings.
 
-However, RAG does not guarantee correctness. Its effectiveness depends on the quality of the source material, chunking, embeddings, retrieval and final generation.
+A separate ChromaDB collection was created containing 12 reference observations selected exclusively from the training data. For each prediction, the system retrieved the three most semantically similar observations and provided them to the LLM as context.
 
-Data preparation
-
-The primary dataset consists of lecture material for LLMs for Developers.
-
-The original documents are converted from PDF into Markdown. This makes the content easier to process and preserves headings and textual structure.
-
-The documents are cleaned, divided into chunks and associated with metadata that allows retrieved passages to be traced to their sources.
-
-The current corpus covers weeks 1, 2, 3, 4, 6, 8, 9 and 10, from our LLM course. Weeks 5 and 7 were empty.
-
-Retrieval choices
-
-ChromaDB was selected as the vector database because it provides a relatively straightforward local vector-search solution and supports metadata filtering.
-
-The heading-first chunking strategy aims to preserve the relationships between headings and the content they introduce. The overlap helps reduce the risk of losing relevant information at chunk boundaries.
-
-The system currently retrieves semantically similar chunks and supplies them to the language model as contextual information.
-
-The final retrieval configuration, including the optimal number of retrieved chunks and a relevance threshold, remains subject to further evaluation.
-
-5. Results and Reflection: Linear Regression versus Local LLM + RAG
-5.1 Experimental setup
-
-A separate experiment was conducted to compare a conventional machine learning model with a local LLM using RAG.
-
-The task was to predict the daily revenue of an ice-cream stand based on temperature.
-
-The dataset contained 500 observations with two variables:
-
-Temperature: input feature.
-Revenue: prediction target.
-
-The dataset was divided into training, validation and test sets using a 70/15/15 split with random_state=42.
-
-This produced 361 training observations, 64 validation observations and 75 test observations.
-
-Three held-out test observations were selected: the coldest, median and warmest temperatures. Their actual revenue values were hidden from both prediction approaches until evaluation.
-
-5.2 Linear regression
-
-The first approach used Scikit-learn's LinearRegression, trained on the 361 training observations.
-
-The resulting fitted equation was:
-
-Revenue = 21.2581 × Temperature + 49.8138
-
-Linear regression learns a relationship between the input feature and target variable by minimising the sum of squared residuals.
-
-It provides a relatively simple, interpretable and deterministic prediction model for this dataset.
-
-5.3 Local LLM with RAG
-
-The second approach used qwen2.5-coder:7b through Ollama, together with nomic-embed-text.
-
-A separate ChromaDB collection was created containing 12 reference observations selected exclusively from the training data.
-
-For each question, the system retrieved the three most semantically similar reference rows. The model was instructed to return a numerical prediction without executing code or using regression formulas.
+The model was instructed to return a numerical prediction without executing code or using regression formulas.
 
 An additional experiment used the same LLM without retrieval to investigate the contribution of RAG.
 
-5.4 Experimental results
+### 5.3 Experimental Results
 
-The following table presents the actual recorded results.
+The recorded results were:
 
-Temperature	Actual revenue	Linear regression	LLM + RAG	LLM without RAG
-0.27	32.55	55.49	55.39	100
-23.59	542.61	551.31	552.82	1500
-40.47	918.39	910.21	630.00	1000
-Mean absolute error		13.28	107.15	368.82
+| Temperature | Actual Revenue | Linear Regression | LLM + RAG | LLM without RAG |
+|---|---:|---:|---:|---:|
+| 0.27 | 32.55 | 55.49 | 55.39 | 100 |
+| 23.59 | 542.61 | 551.31 | 552.82 | 1500 |
+| 40.47 | 918.39 | 910.21 | 630.00 | 1000 |
+| **Mean Absolute Error** | | **13.28** | **107.15** | **368.82** |
 
-The results demonstrate that linear regression performed substantially better for this numerical prediction task.
+Linear regression achieved the lowest Mean Absolute Error (MAE) of 13.28, compared with 107.15 for the LLM with RAG and 368.82 for the LLM without retrieval.
 
-Its mean absolute error was 13.28, compared with 107.15 for the local LLM with RAG and 368.82 for the LLM without retrieval.
+Measured by MAE, linear regression performed approximately eight times better than the LLM with RAG. However, RAG reduced the LLM's prediction error by approximately 71% compared with generation without retrieval.
 
-Linear regression was approximately eight times more accurate than LLM + RAG in terms of mean absolute error.
+### 5.4 Reflection and Interpretation
 
-RAG nevertheless provided a considerable improvement within the LLM approach, reducing its mean absolute error by approximately 71% compared with generation without retrieval.
+The experiment demonstrates an important distinction between traditional predictive machine learning and generative language models.
 
-5.5 Reflection and interpretation
+Linear regression learns numerical coefficients from training data and uses them to calculate predictions. Its objective directly matches the numerical task, making it more suitable for this type of structured data.
 
-The experiment illustrates an important distinction between predictive machine learning and generative language models.
+The LLM, in contrast, generates predictions based on the information provided in its context. Retrieving relevant examples does not necessarily enable it to identify or reproduce the underlying numerical relationship.
 
-Linear regression learns numerical coefficients from the training data and uses them to calculate predictions. Its objective directly matches the numerical evaluation task.
+This limitation was particularly visible in the warmest-temperature test case. The retrieved reference observations were all below approximately 26 degrees, while the test input was 40.47 degrees. As a result, the LLM predicted a revenue of 630 compared with the actual value of 918.39.
 
-The LLM, on the other hand, generates a plausible response based on the information available in its context. It does not automatically learn the underlying numerical relationship simply because it retrieves examples.
+The experiment also revealed a limitation of semantic retrieval for numerical data. The embedding model retrieved nearly identical reference observations for all three temperature questions rather than prioritising values based on numerical distance.
 
-This limitation became particularly visible in the warmest-temperature test case. The retrieved observations were all below approximately 26 degrees, while the test input was 40.47 degrees. Consequently, the LLM predicted 630 instead of the actual revenue of 918.39.
+For structured numerical tasks, numerical nearest-neighbour retrieval would therefore be more appropriate than relying exclusively on semantic similarity.
 
-The experiment also revealed that semantic similarity is not necessarily appropriate for numerical retrieval. The embedding model retrieved nearly identical reference rows for all three temperature questions. It did not reliably prioritise observations based on numerical distance.
+Overall, the findings suggest that model selection should depend on the problem being solved. Traditional machine learning is better suited to numerical prediction tasks requiring accuracy, reproducibility and interpretability, while LLMs are more useful for natural-language explanations and interactions with unstructured information.
 
-For this type of task, numerical nearest-neighbour retrieval would be more appropriate than semantic embedding similarity.
+### 5.5 Limitations and Future Improvements
 
-The findings suggest that the choice of model should depend on the problem being solved. Traditional machine learning is preferable for structured numerical predictions where accuracy, reproducibility and interpretability are important. LLMs are more valuable for tasks involving natural-language explanations, contextual understanding and interaction with unstructured information.
+The experiment has several limitations. Only three held-out observations were used for the final LLM comparison, which is insufficient for drawing broad statistical conclusions. Additionally, the experiment was limited to one dataset, one local LLM configuration and one embedding model.
 
-5.6 Limitations and possible improvements
+The results may therefore differ when using other models, datasets or retrieval strategies.
 
-The experiment has several limitations.
+Possible improvements include:
 
-First, only three held-out observations were used for the final LLM comparison. Although the train/test separation was maintained, this is too small a sample for broad statistical conclusions.
+- Evaluating predictions on a larger number of test observations.
+- Comparing additional regression models and local LLMs.
+- Investigating hybrid retrieval that combines semantic search with numerical nearest-neighbour methods.
+- Testing different chunk sizes, overlap settings and retrieval depths.
+- Introducing relevance thresholds and reranking to improve retrieval quality.
+- Evaluating generated answers for factual correctness, relevance, grounding and usefulness.
+- Improving how the assistant communicates uncertainty when information is missing.
 
-Second, the experiment used one dataset, one local LLM configuration and one embedding model. Different models and retrieval strategies could produce different results.
+It is important to distinguish the completed regression experiment from the broader evaluation of StudyGraph. While the regression experiment provides measured results, the formal evaluation of course-related RAG responses remains unfinished. Consequently, the numerical findings should not be interpreted as a direct measurement of the educational assistant's overall effectiveness.
 
-Third, semantic embeddings are not designed to perform precise numerical similarity searches. A hybrid retrieval approach combining semantic search with numerical nearest-neighbour retrieval could improve performance for structured data.
-
-Other improvements include:
-
-Increasing the number of evaluation observations.
-Comparing additional regression models and local LLMs.
-Testing different chunk sizes, overlap settings and retrieval depths.
-Introducing relevance thresholds to avoid supplying irrelevant context.
-Using reranking to improve the quality of retrieved passages.
-Evaluating answers for factual correctness, relevance, grounding and usefulness.
-Improving the assistant's ability to communicate uncertainty when information is missing.
-
-It is also important to distinguish the completed regression experiment from the broader evaluation of StudyGraph itself. The regression comparison is documented with measured results, whereas the formal evaluation of course-related RAG answers remains unfinished. Therefore, the numerical results should not be interpreted as a direct measurement of the educational assistant's overall performance.
-
-6. Conclusion
+## 6. Conclusion
 
 StudyGraph demonstrates how a locally running LLM can be combined with Retrieval-Augmented Generation to create a personalised study assistant grounded in course-specific learning materials.
 
-The implementation integrates prompt engineering through the four T's, semantic retrieval, local language model inference and persistent conversation management into a modular application.
+The application integrates local language model inference, semantic retrieval, prompt engineering through the four T's and persistent conversation management into a modular system.
 
-The regression experiment demonstrates that RAG can improve an LLM's ability to use available information, but it does not make a generative model equivalent to a specialised predictive model. Choosing the appropriate machine learning technique for the problem remains essential.
+The regression experiment highlights both the potential and limitations of RAG. Although retrieval improved the LLM's numerical predictions compared with generation without retrieval, linear regression performed substantially better for the structured prediction task. This demonstrates the importance of selecting appropriate machine learning methods based on the problem.
 
-Overall, the project provides a functional prototype and a practical demonstration of the opportunities and limitations of local LLMs and RAG in educational applications. Further evaluation of retrieval quality, answer correctness and the student learning experience would be necessary before drawing conclusions about its effectiveness as a complete learning solution.
+Overall, StudyGraph provides a functional prototype that explores the use of local LLMs and RAG in educational applications. Further evaluation of retrieval quality, answer correctness and the student learning experience is necessary before drawing conclusions about its effectiveness as a complete learning solution.
