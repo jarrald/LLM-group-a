@@ -1,5 +1,15 @@
 # Synopsis – StudyGraph: A Local LLM-Powered Study Assistant
 
+*Groupe members:* \
+Ahmad Alkaseb - cph-aa540@stud.ek.dk \
+Aleksandr Uktamovich Sorokin - also1002@stud.ek.dk \
+Jafar Alsukafi - jaal0002@stud.ek.dk \
+Jeppe Jeppsson - jeje1006@stud.ek.dk \
+Frederik Nicolajsen - frni1004@stud.ek.dk \
+Roman Ghazi - rogh1000@stud.ek.dk
+
+Character count: 15795
+
 ## 1. Problem, Target Users, Purpose and MVP Scope
 
 Students often work with large amounts of course material distributed across lecture slides, notes and supplementary documents. Finding relevant information, understanding difficult concepts and preparing for examinations can be time-consuming. While general-purpose AI assistants can help explain concepts, their responses are not necessarily grounded in the material taught in a specific course. This can lead to inaccurate explanations, hallucinations or answers that do not reflect the curriculum.
