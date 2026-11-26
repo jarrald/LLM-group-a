@@ -134,11 +134,11 @@ changed the answer.
 
 ### Phase 8 — Linear regression vs local LLM + RAG (0.5 d, separate track)
 
-Work: per
-[../evaluation/regression-vs-rag.md](../evaluation/regression-vs-rag.md): dataset with a
-train/reference split and held-out test inputs, a scikit-learn baseline, a RAG collection
-built **only** from the reference portion, the same held-out inputs given to the LLM,
-absolute error / MAE for both, and a short discussion of why they differ.
+Work: per the teacher-approved
+[../evaluation/regression-vs-rag.md](../evaluation/regression-vs-rag.md): the same small-model
+regression task with and without retrieval, a runnable-artefact comparison, and a discussion of
+why RAG did not bridge the capability gap. The old numeric-prediction write-up is archived and is
+not the active experiment.
 
 Exit evidence: the results table with real values and the recorded retrieved documents.
 
@@ -179,7 +179,7 @@ and the assignment's mandatory criteria.
 | M2 | RAG demonstrably affects an answer | Phase 7 | Paired answers with/without retrieval |
 | M3 | 4T's applied meaningfully and explained | Phase 4, synopsis | Prompt templates + synopsis section |
 | M4 | ML concept, data prep, limitations reflected | Phase 2, 8, synopsis | Knowledge-base doc + experiment discussion |
-| M5 | Regression vs LLM+RAG comparison | Phase 8 | `docs/evaluation/regression-vs-rag.md` |
+| M5 | Regression vs LLM+RAG comparison | Phase 8 | `docs/evaluation/regression-vs-rag.md` (small-model code generation) |
 
 ## 5. Explicit non-goals for the MVP
 

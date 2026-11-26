@@ -1,131 +1,98 @@
-# Comparison exercise — linear regression vs. local LLM + RAG
+# Regression comparison — small local models with and without RAG
 
-The experiment the assignment requires as a **separate** exercise (see
-[../exam_project_requirements_llm_for_developers_joint_teaching_draft_v4.md](../exam_project_requirements_llm_for_developers_joint_teaching_draft_v4.md)
-§"Comparison Exercise"). It is not part of the StudyGraph app and needs no UI.
+**Scope.** This is the teacher-approved experiment: can a small local model produce a working
+linear-regression program, and does retrieval improve it? It is a **code-generation** comparison,
+not the assignment's separate “same held-out inputs → predictions → MAE” exercise. No LLM
+prediction error is reported, because none of the generated programs reached the prediction stage.
 
-**Status:** done. Every number below comes from a recorded run; nothing is estimated. The wider
-evaluation of the coding-task runs that surround this experiment is in
-[regression-experiment.md](regression-experiment.md).
+The earlier `qwen2.5-coder:7b` prediction comparison is history only; it is archived at
+[`old/regression-vs-rag.md`](old/regression-vs-rag.md) and is not used for this claim.
 
-## 1. Task definition
+## 1. Experimental setup
 
 | Item | Value |
 |---|---|
-| Prediction task | predict the revenue of an ice-cream stand from the day's temperature |
-| Input feature | `Temperature` (0–45) |
-| Target | `Revenue` (10–1000) |
-| Dataset | `regression/datasets/ice_cream_regression.csv`, 500 rows, 2 columns |
-| Split | 70 / 15 / 15 (`train_test_split`, `random_state=42`), identical to `regression/non-llm.ipynb`: 361 train, 64 validation, 75 test |
-| Held-out test inputs | 3 of the 75 test rows: the coldest (0.27), the median (23.59) and the warmest (40.47) |
-| Test targets | read only for scoring; never given to either approach |
+| Models | `gemma3:270m`, `gemma3:1b` |
+| Datasets | `ice_cream_regression.csv` (500 × 2), `house prices.csv` (4,600 × 18) |
+| RAG | lean corpus, 566 chunks (12 scikit-learn files + 7 project guides) |
+| Embedding | `embeddinggemma` |
+| Retrieval | `top_k=0` (no RAG) vs `top_k=4` |
+| Generation | `temperature=0.2`, `num_ctx=16384` |
+| Interface | Streamlit page, one run per cell |
+| Instruction | explicit Dataset block with exact path, header and first data row |
 
-The test targets are not written into any prompt. `compare-predictions.py` holds them in memory
-only after both predictions have been produced.
+Inside each pair, model, dataset, prompt, 4T fields and generation settings are identical. Only
+the excerpts slider changes.
 
-## 2. Approach A — trained linear regression
+| Pair | Model | Dataset | No RAG | RAG |
+|---|---|---|---|---|
+| 1 | `gemma3:270m` | ice cream | `ui/1` | `ui/2` |
+| 2 | `gemma3:1b` | ice cream | `ui/3` | `ui/4` |
+| 3 | `gemma3:1b` | house prices | `ui/5` | `ui/6` |
 
-```powershell
-uv run python .\regression\compare-predictions.py
-```
+## 2. What happened
 
-One command runs both approaches. `--no-rag` records only the no-retrieval arm, `--model` and
-`--top-k` re-run the LLM arm with another configuration, and `--out <folder>` keeps a
-non-default run away from the reference evidence in `regression/runs/predict/`. Running the
-defaults again after the 2026-11-10 refactor reproduced 13.28 / 107.15 / 368.82 exactly.
+Each generated `output.ipynb` was executed unchanged in an isolated subprocess with a 60-second
+timeout. Full logs are in `regression/runs/rag/ui/<n>/execution.md`.
 
-`sklearn.linear_model.LinearRegression` fitted on the 361
-training rows only:
+| Run | Model | Dataset | RAG | Exit | First error |
+|---|---|---|---:|---:|---|
+| `ui/1` | `gemma3:270m` | ice cream | no | 1 | `SyntaxError: invalid syntax` |
+| `ui/2` | `gemma3:270m` | ice cream | yes | 1 | `IndentationError: unexpected indent` |
+| `ui/3` | `gemma3:1b` | ice cream | no | 1 | `NameError: name 'y' is not defined` |
+| `ui/4` | `gemma3:1b` | ice cream | yes | 1 | `FileNotFoundError: 'data.csv'` |
+| `ui/5` | `gemma3:1b` | house prices | no | 1 | `ImportError: cannot import name 'LinearRegression' from 'sklearn.model_selection'` |
+| `ui/6` | `gemma3:1b` | house prices | yes | 1 | `FileNotFoundError: 'data.csv'` |
 
-```text
-revenue = 21.2581 * temperature + 49.8138
-```
+**0 of 6 programs executed.** The detailed evaluation is in
+[`regression-evaluation-2026-11-19.md`](regression-evaluation-2026-11-19.md).
 
-Fitting all 500 rows instead gives `21.4436 * temperature + 44.8313` (the run in `ui/2` and
-`cmd/4`); the difference is exactly the point of keeping a held-out split.
+## 3. Comparison with the hand-written regression
 
-## 3. Approach B — local LLM with RAG
+`regression/non-llm.ipynb` is the manual baseline. It takes about 20 minutes, uses the same
+70/15/15 split (`random_state=42`) and produces a fitted model with these previously recorded test
+metrics:
 
-| Setting | Value |
-|---|---|
-| Chat model | `qwen2.5-coder:7b` (Ollama) |
-| Embedding model | `nomic-embed-text` (768-d) |
-| Generation | `temperature` 0.0, `num_ctx` 4096 |
-| Collection | `ice_cream_reference_v1`, in-memory (`chromadb.EphemeralClient`), built per run |
-| Contents | **12 reference rows from the training split only** — no test rows, no test targets |
-| Retrieval | `top_k` 3 by embedding similarity of the question |
-| Constraint | the prompt forbids code, calculators and regression formulas; the answer must be one number |
+| Approach | Test R² | Test RMSE | Test MAE | Runs? |
+|---|---:|---:|---:|---|
+| Hand-written `LinearRegression` | 0.9764 | 27.2895 | 20.3146 | yes |
+| Small local model, no RAG | — | — | — | **0/3** |
+| Small local model + RAG | — | — | — | **0/3** |
 
-The model was also asked the same three questions with **no retrieved rows**, which isolates the
-effect of retrieval within the LLM approach.
+The LLM columns are intentionally empty: no generated program ran, so there is no prediction to
+score. This is a task-completion comparison, not an accuracy comparison.
 
-## 4. Results
+## 4. Interpretation
 
-| Case | Temperature | Actual revenue | Linear regression | abs. error | LLM + RAG | abs. error | LLM, no retrieval | abs. error |
-|---|---|---|---|---|---|---|---|---|
-| 1 | 0.27 | 32.55 | 55.49 | 22.94 | 55.39 | 22.84 | 100 | 67.45 |
-| 2 | 23.59 | 542.61 | 551.31 | 8.71 | 552.82 | 10.21 | 1500 | 957.39 |
-| 3 | 40.47 | 918.39 | 910.21 | 8.18 | 630.00 | 288.39 | 1000 | 81.61 |
+- **RAG retrieved relevant material.** The RAG prompts contained the workflow, worked examples and
+  the mixed-type pipeline guide. Retrieval itself worked.
+- **RAG did not bridge the capability gap.** The 270M runs produced invalid Python. The 1B no-RAG
+  runs used the correct path in both datasets but still failed on missing variables or invalid
+  imports. The 1B RAG runs copied the worked example's `data.csv` path, even though the instruction
+  supplied the real path and header.
+- **The 1B model came closer, but not close enough.** It produced the right overall shape
+  (`train_test_split`, `LinearRegression`, `MAE`/R²), but not a program that runs.
+- **The hand-written model is categorically better for this task.** In roughly 20 minutes it
+  produced a correct, auditable model with test R² 0.9764; the small models produced no runnable
+  regression at all.
 
-| Metric | Linear regression | LLM + RAG | LLM, no retrieval |
-|---|---|---|---|
-| Mean absolute error | **13.28** | 107.15 | 368.82 |
-| Predictions within ±10 % of actual | 2 of 3 | 1 of 3 | 1 of 3 |
-| Response time per case | milliseconds, not separately timed | 0.16 s (model warm) | 0.15 s (model warm) |
-| Runs code? | yes, by definition | **no** — forbidden and not needed | **no** |
+This supports the conclusion that RAG can improve the *context* without supplying the *procedural
+competence* needed to act like a data scientist.
 
-Retrieved documents, per case (distances in brackets):
+## 5. Limitations
 
-| Case | Retrieved reference rows |
-|---|---|
-| 1 | 0.98 → 55.39 (0.495), 25.24 → 574.71 (0.530), 27.19 → 642.35 (0.535) |
-| 2 | 25.24 → 574.71 (0.489), 0.98 → 55.39 (0.494), 23.06 → 552.82 (0.498) |
-| 3 | 0.98 → 55.39 (0.485), 25.24 → 574.71 (0.511), 21.28 → 526.70 (0.512) |
+- One run per cell; no repetition or confidence interval.
+- Two small models, two datasets, one corpus and one prompt configuration.
+- The comparison is code execution, not numerical prediction error.
+- A single generated file is a narrow view of model capability; a repair loop or a larger model
+  could change the result.
+- The manual baseline metrics were recorded earlier; the notebook's saved outputs are not part of
+  this document.
 
-Raw answers, timings and the exact prompts: `regression/runs/predict/report.json` and
-`regression/runs/predict/prompt.md`. Repeated runs produced the same predictions every time.
+## 6. Evidence
 
-## 5. Discussion
-
-**Why the results differ.** The fitted model estimates one coefficient from all 361 training rows
-and then interpolates; it minimises squared error, which is the quantity being scored, and it is
-identical every time it runs. The LLM has no coefficient and no loss function — it reads three
-numbers in its context window and produces a plausible completion. With retrieval it copies the
-closest example: 55.39 and 552.82 are verbatim revenues of retrieved reference rows, correct only
-because a neighbouring temperature happened to be retrieved. Case 3 shows the ceiling: every
-retrieved row was below 26 °C, so the model answered 630 where the truth was 918, and no amount of
-prompting told it to extrapolate along a line.
-
-**Was RAG useful?** Yes, inside the LLM arm: MAE fell from 368.82 to 107.15, a 71 % reduction,
-and the answers stopped being round guesses (100, 1500, 1000). But the mechanism is not the one
-the exercise is testing: retrieval ranked by *wording*, not by numerical distance. All three
-questions retrieved almost the same three rows, with distances 0.485–0.535 — nearly flat — even
-though the questions named 0.27, 23.59 and 40.47. For a numeric lookup, `k`-nearest-neighbour on
-the feature itself is the right retrieval; embedding similarity is not.
-
-**When a specialised trained model is preferable.** Whenever the answer must be a number that is
-stable, repeatable, auditable and cheap: here it was 8× more accurate at effectively zero cost,
-and its coefficients can be read and checked. A trained model also degrades predictably — it
-extrapolates along a line, well or badly — whereas the LLM degrades unpredictably.
-
-**When the LLM approach adds value.** When the output is not the number but the reasoning around
-it: describing the relationship in words, noticing that three prices are data-entry errors,
-explaining why a house is an outlier, or writing the exploration notebook in the first place. That
-is exactly what the DeepSeek house-price pass did well
-([regression-experiment.md](regression-experiment.md) §9).
-
-**Limitations.** Three test cases and one dataset; a single model and a single configuration;
-`temperature` 0.0 reduces but does not remove non-determinism; the 12 reference rows were chosen
-evenly across the temperature range, which flatters the LLM arm (a random sample would have left
-gaps at both ends); and the no-retrieval arm may still have seen similar toy datasets during
-pretraining, so its poor score is not proof that the model "knows nothing".
-
-## 6. Checklist
-
-- [x] Dataset described (rows, feature, target) and committed.
-- [x] Test targets never exposed to either approach; the LLM sees the training split only.
-- [x] Both approaches use the same three held-out inputs and the same targets.
-- [x] The RAG collection contains only reference rows from the training split.
-- [x] The LLM did not execute regression code (forbidden in the system prompt; it wrote none).
-- [x] Real numbers in §4, errors computed (absolute error and MAE), discussion in §5.
-
+- Run folders: `regression/runs/rag/ui/1`–`ui/6`
+- Execution records: `execution.md` in each run folder
+- Machine-readable summary: [`regression-execution-2026-11-19.json`](regression-execution-2026-11-19.json)
+- Detailed run record: [`regression-experiment-2026-11-19.md`](regression-experiment-2026-11-19.md)
+- Detailed evaluation: [`regression-evaluation-2026-11-19.md`](regression-evaluation-2026-11-19.md)

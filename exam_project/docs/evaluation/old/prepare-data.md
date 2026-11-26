@@ -1,5 +1,9 @@
 # Prepare data
 
+> **Archived (2026-11-19).** This is the data-preparation document for the **old** prediction
+> comparison (linear regression vs `qwen2.5-coder:7b` + RAG). It is historical only; the current
+> teacher-approved experiment is [`../regression-vs-rag.md`](../regression-vs-rag.md).
+
 Dette dokument beskriver datasættet og forsøgsopdelingen til sammenligningen
 mellem en trænet lineær regressionsmodel og en lokal LLM med RAG. Formålet er
 at sikre, at begge løsninger får de samme input på testtidspunktet, uden at
@@ -8,7 +12,7 @@ test-targets bliver givet til nogen af løsningerne.
 ## 1. Datasæt
 
 Vi bruger det versionerede datasæt
-[`regression/datasets/ice_cream_regression.csv`](../../regression/datasets/ice_cream_regression.csv).
+[`regression/datasets/ice_cream_regression.csv`](../../../regression/datasets/ice_cream_regression.csv).
 Datasættet består af 500 rækker og to kolonner:
 
 | Kolonne | Rolle | Beskrivelse |
@@ -27,7 +31,7 @@ træne regressionsmodellen og til den efterfølgende, skjulte scoring.
 
 Datasættet opdeles reproducerbart med `train_test_split` og
 `random_state=42`. Opdelingen følger den samme procedure som
-[`regression/non-llm.ipynb`](../../regression/non-llm.ipynb):
+[`regression/non-llm.ipynb`](../../../regression/non-llm.ipynb):
 
 | Del | Antal rækker | Formål |
 |---|---:|---|
@@ -68,7 +72,7 @@ efter begge løsninger har svaret. På den måde vurderes begge løsninger på
 identiske test-inputs, mens test-targets forbliver skjulte under prediction.
 
 Den konkrete datahåndtering findes i
-[`regression/compare-predictions.py`](../../regression/compare-predictions.py):
+[`regression/compare-predictions.py`](../../../regression/compare-predictions.py):
 
 - `load_split()` opretter trænings- og testopdelingen.
 - `pick_cases()` vælger de tre test-inputs.
@@ -110,5 +114,5 @@ uv run python .\regression\compare-predictions.py
 ```
 
 Kommandoen skriver de endelige resultater til
-[`regression/runs/predict/`](../../regression/runs/predict/). De filer er
+[`regression/runs/old/predict/`](../../../regression/runs/old/predict/). De filer er
 evalueringsoutput og må ikke bruges som input, når en ny testkørsel forberedes.

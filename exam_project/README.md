@@ -6,7 +6,7 @@ Dansk kodeguide: [Forstå arkitekturen, mapperne og de vigtigste kodeforløb](un
 
 StudyGraph helps students understand and revise their course material through an AI assistant grounded in their actual lecture slides and notes.
 
-The application uses a predefined knowledge base built from course slides converted from PDF to Markdown. Students can ask questions, request explanations of difficult concepts, and generate practice questions based on the available course material. They can also upload additional materials to extend the knowledge base.
+The application uses a predefined knowledge base built from course slides converted from PDF to Markdown. Students can ask questions, request explanations of difficult concepts, and generate practice questions based on the available course material. Extending the course corpus is a maintainer task, not part of the student UI.
 
 The project explores how locally running language models and Retrieval-Augmented Generation can support learning by grounding AI-generated answers in relevant course materials.
 
@@ -15,7 +15,6 @@ The project explores how locally running language models and Retrieval-Augmented
 - **Course-specific answers:** Retrieve relevant information from predefined course materials before generating responses.
 - **Source references:** Help students trace answers back to the relevant course materials.
 - **Study assistance:** Get explanations and generate practice questions based on course content.
-- **Optional document uploads:** Extend the knowledge base with personal notes and supplementary materials.
 - **Local inference:** Explore running the language model and retrieval pipeline locally without relying on external LLM APIs.
 
 ## Technology
@@ -65,6 +64,29 @@ uv run python .\scripts\doctor.py
 
 It verifies the interpreter, prompt templates, course material, both Ollama models, the Chroma
 server and the index, and prints the exact command to fix anything that is missing.
+
+### Configuration
+
+All runtime settings come from environment variables. The defaults are in `app/config.py`; nothing
+in `app/` hardcodes a model, port or path.
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `STUDYGRAPH_OLLAMA_URL` | `http://127.0.0.1:11434` | Ollama endpoint |
+| `STUDYGRAPH_CHAT_MODEL` | `llama3.2:3b` | local chat model |
+| `STUDYGRAPH_EMBED_MODEL` | `nomic-embed-text` | embedding model |
+| `STUDYGRAPH_EMBEDDING_DIM` | `768` | embedding dimension; must match the model and index |
+| `STUDYGRAPH_TOP_K` | `4` | retrieved passages per grounded answer |
+| `STUDYGRAPH_NUM_CTX` | `4096` | Ollama context window |
+| `STUDYGRAPH_TEMPERATURE` | `0.2` | generation temperature |
+| `STUDYGRAPH_CHROMA_HOST` / `PORT` | `localhost` / `8000` | Chroma server |
+| `STUDYGRAPH_CHROMA_PATH` | `data/chroma` | Chroma data directory |
+| `STUDYGRAPH_DATA_DIR` | `data` | application data directory |
+| `STUDYGRAPH_DB_PATH` | `data/studygraph.db` | SQLite database |
+| `STUDYGRAPH_COURSE_MATERIAL_DIR` | `docs/RAG/llm_for_developers` | RAG source root |
+| `STUDYGRAPH_PROMPTS_DIR` | `app/prompts` | versioned prompt templates |
+
+Changing the embedding model or dimension requires a re-index; see below.
 
 ### Course material
 
@@ -129,26 +151,32 @@ uv run python .\scripts\smoke_llm.py                 # are the models installed,
 uv run python .\scripts\search.py "What is prompt injection?" --top-k 3
 uv run python .\scripts\check_retrieval.py           # re-run the recorded retrieval checks
 uv run python .\scripts\ask.py --compare "What is overfitting?"   # RAG vs non-RAG side by side
-uv run pytest -q                                     # 119 tests, no live services needed
+uv run pytest -q                                     # 146 tests, no live services needed
 ```
 
 ### The separate regression experiment
 
-`regression/` holds the *other* experiment (linear regression vs. local LLM + RAG on the same
-held-out rows). It has its own corpus — a scikit-learn source checkout — which is third-party
-source, git-ignored and therefore **downloaded** rather than committed:
+`regression/` holds the teacher-approved **small-model regression comparison**: `gemma3:270m` and
+`gemma3:1b`, each with and without RAG, on the ice-cream and house-price datasets. It is a
+code-generation comparison, not a held-out prediction/MAE comparison. Results:
+[`docs/evaluation/regression-vs-rag.md`](docs/evaluation/regression-vs-rag.md).
+
+The corpus is a scikit-learn checkout plus project guidance; the checkout is third-party source,
+git-ignored, and therefore downloaded rather than committed:
 
 ```powershell
-uv run python -m regression.fetch_corpus          # ~23 MB, once
-uv run python -m regression.rag --build-index     # source + guidance docs, in-process Chroma
-uv run python .\regression\compare-predictions.py # the comparison, RAG and no-RAG arms
+uv run python -m regression.fetch_corpus       # ~23 MB, once
+uv run python -m regression.rag --build-index  # lean corpus: 566 chunks
+uv run python -m regression.rag --status       # corpus provenance and index state
 ```
 
-The index holds the scikit-learn source and the project's own guidance documents in
-`regression/rag-optimized/`; `RAG_EXTRA_CORPUS=none` builds the source-only index.
+Current defaults: lean profile (12 scikit-learn files + 7 guides in
+`regression/rag-optimized-lean/`), `embeddinggemma`, `top_k=4`, `num_ctx=16384`. The six runs are
+`regression/runs/rag/ui/1`–`ui/6`; execution records and screenshots are in each folder.
+The older `qwen2.5-coder:7b` prediction comparison is archived under
+`docs/evaluation/old/regression-vs-rag.md` and `regression/runs/old/predict/`.
 
-`uv run python -m regression.rag --status` prints the corpus provenance and the index state.
-Details, prompts and the recorded runs: [`regression/README.md`](regression/README.md).
+Details: [`regression/README.md`](regression/README.md).
 
 ### Troubleshooting
 
@@ -181,7 +209,7 @@ Additional documentation is maintained in the [`docs/`](docs/) directory:
 - **Requirements:** [`docs/requirements/`](docs/requirements/) — functional and non-functional requirements.
 - **Knowledge base:** [`docs/RAG/`](docs/RAG/) — how course material is prepared, chunked and indexed.
 - **Evaluation:** [`docs/evaluation/`](docs/evaluation/) — RAG vs. non-RAG comparison and the
-  linear regression vs. LLM + RAG experiment.
+  small-model regression comparison (`regression-vs-rag.md`).
 
 ## Project Status
 
@@ -189,8 +217,10 @@ StudyGraph is an educational software prototype exploring local LLMs and Retriev
 Generation for course-specific study assistance.
 
 Current state: the application is working — three Streamlit pages on top of the same services the
-CLI uses, 119 passing tests and an 85-document course corpus (1,660 chunks). The Chroma index was
-rebuilt from the translated English corpus on 2026-11-10 (`llms_for_devs_v1`, 1,660 chunks,
+CLI uses, **146 passing tests** and an 85-document course corpus (1,660 chunks). The Chroma index
+was rebuilt from the translated English corpus on 2026-11-10 (`llms_for_devs_v1`, 1,660 chunks,
 corpus digest `62313c4629307e08`), so course-grounded answers come from the current material;
-`doctor.py` now reports when the index and the material on disk diverge. See
-[`docs/plan/status.md`](docs/plan/status.md) for the live status, blockers and next steps.
+`doctor.py` reports when the index and the material on disk diverge. The regression experiment is a
+separate small-model code-generation comparison; see
+[`docs/evaluation/regression-vs-rag.md`](docs/evaluation/regression-vs-rag.md). See
+[`docs/plan/status.md`](docs/plan/status.md) for live status and next steps.
