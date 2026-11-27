@@ -1,4 +1,4 @@
-# StudyGraph exam synopsis
+# Local Language Models and Machine Learning — exam synopsis
 
 The LaTeX source for the final synopsis is in this directory. The compiled document is
 `build/main.pdf`. The five-page limit includes the compact title page and bibliography.

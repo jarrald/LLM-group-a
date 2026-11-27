@@ -1,6 +1,6 @@
 \section{Linear regression versus local LLM + RAG}
 \subsection{Required numerical comparison: archived exploratory evidence}
-The only recorded experiment that directly answers the assignment's same-input prediction exercise is the archived run of 9 November 2026. We include it as \textbf{historical/exploratory evidence}, not as the later controlled small-model experiment. The 500-row ice-cream dataset maps \texttt{Temperature} to \texttt{Revenue}. The project's two-stage, nominally 70/15/15 split with \texttt{random\_state=42} yields 361 training, 64 validation, and 75 test rows. Three test inputs were selected: coldest, median, and warmest. Their targets were withheld from both prediction approaches until scoring.
+The only recorded experiment that directly answers the assignment's same-input prediction exercise is the archived run of 9 November 2026. We include it as \textbf{historical/exploratory evidence}, not as the later controlled small-model experiment. The 500-row ice-cream dataset maps \texttt{Temperature} to \texttt{Revenue}. The project's two-stage split, described as 70/15/15 and using \texttt{random\_state=42}, yields 361 training, 64 validation, and 75 test rows. Three test inputs were selected: coldest, median, and warmest. Their targets were withheld from both prediction approaches until scoring.
 
 Scikit-learn's \texttt{LinearRegression} was fitted on the 361 training rows only, giving
 \begin{equation}
@@ -45,4 +45,4 @@ After teacher feedback, we narrowed the study to the same small local model with
 \end{tabularx}
 \end{table}
 
-None of the six programs ran (\textbf{0/6}); consequently, assigning them prediction errors would be invalid. The hand-written baseline did run and had previously recorded MAE 20.3146 over all 75 ice-cream test rows---a different denominator from Table~\ref{tab:predictions}. In the two 1B RAG runs, the model copied a worked example's placeholder \texttt{data.csv} despite an explicit dataset block giving the real path and forbidding that substitution. These controlled outcomes concern task completion, not a claim that RAG universally harms coding.
+None of the six programs ran (\textbf{0/6}); consequently, assigning them prediction errors would be invalid. The hand-written baseline did run and had previously recorded MAE 20.3146 over all 75 ice-cream test rows---a different set of test rows from Table~\ref{tab:predictions}. In the two 1B RAG runs, the model copied a worked example's placeholder \texttt{data.csv} despite an explicit dataset block giving the real path and forbidding that substitution. These controlled outcomes concern task completion, not a claim that RAG universally harms coding.
