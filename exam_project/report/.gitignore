@@ -1,0 +1,4 @@
+.tools/
+.cache/
+build/*
+!build/main.pdf

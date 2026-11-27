@@ -1,0 +1,90 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[final]{microtype}
+\usepackage[margin=17mm,top=16mm,bottom=17mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{url}
+\usepackage[hidelinks,unicode,pdftitle={StudyGraph: Local LLM and RAG in Practice},pdfauthor={Ahmad Alkaseb; Aleksandr Uktamovich Sorokin; Jafar Alsukafi; Jeppe Jeppsson; Frederik Nicolajsen; Roman Ghazi}]{hyperref}
+
+\definecolor{EKBlue}{HTML}{17365D}
+\definecolor{LightBlue}{HTML}{EAF0F6}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\belowcaptionskip}{0pt}
+\renewcommand{\arraystretch}{1.06}
+\setlist{nosep,leftmargin=1.4em,itemsep=1pt}
+\titleformat{\section}{\large\bfseries\color{EKBlue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\model}[1]{\texttt{#1}}
+\newcommand{\sourcefile}[1]{\texttt{\small #1}}
+
+\begin{document}
+
+% Compact title page: the abstract and research questions remain on page 1.
+\thispagestyle{empty}
+{\color{EKBlue}\rule{\textwidth}{1.4pt}}\\[-1pt]
+{\small\textbf{EXAM SYNOPSIS \hfill LLM FOR DEVELOPERS \hfill NOVEMBER 2026}}
+
+\vspace{7mm}
+{\color{EKBlue}\Huge\bfseries StudyGraph\par}
+\vspace{2mm}
+{\Large Local LLM and retrieval-augmented generation\\for course-grounded study support\par}
+\vspace{3mm}
+{\normalsize With an exploratory numerical comparison and a controlled\\small-model regression code-generation experiment\par}
+
+\vspace{7mm}
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Author} & \textbf{Student email}\\
+\midrule
+Ahmad Alkaseb & \href{mailto:cph-aa540@stud.ek.dk}{cph-aa540@stud.ek.dk}\\
+Aleksandr Uktamovich Sorokin & \href{mailto:also1002@stud.ek.dk}{also1002@stud.ek.dk}\\
+Jafar Alsukafi & \href{mailto:jaal0002@stud.ek.dk}{jaal0002@stud.ek.dk}\\
+Jeppe Jeppsson & \href{mailto:jeje1006@stud.ek.dk}{jeje1006@stud.ek.dk}\\
+Frederik Nicolajsen & \href{mailto:frni1004@stud.ek.dk}{frni1004@stud.ek.dk}\\
+Roman Ghazi & \href{mailto:rogh1000@stud.ek.dk}{rogh1000@stud.ek.dk}\\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{2mm}
+\centerline{\small Erhvervsakademi København (EK) \quad$\cdot$\quad Software Development}
+
+\vspace{4mm}
+\section*{Abstract}
+\small
+StudyGraph is a working MVP that combines a locally running language model, Chroma retrieval over course material, and configurable prompts to help students explain, summarise, and practise course content. We describe its Streamlit--LangGraph--Ollama architecture and its explicit use of Traits, Task, Tone, and Target. A separate regression strand examines what retrieval can---and cannot---supply. In an archived exploratory prediction run, linear regression achieved MAE 13.28 on three held-out cases versus 107.15 for a local LLM with RAG. In the later controlled code-generation experiment, none of six small-model programs executed, so no prediction MAE exists for that experiment. The results support a bounded conclusion: retrieval can provide relevant context, but it does not guarantee correct task execution or turn a generative model into a fitted numerical model.
+\normalsize
+
+\section{Introduction and research questions}
+Students must navigate slides, notes, and examples whose terminology may differ from a general assistant's pretrained knowledge. StudyGraph addresses this with local inference and answers linked to retrieved course sources. A separate regression exercise applies the same broader idea---supplying external knowledge to an LLM---to numerical prediction and code generation. RAG here means retrieving external context before generation, in the general tradition of Lewis et al.~\cite{lewis2020rag}, not reproducing their fine-tuned architecture. We ask:
+\begin{enumerate}[label=\textbf{RQ\arabic*:},leftmargin=3.2em]
+\item How do local inference, RAG, and the 4T's combine in StudyGraph to provide useful, traceable study assistance?
+\item What does the recorded numerical comparison show about linear regression versus LLM~+~RAG, and what are its evidential limits?
+\item What do the controlled with/without-RAG runs reveal about smaller models' use of retrieved documentation and the limits of our methodology?
+\end{enumerate}
+
+\clearpage
+\input{sections/01_theory}
+\input{sections/02_studygraph}
+\input{sections/03_experiment}
+\input{sections/04_discussion}
+\input{sections/05_conclusion}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

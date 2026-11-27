@@ -1,0 +1,18 @@
+\section{Reflection, limitations, and future work}
+\subsection{What our development process taught us}
+We initially explored manual regression, LLM+RAG over scikit-learn documentation, direct LLM prediction without RAG, code generation without RAG, and possible cloud comparisons. This breadth helped us find failure modes but weakened comparisons: models, datasets, prompts, corpora, retrieval depths, and environments changed between runs; some old runs used in-sample metrics or lacked retrieval metadata. Those outcomes are development history, not one controlled benchmark. The archived numbers in Table~\ref{tab:predictions} are internally recorded and reproducible, but they must not be merged with the later Gemma runs.
+
+Teacher feedback led to a narrower question and a cleaner paired design. Freezing the corpus, prompt, model, dataset, and generation settings while changing only retrieval made the six outcomes auditable. Saving exact prompts, raw answers, generated notebooks, and execution logs also separated observation from interpretation. The remaining cost is a small sample: one run per cell gives no variance estimate, and two models/datasets cannot establish a general RAG effect.
+
+\subsection{Retrieval, reference, and actual use are different}
+Our experiments show why RAG evaluation needs at least three measures:
+\begin{enumerate}
+\item \textbf{Retrieval quality:} did the system return relevant material? The selected regression setup achieved 6/6 hit@4 on its six retrieval-check queries.
+\item \textbf{Reference in the response:} did the model cite, repeat, or visibly copy that material? Historical Qwen runs sometimes referenced relevant documentation yet still produced placeholder paths or incorrect code. This is an observation from those older experiments, not a measured finding of the numerical run.
+\item \textbf{Effective task use:} did the information lead to a correct answer or runnable artifact? In the final 1B RAG runs, copying the retrieved template's \texttt{data.csv} was visible reference but ineffective use, confirmed by \texttt{FileNotFoundError}.
+\end{enumerate}
+Thus hit@4 or a citation cannot by itself demonstrate grounding or task success. Possible explanations include limited small-model procedural ability, placeholder-bearing document quality, retrieval ranking, and competition between prompt instructions and examples. Our records do not isolate a cause.
+
+For StudyGraph, source display likewise proves retrieval and traceability, not factual correctness or improved learning. We have not conducted a systematic student study or a scored answer-quality evaluation. Chunk size, overlap, $k$, and relevance thresholds remain design choices rather than optimised parameters, and the small models' errors can be confident. Local execution reduces external inference dependence but does not solve these quality problems.
+
+Future work should therefore be measurement-led: test alternative chunk sizes and document preparation, compare embedding/retrieval strategies, and score retrieval, citation, factual support, and task completion separately. Repeated controlled runs with held-out cases and recorded configurations would make effects more reliable. Numerical nearest-neighbour retrieval is also a more task-appropriate baseline than semantic lookup for the ice-cream rows. These are extensions, not results claimed here.
