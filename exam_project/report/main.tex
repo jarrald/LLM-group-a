@@ -1,0 +1,102 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[final]{microtype}
+\usepackage[margin=17mm,top=16mm,bottom=17mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{url}
+\usepackage[hidelinks,unicode,pdftitle={Local Language Models and Machine Learning: Applications, Experiments, and Implications},pdfauthor={Ahmad Alkaseb; Aleksandr Uktamovich Sorokin; Jafar Alsukafi; Jeppe Jeppsson; Frederik Nicolajsen; Roman Ghazi}]{hyperref}
+
+\definecolor{EKBlue}{HTML}{17365D}
+\definecolor{LightBlue}{HTML}{EAF0F6}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\textfloatsep}{7pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\belowcaptionskip}{0pt}
+\renewcommand{\arraystretch}{1.06}
+\setlist{nosep,leftmargin=1.4em,itemsep=1pt}
+\titleformat{\section}{\large\bfseries\color{EKBlue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\model}[1]{\texttt{#1}}
+\newcommand{\sourcefile}[1]{\texttt{\small #1}}
+
+\begin{document}
+
+% Compact title page: the abstract and research questions remain on page 1.
+\thispagestyle{empty}
+{\color{EKBlue}\rule{\textwidth}{1.4pt}}\\[-1pt]
+{\small\textbf{EXAM SYNOPSIS \hfill LLM FOR DEVELOPERS \hfill NOVEMBER 2026}}
+
+\vspace{7mm}
+{\color{EKBlue}\Huge\bfseries Local Language Models and\\Machine Learning\par}
+\vspace{2mm}
+{\Large Applications, Experiments, and Implications\par}
+\vspace{3mm}
+{\normalsize StudyGraph, retrieval-augmented generation, regression, and embeddings\\with numerical and code-generation experiments\par}
+
+\vspace{7mm}
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Author} & \textbf{Student email}\\
+\midrule
+Ahmad Alkaseb & \href{mailto:cph-aa540@stud.ek.dk}{cph-aa540@stud.ek.dk}\\
+Aleksandr Uktamovich Sorokin & \href{mailto:also1002@stud.ek.dk}{also1002@stud.ek.dk}\\
+Jafar Alsukafi & \href{mailto:jaal0002@stud.ek.dk}{jaal0002@stud.ek.dk}\\
+Jeppe Jeppsson & \href{mailto:jeje1006@stud.ek.dk}{jeje1006@stud.ek.dk}\\
+Frederik Nicolajsen & \href{mailto:frni1004@stud.ek.dk}{frni1004@stud.ek.dk}\\
+Roman Ghazi & \href{mailto:rogh1000@stud.ek.dk}{rogh1000@stud.ek.dk}\\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{2mm}
+\centerline{\small Erhvervsakademi København (EK) \quad$\cdot$\quad Software Development}
+
+\vspace{4mm}
+\section*{Abstract}
+\small
+This project explores local language models and machine learning through an application and two regression experiments.
+StudyGraph is a working minimum viable product (MVP) that uses a local LLM and retrieval-augmented generation (RAG) to support study with course sources.
+We describe its architecture, document retrieval, and use of Traits, Task, Tone, and Target.
+In an exploratory prediction comparison, our manual linear regression achieved MAE 13.28 on three held-out cases,
+compared with 107.15 for a local LLM with RAG and 368.82 without RAG.
+In a separate code-generation experiment, none of six small-model programs ran, so no prediction MAE exists for that experiment.
+We also reflect on hallucinations, prompt injection, and ambiguity when using retrieved course material.
+The results show that retrieval can change LLM outputs, but manual regression was more accurate on this small comparison.
+\normalsize
+
+\section{Introduction and research questions}
+The project has two connected parts.
+StudyGraph applies local inference and course-material retrieval to a practical study problem.
+The regression work examines the same broader idea---giving external knowledge to an LLM---through numerical prediction and code generation.
+Course examples of embeddings and model training help us explain these systems.
+RAG means retrieving external context before generation, in the general tradition of Lewis et al.~\cite{lewis2020rag}, not reproducing their fine-tuned architecture.
+We ask:
+\begin{enumerate}[label=\textbf{RQ\arabic*:},leftmargin=3.2em]
+\item How does StudyGraph use a local LLM and course material to help students study?
+\item How accurate were our three approaches---manual linear regression, local LLM with RAG, and local LLM without RAG---when predicting ice-cream revenue?
+\item Could the smaller local LLMs use retrieved documentation to generate working regression code?
+\end{enumerate}
+
+\clearpage
+\input{sections/01_theory}
+\input{sections/02_studygraph}
+\input{sections/03_experiment}
+\input{sections/04_discussion}
+\input{sections/05_conclusion}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

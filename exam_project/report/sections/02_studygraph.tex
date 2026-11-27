@@ -1,0 +1,92 @@
+\section{StudyGraph: implementation and architecture}
+\subsection{Problem, users, and MVP scope}
+StudyGraph is for students revising \emph{LLMs for Developers}.
+Its value is course-specific assistance with inspectable sources and configurable
+teaching behaviour, rather than unrestricted general chat alone. The MVP provides
+three Streamlit pages: \textbf{Chat} for tasks and streamed answers with retrieved
+sources, \textbf{Buddies} for reusable teaching profiles, and \textbf{About} for
+model/index/storage information. Conversations and Buddy snapshots persist in SQLite.
+A Buddy can be course-linked (RAG) or unlinked (general chat). Explanations,
+summaries, practice questions, quizzes, comparisons, and answer review are
+included; unrestricted course management, student document upload, a
+learning-management system, and validated learning outcomes are outside scope.
+
+\subsection{Architecture and user flow}
+The application separates UI, services, domain models, orchestration, and external adapters.
+When a conversation starts, \sourcefile{ChatService} (\path{app/services/chat_service.py}) freezes the Buddy's Tone,
+Traits, Target, and course link into a snapshot, so later profile edits do not
+silently alter old conversations. For each message, history is loaded and a Task is selected.
+LangGraph routes course-linked turns through retrieval; general-chat turns skip it.
+Both then share prompt construction and Ollama generation before messages,
+prompt version, model, retrieval status, and actual source references are stored.
+
+\begin{figure}[htbp]
+\centering
+\small
+\fcolorbox{EKBlue}{LightBlue}{\parbox{0.96\linewidth}{\centering
+Streamlit Chat $\rightarrow$ ChatService + frozen Buddy snapshot $\rightarrow$ LangGraph\\[2pt]
+course-linked: current question $\rightarrow$ Ollama query embedding $\rightarrow$ Chroma top-$k$\\
+general chat: retrieval skipped\\[2pt]
+both: 4T prompt + history + any retrieved passages $\rightarrow$ local Ollama chat model\\
+$\rightarrow$ streamed answer + source metadata $\rightarrow$ SQLite}}
+\caption{Implemented StudyGraph turn flow; only the course-linked route retrieves.}
+\label{fig:architecture}
+\end{figure}
+
+The defaults are \model{llama3.2:3b} for generation (temperature 0.2, context 4096)
+and \model{nomic-embed-text} for 768-dimensional embeddings; they are configured in
+\path{app/config.py}. Both run locally
+through Ollama. Chroma and Streamlit run as separate local processes.
+This modular split and replaceable interfaces support tests without live services,
+although passing unit tests alone does not demonstrate correct generated answers.
+
+\subsection{Course-material preparation and retrieval}
+The supplied course PDFs and notebooks are converted into cleaned Markdown
+documents before being indexed. The indexed Markdown is under
+\path{docs/RAG/llm_for_developers/llm_friendly/}. The current collection contains 85 documents
+from eight teaching weeks, split into 1,660 smaller text sections (chunks).
+These chunks are created to keep related content together, including headings
+and code examples, and are stored in Chroma with metadata that helps identify
+the source and keep the index consistent when documents are updated.
+
+When a student asks a question, StudyGraph embeds the original message and
+uses Chroma to retrieve the four most relevant chunks; retrieval is implemented in
+\path{app/adapters/retriever.py}. Their text and source
+information are added to the prompt sent to the local LLM. This allows the
+model to use the retrieved course material when generating its answer and
+provides references that can be shown to the student. The system also tracks
+whether retrieval succeeded, returned no results, failed, or was skipped.
+This distinction is important because an answer generated without retrieved
+context cannot be considered grounded in the course material. Currently,
+the system can still generate an answer after a retrieval failure, so the
+retrieval status must be considered when interpreting its responses.
+
+In one earlier paired demonstration on a 57-chunk index, the RAG answer
+to ``What is overfitting?'' reused the course's first-/eighth-degree example,
+while no-RAG used leaf and house-price examples. This shows that retrieval
+changed one answer, not that it was correct or generally better. The paired
+outputs are recorded in \path{docs/evaluation/prompt-examples.md}.
+
+\subsection{Meaningful application of the 4T's}
+The four dimensions are explicit fields rendered into
+\path{app/prompts/system_v1.md}, not merely UI labels (Table~\ref{tab:4ts}).
+Task varies per interaction; the other three belong to the Buddy snapshot.
+Grounding rules additionally forbid invented references, treat retrieved text
+as data rather than instructions, require uncertainty when context is
+insufficient, and prohibit course citations in general chat.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Actual 4T implementation and purpose.}
+\label{tab:4ts}
+\begin{tabularx}{\linewidth}{@{}p{15mm}YY@{}}
+\toprule
+\textbf{Field} & \textbf{Where it appears} & \textbf{Why this choice}\\
+\midrule
+Traits & Buddy options such as patient, analytical, Socratic; inserted as ``Behave with these characteristics''. & Shapes teaching behaviour independently of topic.\\
+Task & Per-message presets, e.g. explain, summarise, quiz, review; inserted under \texttt{\# Task}. & Makes the requested operation specific without creating a new Buddy per activity.\\
+Tone & Buddy setting such as formal/academic or concise/direct; inserted under \texttt{\# Tone}. & Controls expression separately from the task.\\
+Target & Learner level/goal, e.g. beginner or exam preparation; ``Address a learner described as\ldots''. & Adapts depth and framing to the intended student.\\
+\bottomrule
+\end{tabularx}
+\end{table}

@@ -1,0 +1,42 @@
+\section{Relevant course concepts}
+\subsection{Local generation, tokens, and RAG}
+A \emph{local LLM} performs core inference on the user's own machine through
+a model server; in StudyGraph this server is Ollama.
+Text is divided into tokens---often subwords rather than whole words.
+A transformer language model~\cite{vaswani2017attention} estimates a probability
+distribution for the next token from the tokens and context already present.
+Decoding selects a token and repeats this process.
+Thus a generated answer is not a database lookup or a fitted numerical function.
+
+RAG adds a retrieval step before this generation.
+Documents are prepared and indexed offline; at question time, relevant passages
+are retrieved and inserted into the model's context~\cite{lewis2020rag}.
+The model's parameters are not updated by a query.
+Retrieval can improve access to course-specific facts and source references, but
+the quality of the answer still depends on the passages and model behaviour.
+
+\subsection{Embeddings and similarity}
+An embedding model converts tokens---not necessarily complete words---into numerical vectors.
+During training, it adjusts these vectors based on the context in which tokens
+appear, so the vectors can learn useful relationships between them~\cite{mikolov2013efficient}.
+In the course demonstration, the loss increased when a new word was introduced
+and then decreased as training continued.
+The vectors also moved during training.
+Real embedding models use many dimensions, while the demonstration used only
+three so that the changes could be visualised.
+
+StudyGraph uses a pretrained local embedding model to represent course text and student questions.
+This model supports retrieval; it does not generate the written answer.
+We did not train or optimise an embedding model ourselves.
+
+\subsection{Supervised regression and evaluation}
+Linear regression learns a relationship between an input and a numerical target.
+It fits a line to training data, here in the form $\hat y=ax+b$.
+We then evaluate its predictions on held-out test data rather than on the rows
+used for fitting. Mean absolute error (MAE) is the average absolute difference
+between predicted and actual values:
+\begin{equation}
+\mathrm{MAE}=\frac{1}{n}\sum_{i=1}^{n}\left|y_i-\hat y_i\right|.
+\end{equation}
+A lower MAE means predictions are closer to the actual values on average.
+Scikit-learn supplied the implementation used in this project~\cite{pedregosa2011scikit}.
