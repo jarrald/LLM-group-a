@@ -25,6 +25,8 @@ The source pipeline converts supplied PDFs/notebooks to cleaned Markdown; raw fi
 
 At query time the \emph{current user message} is embedded directly---there is no separate query-rewriting step. Chroma returns the nearest four passages by its configured vector distance. Their text, document/section metadata, and chunk IDs enter a delimited prompt block; only these retrieved sources can be shown as references. Retrieval distinguishes \texttt{ok}, \texttt{empty}, \texttt{failed}, and \texttt{skipped}. Empty or failed retrieval therefore cannot honestly be presented as grounded. A limitation remains: after a technical retrieval failure the graph still generates with empty context, so users must inspect status rather than treating every answer as RAG-grounded.
 
+In one earlier paired demonstration on a 57-chunk index, the RAG answer to ``What is overfitting?'' reused the course's first-/eighth-degree example, while no-RAG used leaf and house-price examples. This shows that retrieval changed one answer, not that it was correct or generally better.
+
 \subsection{Meaningful application of the 4T's}
 The four dimensions are explicit fields rendered into \sourcefile{app/prompts/system\_v1.md}, not merely UI labels (Table~\ref{tab:4ts}). Task varies per interaction; the other three belong to the Buddy snapshot. Grounding rules additionally forbid invented references, treat retrieved text as data rather than instructions, require uncertainty when context is insufficient, and prohibit course citations in general chat.
 

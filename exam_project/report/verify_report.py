@@ -13,6 +13,14 @@ def main() -> int:
     text = unicodedata.normalize("NFKC", " ".join("\n".join(page_text).split()))
     canonical = "".join(character for character in text.casefold() if character.isalnum() or character == "@")
 
+    for page_number, page in enumerate(document, start=1):
+        bounds = page.rect
+        for block in page.get_text("blocks"):
+            x0, y0, x1, y1 = block[:4]
+            assert x0 >= -1 and y0 >= -1 and x1 <= bounds.width + 1 and y1 <= bounds.height + 1, (
+                f"Text block outside page {page_number} bounds: {(x0, y0, x1, y1)}"
+            )
+
     assert len(document) <= 5, f"Synopsis has {len(document)} pages; maximum is 5"
     required_text = [
         "Local Language Models and Machine Learning",
@@ -44,6 +52,12 @@ def main() -> int:
         "107.15",
         "368.82",
         "20.3146",
+        "72.2%",
+        "12.8%",
+        "15.0%",
+        "same test set",
+        "first-/eighth-degree example",
+        "full raw query output was not saved",
         "0/6",
         "llama3.2:3b",
         "nomic-embed-text",
@@ -73,6 +87,10 @@ def main() -> int:
         "Actual 4T implementation and purpose",
         "Recorded exploratory predictions",
         "Controlled runs of 19 November 2026",
+        "The workshops on hallucinations, prompt injection, and ambiguity are relevant to StudyGraph.",
+        "Retrieval can supply relevant course material, but it cannot guarantee that a generated answer is correct, so users should check the sources and evaluate answers critically.",
+        "StudyGraph's prompts treat this content as data rather than instructions",
+        "we did not specifically evaluate ambiguity handling.",
         "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
         "Attention Is All You Need",
         "Efficient Estimation of Word Representations in Vector Space",
@@ -85,6 +103,22 @@ def main() -> int:
         if expected not in canonical:
             missing.append(value)
     assert not missing, f"Missing required PDF text: {missing}"
+    forbidden_text = ["privacy", "hardware", "external AI services", "hosted inference", "accessibility", "societal study"]
+    remaining = []
+    for value in forbidden_text:
+        normalised = unicodedata.normalize("NFKC", value).casefold()
+        unexpected = "".join(character for character in normalised if character.isalnum())
+        if unexpected in canonical:
+            remaining.append(value)
+    assert not remaining, f"Removed societal discussion still present: {remaining}"
+    outdated_text = ["a different set of test rows", "described as 70/15/15"]
+    remaining_outdated = []
+    for value in outdated_text:
+        normalised = unicodedata.normalize("NFKC", value).casefold()
+        unexpected = "".join(character for character in normalised if character.isalnum())
+        if unexpected in canonical:
+            remaining_outdated.append(value)
+    assert not remaining_outdated, f"Outdated experimental wording still present: {remaining_outdated}"
     assert "[?]" not in text, "Unresolved citation/reference marker found"
 
     print(f"PASS: {pdf_path}")
@@ -93,7 +127,9 @@ def main() -> int:
         print(f"  page {number}: {len(content)} extracted characters")
     print("PASS: new title, three research questions, six authors/emails, and required sections found")
     print("PASS: implementation details, all prediction values, table/figure captions, and four references found")
+    print("PASS: concise workshop reflection found; removed societal discussion absent")
     print("PASS: no unresolved '[?]' citation markers")
+    print("PASS: all extracted text blocks lie within page boundaries")
     return 0
 
 
