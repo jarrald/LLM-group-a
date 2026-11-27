@@ -1,5 +1,13 @@
 # Regression exercise — evaluation of the local coding-task runs
 
+> **Read [regression-summary.md](regression-summary.md) first (2026-11-19).** This document is the
+> long archive narrative for the qwen-era runs. It is useful for the failure taxonomy and the
+> cloud anecdote, but its comparison tables are **not** the report's evidence: it mixes the local
+> ice-cream task with cloud house-price runs, and it predates the `gemma3:270m` runs
+> `ui/11`–`ui/15` and the clean controlled sweep `cmd/6`–`cmd/9`. The short, defensible
+> comparisons — small model no-RAG vs RAG, the 7B retrieval-depth control, and the required
+> prediction comparison — are in [regression-summary.md](regression-summary.md).
+
 Evaluation of the separate experiment in [`regression/`](../../regression/README.md): can a
 **local** model, optionally with retrieval over the scikit-learn source, write a regression
 script or notebook that actually runs — and how does that compare with a fitted linear
@@ -44,6 +52,33 @@ The index is the scikit-learn checkout (`sklearn/linear_model/*.py`,
 embedded with `nomic-embed-text`. Default `top_k` is 8. The index lives in
 `regression/.chroma` and is queried in-process — no Chroma server is involved.
 
+> The 2026-11-19 sweep `cmd/6`–`cmd/9` uses the later guide-inclusive index: **1,041 chunks**
+> (962 source + 79 project guidance chunks). The 962-chunk number below describes the qwen-era
+> runs; do not mix the two indices in one comparison.
+
+The corpus is third-party source (~23 MB, 1 600+ files). It is git-ignored and is therefore
+**not** part of a clone of this repository; it is downloaded once and recorded:
+
+```powershell
+uv run python -m regression.fetch_corpus      # ref main -> commit bf4348196, sklearn 1.10.dev0
+uv run python -m regression.rag --build-index
+```
+
+Since 2026-11-11 the same collection also holds **79 chunks from seven project-authored
+guidance documents** in `regression/rag-optimized/` (concepts, scikit-learn workflow, metrics,
+diagnostics, worked examples, a small-model playbook, and a corpus guide), cited as
+`rag-optimized/<file>.md`. They are optional: `RAG_EXTRA_CORPUS` pointing at a missing path
+builds the source-only index that every run recorded before that date used, so those runs
+remain reproducible. See ADR-026.
+
+`regression/fetch_corpus.py` downloads the repository archive, checks that the paths the index
+needs are present, and writes `regression/scikit-learn-main/.corpus.json` with the ref, the
+commit GitHub reports for it, the declared `scikit-learn.__version__` and the fetch date. All
+runs documented here were made against a `main` checkout reporting `1.10.dev0`, which still
+chunks into the same 962 pieces after the 2026-11-10 re-download. Pass `--ref <tag>` to pin a
+release instead; re-downloading changes the corpus, and the index records a fingerprint of it,
+so the next build refuses to mix two versions unless it is rebuilt with `--recreate`.
+
 ### 2.3 Datasets
 
 | File | Rows | Columns | Role |
@@ -74,6 +109,11 @@ StudyGraph app and every measured local number in this document come from the lo
    the run folder; the prompt then names that on-disk path.
 5. The answer's single fenced Python block is written to `output.py`, or to `output.ipynb`
    when a notebook was requested. Every run is archived with the full prompt it received.
+6. The chat model is chosen at run time from the models installed in Ollama (the web page's
+   sidebar lists them, `--model` does the same on the CLI), and the model that answered is
+   written into the run record. The qwen-era coding runs used `qwen2.5-coder:7b`; the 2026-11-11
+follow-up used `gemma3:270m` (`ui/11`–`ui/15`) and the clean sweep `cmd/6`–`cmd/9` adds both
+models. See [regression-summary.md](regression-summary.md) for the model split.
 
 Each run folder therefore contains the instruction, the retrieved excerpts with distances, the
 complete system + user prompt, and the exact file the model produced.
@@ -255,8 +295,9 @@ The Leanstral-1-5 runs show the opposite end: a 262.1k-token context still overf
 
 ## 10. Limitations
 
-- **Small sample.** 15 local runs, 3 cloud runs, one dataset pair, one machine. This is a
-  demonstration, not a benchmark; no confidence interval is claimed.
+- **Small sample.** The qwen-era archive has 15 local code-generation runs and 3 cloud runs; the
+  2026-11-11 follow-up adds `ui/11`–`ui/15` and `cmd/6`–`cmd/9`. One dataset pair, one machine.
+  This is a demonstration, not a benchmark; no confidence interval is claimed.
 - **Not a controlled experiment except in one place.** Instruction text differs between runs, so
   only ui/4 ↔ ui/5 ↔ ui/6 isolates a single variable. The other comparisons in §6 are
   before/after observations, not trials.
@@ -277,11 +318,13 @@ The Leanstral-1-5 runs show the opposite end: a 262.1k-token context still overf
 
 ## 11. Conclusion
 
-**Local LLM development sometimes works, but not usefully in the 8 GB VRAM range.** Three of ten
-web runs and three of five CLI runs produced a file that ran, and every success was a short,
-well-known snippet (one `read_csv`, one `LinearRegression`, one printed metric). Prompt
-engineering (the 4T's, "no placeholders" in the system prompt) and retrieval depth (0, 8 and 12
-excerpts) did not move that number; injecting the CSV header and the on-disk path did.
+**Local LLM development sometimes works, but not usefully in the 8 GB VRAM range.** In the
+qwen-era archive, three of ten web runs and three of five CLI runs produced a file that ran, and
+every success was a short, well-known snippet (one `read_csv`, one `LinearRegression`, one printed
+metric). Prompt engineering (the 4T's, "no placeholders" in the system prompt) and retrieval depth
+(0, 8 and 12 excerpts) did not move that number; injecting the CSV header and the on-disk path did.
+The 270M follow-up is worse: no run produced a regression, and the RAG arm was empty
+([regression-summary.md](regression-summary.md)).
 
 **Retrieval helps coding, not prediction.** Over the scikit-learn source it reliably surfaced the
 right API, and within the LLM arm it cut the prediction error from MAE 369 to 107. It never turned
@@ -295,21 +338,24 @@ writing the exploration, explaining the outliers, and being wrong in a way that 
 
 ## 12. Ready-to-paste text for the synopsis
 
-> To test the local stack outside the assistant, 15 runs asked the local model
+> To test the local stack outside the assistant, 15 qwen-era runs asked the local model
 > (`qwen2.5-coder:7b`, plus retrieval over 962 chunks of the scikit-learn source) to write a
 > regression script or notebook for a two-column CSV. Three of ten web runs and three of five CLI
 > runs produced a file that ran unchanged. The failures were consistent: the model invented column
-> names, or wrote `path_to_your_csv_file.csv` although the data was attached and its columns were
-> listed. Changing the number of retrieved excerpts (0, 8, 12) changed nothing; injecting the CSV
+> names, or wrote `path_to_your_csv_file.csv` although the data path was available or the file was
+> attached. Changing the number of retrieved excerpts (0, 8, 12) changed nothing; injecting the CSV
 > header and the on-disk path fixed the same task immediately. On the prediction itself, three
 > held-out rows gave a mean absolute error of 13.3 for a fitted linear regression, 107.1 for the
 > local model with RAG, and 368.8 without it. The RAG arm returned the revenue of the closest
 > retrieved example rather than interpolating, and retrieval ranked by wording, not by numerical
-> distance. Only a cloud agent (DeepSeek v4.1 Flash) produced a complete house-price analysis,
-> where data quality dominated model choice: three impossible prices alone held every model at
-> R² 0.03. Our conclusion is that local LLM development is workable for small, familiar coding
-> tasks on an 8 GB GPU, but prompt engineering and RAG do not compensate for the capability gap,
-> and for numeric prediction a trained model remains the right tool.
+> distance. In a separate 270M follow-up with the same ice-cream prompt, no run produced a
+> regression: without RAG the script loaded the CSV but only mean-centred the columns, and with 12
+> retrieved excerpts the model returned an empty answer. Only a cloud agent (DeepSeek v4.1 Flash)
+> produced a complete house-price analysis, where data quality dominated model choice: three
+> impossible prices alone held every model at R² 0.03. Our conclusion is that local LLM development
+> is workable for small, familiar coding tasks on an 8 GB GPU, but prompt engineering and RAG do
+> not compensate for the capability gap, and for numeric prediction a trained model remains the
+> right tool.
 
 ## 13. Reproducing everything
 

@@ -29,6 +29,7 @@ CONTEXT_TEMPLATE_VERSION = "context_block_v1"
 
 _PLACEHOLDER = re.compile(r"\{\{(?P<name>\w+)\}\}")
 
+
 _GROUNDED_WITH_PASSAGES = (
     "Course material was retrieved for this question and appears in the COURSE MATERIAL block.\n"
     "Base your answer primarily on it. If it does not contain enough information, say so explicitly\n"
@@ -40,6 +41,7 @@ _GROUNDED_WITHOUT_PASSAGES = (
     "question. Do not claim the answer comes from the course material. Say that the material does not\n"
     "cover it, then optionally answer from general knowledge, clearly labelled as not from the course material."
 )
+
 
 _GENERAL = (
     "This conversation is not linked to any course and no course material was retrieved. Answer from\n"

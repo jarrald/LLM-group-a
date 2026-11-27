@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass
 
 from app.adapters.loader import LectureDocument
@@ -174,6 +175,21 @@ def _split_body(body: str, budget: int, overlap: int) -> list[str]:
     if current:
         pieces.append(current)
     return pieces
+
+
+def chunks_digest(chunks: Iterable[Chunk]) -> str:
+    """A short, order-independent digest of a chunk set.
+
+    Stored in the collection metadata, so a corpus that was re-translated or re-chunked can
+    be recognised as stale instead of answering from the previous index
+    (``docs/RAG/knowledge-base.md`` §5, ADR-025). Chunk ids already contain the chunker
+    version and a text hash, so this changes whenever the material or the chunking changes.
+    """
+    hasher = hashlib.sha1()
+    for chunk_id in sorted(chunk.chunk_id for chunk in chunks):
+        hasher.update(chunk_id.encode("utf-8"))
+        hasher.update(b"\n")
+    return hasher.hexdigest()[:16]
 
 
 def chunk_document(

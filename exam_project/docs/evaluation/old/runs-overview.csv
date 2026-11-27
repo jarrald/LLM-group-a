@@ -1,0 +1,33 @@
+experiment,run,interface,model,retrieval,artefact,ran,outcome,metric,use_in_report,notes
+1 manual,non-llm.ipynb,notebook,"scikit-learn, no LLM",none (code written by hand),outputs saved in the notebook,yes,PASS,"test R2 0.9764, RMSE 27.29, MAE 20.31",context,"12 cells, about 20 min, 70/15/15 split; MAE is over 75 test rows, not the 3-row comparison"
+2 LLM+RAG code,cmd/1,CLI,qwen2.5-coder:7b,not recorded,output.ipynb,yes,FAIL,n/a,no,invented temperature/sales -> KeyError; before the CSV header preview; no excerpt record (backfilled)
+2 LLM+RAG code,cmd/2,CLI,qwen2.5-coder:7b,not recorded,output.ipynb,yes,FAIL,n/a,no,same invented columns; no excerpt record (backfilled)
+2 LLM+RAG code,cmd/3,CLI,qwen2.5-coder:7b,not recorded,output.ipynb,yes,PASS,"MSE 652.52, coef 21.38197386",context,first run with the CSV header injected; not a controlled arm
+2 LLM+RAG code,cmd/4,CLI,qwen2.5-coder:7b,not recorded,output.py,yes,PASS,"coef 21.44362551, intercept 44.83126709",no,fits all 500 rows (in-sample) -> do not cite accuracy
+2 LLM+RAG code,cmd/5,CLI,qwen2.5-coder:7b,8 excerpts d 0.490-0.532,output.py,yes,PASS,"RidgeCV alpha 0.001, coef 21.44362486, R2 0.9797",context,"5.6 s, 68 tok/s; in-sample (all 500 rows)"
+7 small model code,cmd/6,CLI,gemma3:270m,0 (top_k 0),output.ipynb,yes,FAIL,runs but does not regress,cite,"loads the correct CSV/columns, mean-centres and prints; no sklearn; raw answer saved in answer.md"
+7 small model code,cmd/7,CLI,gemma3:270m,12 (top_k 12),output.md,no,FAIL,empty answer (0 chars),cite,6 guide + 6 source chunks retrieved; no code produced
+7 small model code,cmd/8,CLI,qwen2.5-coder:7b,0 (top_k 0),output.ipynb,yes,PASS,"MSE 652.52, R2 0.9772",cite,"20% hold-out, train_test_split random_state 42"
+7 small model code,cmd/9,CLI,qwen2.5-coder:7b,12 (top_k 12),output.ipynb,yes,PASS,"MSE 623.10, R2 0.9797",cite,fits all 500 rows -> in-sample; no split
+2 LLM+RAG code,ui/1,web,qwen2.5-coder:7b,not recorded,output.py,yes,FAIL,n/a,no,np.loadtxt('data.csv'); invented filename (re-executed: FileNotFoundError)
+2 LLM+RAG code,ui/2,web,qwen2.5-coder:7b,not recorded,output.py,yes,PASS,"coef 21.44362551, MSE 623.0964",no,fits all 500 rows (in-sample); re-executed
+2 LLM+RAG code,ui/3,web,qwen2.5-coder:7b,8,output.ipynb,yes,PASS,"MAE 19.5859, R2 0.9797",no,fits all 500 rows (in-sample)
+2 LLM+RAG code,ui/4,web,qwen2.5-coder:7b,8,output.ipynb,yes,FAIL,n/a,cite,path_to_your_csv_file.csv; 4T's filled in; no CSV attached; 6.0 s
+4 LLM no-RAG code,ui/5,web,qwen2.5-coder:7b,0,output.ipynb,yes,FAIL,n/a,cite,identical placeholder to ui/4; no CSV attached; 5.3 s
+2 LLM+RAG code,ui/6,web,qwen2.5-coder:7b,12,output.ipynb,yes,FAIL,n/a,cite,identical placeholder; no CSV attached; 4.7 s
+2 LLM+RAG code,ui/7,web,qwen2.5-coder:7b,8,output.py,yes,FAIL,n/a,no,path_to_your_file.csv (re-executed: FileNotFoundError)
+3 LLM no-RAG no code,ui/8,web,qwen2.5-coder:7b,0,output.ipynb,yes,FAIL,n/a,context,asked without code but the system prompt demanded a python block -> SyntaxError; slope ~10 vs 21.44; 2.2 s
+2 LLM+RAG code,ui/9,web,qwen2.5-coder:7b,8,output.ipynb,yes,PASS,"MAE 19.5859, R2 0.9797",cite,CSV attached + run-folder path; fits all 500 rows -> in-sample
+2 LLM+RAG code,ui/10,web,qwen2.5-coder:7b,8,output.ipynb,yes,FAIL,n/a,no,"invented sqft/year_built, then corr() on a date column -> ValueError; house prices; 12.0 s"
+7 small model code,ui/11,web,gemma3:270m,12 (source-only corpus),output.md,no,FAIL,n/a,context,445-line code-shaped echo; not runnable; pre-guide corpus (962 chunks)
+7 small model code,ui/12,web,gemma3:270m,12 (guide corpus),output.py,no,FAIL,3-line document header,support,extracted block is a retrieved-document header; no code; duplicate of ui/14
+7 small model code,ui/13,web,gemma3:270m,0,output.py,no,FAIL,pd.LinearRegression + 1-D fit,support,old prompt path /datasets/icecream.csv; no-RAG observation
+7 small model code,ui/14,web,gemma3:270m,12 (guide corpus),output.py,no,FAIL,3-line document header,no,byte-identical duplicate of ui/12 (141 bytes)
+7 small model code,ui/15,web,gemma3:270m,12 (guide corpus),output.py,no,FAIL,3-line document header,support,repair instruction 'not a guide' did not change the output
+3 LLM no-RAG no code,predictions/no-rag,script,qwen2.5-coder:7b,0 (no data either),results.csv,n/a,PASS,MAE 368.82,cite,3 held-out rows; answers 100 / 1500 / 1000
+extra LLM+RAG no code,predictions/rag,script,qwen2.5-coder:7b,3 of 12,results.csv,n/a,PASS,MAE 107.15,cite,3 held-out rows; answers copied from retrieved rows
+4 LLM no-RAG code,ollama-no-rag,chat UI,Qwen2.5:9B,none (whole CSV pasted),none,no,FAIL,n/a,no,34.9 s thinking; asked clarifying questions; placeholder raw_data
+5 cloud no code,-,-,-,-,-,no,NOT RUN,n/a,no,no cloud model was ever asked for a prediction without code
+6 cloud code,cloud/1,agent,Leanstral-1-5,n/a,none,no,FAIL,n/a,no,context window exceeded (262.1k); compaction skipped
+6 cloud code,cloud/2,agent,Leanstral-1-5,n/a,house_price_analysis(Restored).py,no,FAIL,n/a,no,"485 lines, 4 plots, hard-coded path; agent crashed; file restored by hand"
+6 cloud code,cloud/deepseek,agent,DeepSeek v4.1 Flash,n/a,house-price-manual.ipynb,yes,PASS,"test MAE 109094, RMSE 186517, R2 0.731",context,house prices 4600x18; different dataset/model from the local ice-cream runs
