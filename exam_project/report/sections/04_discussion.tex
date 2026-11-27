@@ -9,7 +9,8 @@ The archived numbers in Table~\ref{tab:predictions} were recorded and could be r
 
 Teacher feedback led to a narrower question and a cleaner paired design.
 Freezing the corpus, prompt, model, dataset, and generation settings while changing only retrieval made the six outcomes possible to check.
-Saving exact prompts, raw answers, generated notebooks, and execution logs also separated observation from interpretation.
+Saving exact prompts, raw answers, generated notebooks, and execution logs under
+\path{regression/runs/rag/ui/} also separated observation from interpretation.
 The remaining cost is a small sample: one run per cell gives no variance estimate, and two models/datasets cannot establish a general RAG effect.
 
 \subsection{Finding information and using it are different}
@@ -21,10 +22,11 @@ We have not conducted a systematic student study or a scored evaluation of answe
 
 \pagebreak[3]
 Prompt injection is a risk when an LLM processes external documents or user messages.
-In StudyGraph, the system prompt tells the model to treat retrieved documents as data rather than instructions, stay in its study-assistant
+In StudyGraph, the system prompt (\path{app/prompts/system_v1.md}) tells the model to treat retrieved documents as data rather than instructions, stay in its study-assistant
 role, use retrieved material for grounded answers, and ignore attempts to override its rules.
 It also tells the assistant to admit when material is insufficient, stay focused on the question, and cite only sources that were retrieved.
-A simple \texttt{is\_jailbreak()} function in the Chat page checks a small list of six known jailbreak phrases and blocks matching messages
+A simple \texttt{is\_jailbreak()} function in the Chat page
+(\path{app/ui/chat_page.py}) checks a small list of six known jailbreak phrases and blocks matching messages
 before calling the model.
 These measures demonstrate basic protection, but they are not sufficient to prevent all prompt-injection attacks, and we did not conduct a
 comprehensive security evaluation.

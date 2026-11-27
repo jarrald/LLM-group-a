@@ -1,7 +1,8 @@
 \section{Manual regression versus local LLM prediction}
 \subsection{Data inspection and the three approaches}
-The direct numerical comparison used the 500-row ice-cream dataset, with \texttt{Temperature} as input and \texttt{Revenue} as target.
-In our notebook \texttt{non-llm.ipynb}, we inspected the rows and data types and plotted temperature against revenue.
+The direct numerical comparison used the 500-row ice-cream dataset
+({\small\path{regression/datasets/ice_cream_regression.csv}}), with \texttt{Temperature} as input and \texttt{Revenue} as target.
+In our notebook \path{regression/non-llm.ipynb}, we inspected the rows and data types and plotted temperature against revenue.
 The plot showed a roughly linear upward relationship.
 We then wrote the regression code ourselves and fitted one final \texttt{LinearRegression} model on 361 training rows.
 The notebook reports training, validation, and test metrics and plots predictions for each set; it contains one final successful model configuration.
@@ -14,9 +15,13 @@ Fitting on the training rows gave
 \begin{equation}
 \widehat{\mathrm{Revenue}}=21.2581\,\mathrm{Temperature}+49.8138.
 \end{equation}
-To compare the approaches on identical inputs, the evaluation script rebuilt the same split and fitted model to extract predictions for
+To compare the approaches on identical inputs, the evaluation script
+\path{regression/compare-predictions.py} rebuilt the same split and fitted model to extract predictions for
 three test rows: the coldest, median, and warmest temperatures.
 These rows are part of the same 75-row test set.
+The script writes the scores to \path{regression/runs/old/predict/results.csv}; the exact prompt and the raw LLM
+answers with retrieved rows are stored in \path{regression/runs/old/predict/prompt.md} and
+\path{regression/runs/old/predict/report.json}.
 
 The LLM experiment used \model{qwen2.5-coder:7b} through Ollama at temperature 0 with a 4096-token context.
 It received the same three test temperatures but no test targets, and it was instructed not to write code, use a calculator, or run a regression.
@@ -57,9 +62,13 @@ The full 75-row manual MAE (20.31) and the three-case manual MAE (13.28) also us
 This later experiment asked a different question: could smaller local models \emph{generate a runnable regression program} with or without
 retrieved documentation?
 It did not repeat the direct numerical prediction task.
+The two dataset files were \path{regression/datasets/ice_cream_regression.csv} and
+\path{regression/datasets/house prices.csv}.
 Within each pair, the model, dataset, instruction, 4T fields, temperature (0.2), and context (16,384 tokens) were fixed; only \texttt{top\_k} changed from 0 to 4.
-Retrieval used \model{embeddinggemma} over a frozen lean corpus of 566 chunks.
-The generated notebooks were executed unchanged with a 60-second timeout.
+Retrieval used \model{embeddinggemma}; its configuration and chunking are implemented in
+\path{regression/rag.py}, using a frozen lean corpus of 566 chunks.
+The generated notebooks were executed unchanged with a 60-second timeout by
+\path{regression/verify_generated_runs.py}; outputs and execution records are under \path{regression/runs/rag/ui/}.
 
 \begin{table}[htbp]
 \centering\footnotesize
@@ -77,6 +86,7 @@ The generated notebooks were executed unchanged with a 60-second timeout.
 \end{table}
 
 None of the six programs ran (\textbf{0/6}); consequently, assigning them prediction errors would be invalid.
+The machine-readable execution summary is \path{docs/evaluation/regression-execution-2026-11-19.json}.
 The manual baseline values above describe prediction accuracy and are not scores for these generated programs.
 In the two 1B RAG runs, the model copied a worked example's placeholder \texttt{data.csv} despite an explicit dataset block giving
 the real path and forbidding that substitution.
