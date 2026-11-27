@@ -1,34 +1,65 @@
-\section{Linear regression versus local LLM + RAG}
-\subsection{Required numerical comparison: archived exploratory evidence}
-The only recorded experiment that directly answers the assignment's same-input prediction exercise is the archived run of 9 November 2026. We include it as \textbf{historical/exploratory evidence}, not as the later controlled small-model experiment. The 500-row ice-cream dataset maps \texttt{Temperature} to \texttt{Revenue}. Two calls to \texttt{train\_test\_split} with \texttt{random\_state=42} first hold out 75 test rows (15\%), then take 64 of the remaining 425 rows (15\% of the remainder) for validation, leaving 361 training rows. The actual train/validation/test shares are 72.2\%/12.8\%/15.0\%. Three test inputs were selected: coldest, median, and warmest. Their targets were withheld from both prediction approaches until scoring.
+\section{Manual regression versus local LLM prediction}
+\subsection{Data inspection and the three approaches}
+The direct numerical comparison used the 500-row ice-cream dataset, with \texttt{Temperature} as input and \texttt{Revenue} as target.
+In our notebook \texttt{non-llm.ipynb}, we inspected the rows and data types and plotted temperature against revenue.
+The plot showed a roughly linear upward relationship.
+We then wrote the regression code ourselves and fitted one final \texttt{LinearRegression} model on 361 training rows.
+The notebook reports training, validation, and test metrics and plots predictions for each set; it contains one final successful model configuration.
 
-Scikit-learn's \texttt{LinearRegression} was fitted on the 361 training rows only, giving
+The data split used two calls to \texttt{train\_test\_split} with \texttt{random\_state=42}.
+It first held out 75 test rows (15\%), then took 64 of the remaining 425 rows (15\% of the remainder) for validation, leaving 361 training rows.
+The actual train/validation/test shares were 72.2\%/12.8\%/15.0\%.
+On all 75 test rows, the manual model achieved $R^2=0.9764$, RMSE $=27.2895$, and MAE $=20.3146$.
+Fitting on the training rows gave
 \begin{equation}
 \widehat{\mathrm{Revenue}}=21.2581\,\mathrm{Temperature}+49.8138.
 \end{equation}
-The LLM used \model{qwen2.5-coder:7b} via Ollama, temperature 0 and context 4096. Its RAG collection contained only 12 evenly spaced \emph{training} reference rows embedded with \model{nomic-embed-text}; the three nearest reference rows by embedding distance accompanied each question. It received exactly the same test temperatures as regression but no test targets. The prompt explicitly prohibited code, calculators, and regression, and required one number only. It could not invoke the fitted model. A no-RAG arm asked the same model the same questions without reference rows.
+To compare the approaches on identical inputs, the evaluation script rebuilt the same split and fitted model to extract predictions for
+three test rows: the coldest, median, and warmest temperatures.
+These rows are part of the same 75-row test set.
+
+The LLM experiment used \model{qwen2.5-coder:7b} through Ollama at temperature 0 with a 4096-token context.
+It received the same three test temperatures but no test targets, and it was instructed not to write code, use a calculator, or run a regression.
+In the RAG version, 12 reference rows from the training split were indexed with \model{nomic-embed-text}, and the three most similar
+rows accompanied each question.
+The no-RAG version used the same model and questions without reference rows.
 
 \begin{table}[htbp]
 \centering\small
-\caption{Recorded exploratory predictions; revenue units. MAE is over these three selected held-out cases, not all 75 test rows.}
+\caption{Predictions for the same three held-out inputs; revenue units. MAE is calculated over these three cases.}
 \label{tab:predictions}
-\begin{tabular}{@{}lrrr@{}}
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
-\textbf{Test case (temperature)} & \textbf{Actual} & \textbf{Linear regression} & \textbf{LLM + RAG}\\
+\textbf{Test case (temperature)} & \textbf{Actual} & \textbf{Manual regression} & \textbf{LLM + RAG} & \textbf{LLM without RAG}\\
 \midrule
-1 (0.27)  & 32.55  & 55.49  & 55.39\\
-2 (23.59) & 542.61 & 551.31 & 552.82\\
-3 (40.47) & 918.39 & 910.21 & 630.00\\
+1 (0.27) Coldest  & 32.55  & 55.49  & 55.39  & 100.00\\
+2 (23.59) Median & 542.61 & 551.31 & 552.82 & 1500.00\\
+3 (40.47) Warmest & 918.39 & 910.21 & 630.00 & 1000.00\\
 \midrule
-\textbf{MAE} & & \textbf{13.28} & \textbf{107.15}\\
+\textbf{MAE} & & \textbf{13.28} & \textbf{107.15} & \textbf{368.82}\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The LLM+RAG MAE was about $8.1$ times the regression MAE. In this run, the LLM's MAE was 70.95\% lower with RAG than without it (107.15 versus 368.82; no-RAG predictions 100, 1500, 1000), but remained far less accurate. Cases 1--2 exactly match retrieved revenues, consistent with copying and not evidence of learned regression behaviour. Retrieval returned overlapping rows rather than consistently near temperatures: every case included 0.98 and 25.24. At 40.47, it returned 0.98, 25.24, and 21.28 although 32.89 and 45.00 were available. Regression instead estimated a global linear trend from all training rows. Three cases cannot support broad statistical claims, and the deliberately even reference sample limits generalisation.
+Our process differed from the LLM approach.
+We inspected and visualised the data before writing our own regression code.
+The LLM was instead asked to solve the prediction task from its instructions and, in the RAG version, retrieved reference information.
+We can therefore compare prediction quality, but we should not call one method better merely because its code or workflow looks different.
 
-\subsection{Later controlled small-model code-generation experiment}
-After teacher feedback, we narrowed the study to the same small local model without RAG versus with RAG. This experiment asks whether the model can \emph{generate a runnable regression program}; it does not repeat the direct numerical-prediction protocol. Within each pair, model, dataset, instruction, 4T fields, temperature 0.2, and context 16,384 were fixed; only \texttt{top\_k} changed from 0 to 4. Retrieval used \model{embeddinggemma} over a frozen lean corpus of 566 chunks (12 selected scikit-learn files and seven project guides). Generated notebooks were executed unchanged with a 60-second timeout.
+The manual regression had the lowest MAE: 13.28, compared with 107.15 for LLM+RAG and 368.82 for the LLM without RAG.
+RAG therefore lowered the LLM's average error in this run, but the LLM+RAG MAE was still about 8.1 times the manual MAE.
+Cases 1--2 of the RAG output exactly match retrieved revenue values, consistent with copying rather than a learned regression rule.
+Its third answer (630.00) is far below the actual value, while the no-RAG model's third guess (1000.00) happened to be closer.
+These three selected cases show behaviour but are too few to support a broad ranking.
+The full 75-row manual MAE (20.31) and the three-case manual MAE (13.28) also use different numbers of test rows and should not be compared directly.
+
+\subsection{Separate controlled code-generation experiment}
+This later experiment asked a different question: could smaller local models \emph{generate a runnable regression program} with or without
+retrieved documentation?
+It did not repeat the direct numerical prediction task.
+Within each pair, the model, dataset, instruction, 4T fields, temperature (0.2), and context (16,384 tokens) were fixed; only \texttt{top\_k} changed from 0 to 4.
+Retrieval used \model{embeddinggemma} over a frozen lean corpus of 566 chunks.
+The generated notebooks were executed unchanged with a 60-second timeout.
 
 \begin{table}[htbp]
 \centering\footnotesize
@@ -45,4 +76,8 @@ After teacher feedback, we narrowed the study to the same small local model with
 \end{tabularx}
 \end{table}
 
-None of the six programs ran (\textbf{0/6}); consequently, assigning them prediction errors would be invalid. The hand-written baseline did run and had previously recorded MAE 20.3146 over all 75 ice-cream test rows---a different denominator from the three selected rows in Table~\ref{tab:predictions}, but drawn from the same test set. In the two 1B RAG runs, the model copied a worked example's placeholder \texttt{data.csv} despite an explicit dataset block giving the real path and forbidding that substitution. These controlled outcomes concern task completion, not a claim that RAG universally harms coding.
+None of the six programs ran (\textbf{0/6}); consequently, assigning them prediction errors would be invalid.
+The manual baseline values above describe prediction accuracy and are not scores for these generated programs.
+In the two 1B RAG runs, the model copied a worked example's placeholder \texttt{data.csv} despite an explicit dataset block giving
+the real path and forbidding that substitution.
+These outcomes concern task completion, not a claim that RAG always harms coding.

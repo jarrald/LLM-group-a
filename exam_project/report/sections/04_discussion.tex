@@ -1,21 +1,36 @@
 \section{Reflection, limitations, and future work}
 \subsection{What our development process taught us}
-We initially explored manual regression, LLM+RAG over scikit-learn documentation, direct LLM prediction without RAG, code generation without RAG, and possible cloud comparisons. This breadth helped us find failure modes but weakened comparisons: models, datasets, prompts, corpora, retrieval depths, and environments changed between runs; some old runs used in-sample metrics or lacked retrieval metadata. Those outcomes are development history, not one controlled benchmark. The archived numbers in Table~\ref{tab:predictions} were recorded and could be reproduced, but they must not be merged with the later Gemma runs. Before submission, we should confirm with our teacher that using this archived numerical comparison is acceptable, or repeat it under one frozen configuration.
+We initially explored manual regression, LLM+RAG over scikit-learn documentation, direct LLM prediction without RAG, code generation
+without RAG, and possible cloud comparisons.
+This breadth helped us find failure modes but weakened comparisons: models, datasets, prompts, corpora, retrieval depths, and environments
+changed between runs; some old runs used in-sample metrics or lacked retrieval metadata.
+Those outcomes are development history, not one controlled benchmark.
+The archived numbers in Table~\ref{tab:predictions} were recorded and could be reproduced, but they must not be merged with the later Gemma runs.
 
-Teacher feedback led to a narrower question and a cleaner paired design. Freezing the corpus, prompt, model, dataset, and generation settings while changing only retrieval made the six outcomes possible to check. Saving exact prompts, raw answers, generated notebooks, and execution logs also separated observation from interpretation. The remaining cost is a small sample: one run per cell gives no variance estimate, and two models/datasets cannot establish a general RAG effect.
+Teacher feedback led to a narrower question and a cleaner paired design.
+Freezing the corpus, prompt, model, dataset, and generation settings while changing only retrieval made the six outcomes possible to check.
+Saving exact prompts, raw answers, generated notebooks, and execution logs also separated observation from interpretation.
+The remaining cost is a small sample: one run per cell gives no variance estimate, and two models/datasets cannot establish a general RAG effect.
 
-\subsection{Retrieval, reference, and actual use are different}
-Our experiments show why RAG evaluation needs at least three measures:
-\begin{enumerate}
-\item \textbf{Retrieval quality:} did the system return relevant material? The experiment report records 6/6 hit@4 for its six retrieval checks; the full raw query output was not saved.
-\item \textbf{Reference in the response:} did the model cite, repeat, or visibly copy that material? Historical Qwen runs sometimes referenced relevant documentation yet still produced placeholder paths or incorrect code. This is an observation from those older experiments, not a measured finding of the numerical run.
-\item \textbf{Effective task use:} did the information lead to a correct answer or runnable artifact? In the final 1B RAG runs, copying the retrieved template's \texttt{data.csv} was visible reference but ineffective use, confirmed by \texttt{FileNotFoundError}.
-\end{enumerate}
-Thus hit@4 or a citation cannot by itself demonstrate grounding or task success. Possible explanations include limited small-model procedural ability, placeholder-bearing document quality, retrieval ranking, and competition between prompt instructions and examples. Our records do not isolate a cause.
-
-For StudyGraph, source display likewise proves retrieval and traceability, not factual correctness or improved learning. We have not conducted a systematic student study or a scored answer-quality evaluation. Chunk size, overlap, $k$, and relevance thresholds remain design choices rather than optimised parameters, and the small models' errors can be confident.
+\subsection{Finding information and using it are different}
+Finding relevant documentation does not guarantee that the model will use it correctly.
+A model may retrieve the right information but still generate incorrect code or fail to complete the task.
+In our experiments, some generated programs contained incorrect file paths or other errors despite retrieval.
+For StudyGraph, displayed sources show what was retrieved and allow traceability; they do not prove that an answer is correct.
+We have not conducted a systematic student study or a scored evaluation of answer quality.
 
 \pagebreak[3]
-The workshops on hallucinations, prompt injection, and ambiguity are relevant to StudyGraph. Retrieval can supply relevant course material, but it cannot guarantee that a generated answer is correct, so users should check the sources and evaluate answers critically. Retrieved documents may contain instructions that should not be trusted; StudyGraph's prompts treat this content as data rather than instructions, but this does not make the application fully secure or show that it resists prompt-injection attacks. Unclear student questions may also lead to incorrect assumptions; we did not specifically evaluate ambiguity handling.
+Prompt injection is a risk when an LLM processes external documents or user messages.
+In StudyGraph, the system prompt tells the model to treat retrieved documents as data rather than instructions, stay in its study-assistant
+role, use retrieved material for grounded answers, and ignore attempts to override its rules.
+It also tells the assistant to admit when material is insufficient, stay focused on the question, and cite only sources that were retrieved.
+A simple \texttt{is\_jailbreak()} function in the Chat page checks a small list of six known jailbreak phrases and blocks matching messages
+before calling the model.
+These measures demonstrate basic protection, but they are not sufficient to prevent all prompt-injection attacks, and we did not conduct a
+comprehensive security evaluation.
+The prompt also asks the assistant to request clarification for unclear questions; we did not systematically evaluate ambiguity handling.
+RAG can provide relevant course material, but it does not guarantee correct answers, so users should still check the sources.
 
-Future work should therefore be measurement-led: test alternative chunk sizes and document preparation, compare embedding/retrieval strategies, and score retrieval, citation, factual support, and task completion separately. Repeated controlled runs with held-out cases and recorded configurations would make effects more reliable. Numerical nearest-neighbour retrieval is also a more task-appropriate baseline than semantic lookup for the ice-cream rows. These are extensions, not results claimed here.
+Future work could test different document chunk sizes and retrieval settings, evaluate whether retrieved information is relevant and correctly
+used, run experiments multiple times to make results more reliable, and evaluate StudyGraph with real questions and users.
+These are proposed next steps, not completed work.

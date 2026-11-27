@@ -26,7 +26,7 @@ def main() -> int:
         "Local Language Models and Machine Learning",
         "Applications, Experiments, and Implications",
         "How does StudyGraph use a local LLM and course material to help students study?",
-        "How accurate was the local LLM with RAG compared with linear regression when predicting ice-cream revenue?",
+        "How accurate were our three approaches---manual linear regression, local LLM with RAG, and local LLM without RAG---when predicting ice-cream revenue?",
         "Could the smaller local LLMs use retrieved documentation to generate working regression code?",
         "Ahmad Alkaseb",
         "Aleksandr Uktamovich Sorokin",
@@ -44,7 +44,7 @@ def main() -> int:
         "Introduction and research questions",
         "Relevant course concepts",
         "StudyGraph: implementation and architecture",
-        "Linear regression versus local LLM + RAG",
+        "Manual regression versus local LLM prediction",
         "Reflection, limitations, and future work",
         "Conclusion",
         "References",
@@ -55,9 +55,13 @@ def main() -> int:
         "72.2%",
         "12.8%",
         "15.0%",
-        "same test set",
+        "same 75-row test set",
         "first-/eighth-degree example",
-        "full raw query output was not saved",
+        "Manual regression",
+        "LLM without RAG",
+        "100.00",
+        "1500.00",
+        "1000.00",
         "0/6",
         "llama3.2:3b",
         "nomic-embed-text",
@@ -85,12 +89,14 @@ def main() -> int:
         "16,384",
         "Implemented StudyGraph turn flow",
         "Actual 4T implementation and purpose",
-        "Recorded exploratory predictions",
+        "Predictions for the same three held-out inputs",
         "Controlled runs of 19 November 2026",
-        "The workshops on hallucinations, prompt injection, and ambiguity are relevant to StudyGraph.",
-        "Retrieval can supply relevant course material, but it cannot guarantee that a generated answer is correct, so users should check the sources and evaluate answers critically.",
-        "StudyGraph's prompts treat this content as data rather than instructions",
-        "we did not specifically evaluate ambiguity handling.",
+        "Prompt injection is a risk when an LLM processes external documents or user messages.",
+        "is_jailbreak()",
+        "six known jailbreak phrases",
+        "we did not conduct a comprehensive security evaluation",
+        "we did not systematically evaluate ambiguity handling.",
+        "evaluate StudyGraph with real questions and users",
         "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
         "Attention Is All You Need",
         "Efficient Estimation of Word Representations in Vector Space",
@@ -111,7 +117,7 @@ def main() -> int:
         if unexpected in canonical:
             remaining.append(value)
     assert not remaining, f"Removed societal discussion still present: {remaining}"
-    outdated_text = ["a different set of test rows", "described as 70/15/15"]
+    outdated_text = ["a different set of test rows", "described as 70/15/15", "confirm with our teacher"]
     remaining_outdated = []
     for value in outdated_text:
         normalised = unicodedata.normalize("NFKC", value).casefold()

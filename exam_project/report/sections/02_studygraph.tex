@@ -1,9 +1,24 @@
 \section{StudyGraph: implementation and architecture}
 \subsection{Problem, users, and MVP scope}
-StudyGraph is for students revising \emph{LLMs for Developers}. Its value is course-specific assistance with inspectable sources and configurable teaching behaviour, rather than unrestricted general chat alone. The MVP provides three Streamlit pages: \textbf{Chat} for tasks and streamed answers with retrieved sources, \textbf{Buddies} for reusable teaching profiles, and \textbf{About} for model/index/storage information. Conversations and Buddy snapshots persist in SQLite. A Buddy can be course-linked (RAG) or unlinked (general chat). Explanations, summaries, practice questions, quizzes, comparisons, and answer review are included; unrestricted course management, student document upload, a learning-management system, and validated learning outcomes are outside scope.
+StudyGraph is for students revising \emph{LLMs for Developers}.
+Its value is course-specific assistance with inspectable sources and configurable
+teaching behaviour, rather than unrestricted general chat alone. The MVP provides
+three Streamlit pages: \textbf{Chat} for tasks and streamed answers with retrieved
+sources, \textbf{Buddies} for reusable teaching profiles, and \textbf{About} for
+model/index/storage information. Conversations and Buddy snapshots persist in SQLite.
+A Buddy can be course-linked (RAG) or unlinked (general chat). Explanations,
+summaries, practice questions, quizzes, comparisons, and answer review are
+included; unrestricted course management, student document upload, a
+learning-management system, and validated learning outcomes are outside scope.
 
 \subsection{Architecture and user flow}
-The application separates UI, services, domain models, orchestration, and external adapters. When a conversation starts, \sourcefile{ChatService} freezes the Buddy's Tone, Traits, Target, and course link into a snapshot, so later profile edits do not silently alter old conversations. For each message, history is loaded and a Task is selected. LangGraph routes course-linked turns through retrieval; general-chat turns skip it. Both then share prompt construction and Ollama generation before messages, prompt version, model, retrieval status, and actual source references are stored.
+The application separates UI, services, domain models, orchestration, and external adapters.
+When a conversation starts, \sourcefile{ChatService} freezes the Buddy's Tone,
+Traits, Target, and course link into a snapshot, so later profile edits do not
+silently alter old conversations. For each message, history is loaded and a Task is selected.
+LangGraph routes course-linked turns through retrieval; general-chat turns skip it.
+Both then share prompt construction and Ollama generation before messages,
+prompt version, model, retrieval status, and actual source references are stored.
 
 \begin{figure}[htbp]
 \centering
@@ -18,17 +33,43 @@ $\rightarrow$ streamed answer + source metadata $\rightarrow$ SQLite}}
 \label{fig:architecture}
 \end{figure}
 
-The defaults are \model{llama3.2:3b} for generation (temperature 0.2, context 4096) and \model{nomic-embed-text} for 768-dimensional embeddings. Both run locally through Ollama. Chroma and Streamlit run as separate local processes. This modular split and replaceable interfaces support tests without live services, although passing unit tests alone does not demonstrate correct generated answers.
+The defaults are \model{llama3.2:3b} for generation (temperature 0.2, context 4096)
+and \model{nomic-embed-text} for 768-dimensional embeddings. Both run locally
+through Ollama. Chroma and Streamlit run as separate local processes.
+This modular split and replaceable interfaces support tests without live services,
+although passing unit tests alone does not demonstrate correct generated answers.
 
 \subsection{Course-material preparation and retrieval}
-The source pipeline converts supplied PDFs/notebooks to cleaned Markdown; raw files are not indexed. The current corpus has 85 Markdown documents across eight teaching weeks, producing 1,660 chunks. Heading-first chunking keeps headings with content, targets 900 characters with 120-character overlap, drops chunks below 80 characters, and avoids splitting fenced code blocks. Deterministic IDs let repeated indexing update the same chunks instead of duplicating them. Collection metadata records the embedding model, dimension, chunker version, and corpus digest to expose stale or incompatible indexes.
+The supplied course PDFs and notebooks are converted into cleaned Markdown
+documents before being indexed. The current collection contains 85 documents
+from eight teaching weeks, split into 1,660 smaller text sections (chunks).
+These chunks are created to keep related content together, including headings
+and code examples, and are stored in Chroma with metadata that helps identify
+the source and keep the index consistent when documents are updated.
 
-At query time the \emph{current user message} is embedded directly---there is no separate query-rewriting step. Chroma returns the nearest four passages by its configured vector distance. Their text, document/section metadata, and chunk IDs enter a delimited prompt block; only these retrieved sources can be shown as references. Retrieval distinguishes \texttt{ok}, \texttt{empty}, \texttt{failed}, and \texttt{skipped}. Empty or failed retrieval therefore cannot honestly be presented as grounded. A limitation remains: after a technical retrieval failure the graph still generates with empty context, so users must inspect status rather than treating every answer as RAG-grounded.
+When a student asks a question, StudyGraph embeds the original message and
+uses Chroma to retrieve the four most relevant chunks. Their text and source
+information are added to the prompt sent to the local LLM. This allows the
+model to use the retrieved course material when generating its answer and
+provides references that can be shown to the student. The system also tracks
+whether retrieval succeeded, returned no results, failed, or was skipped.
+This distinction is important because an answer generated without retrieved
+context cannot be considered grounded in the course material. Currently,
+the system can still generate an answer after a retrieval failure, so the
+retrieval status must be considered when interpreting its responses.
 
-In one earlier paired demonstration on a 57-chunk index, the RAG answer to ``What is overfitting?'' reused the course's first-/eighth-degree example, while no-RAG used leaf and house-price examples. This shows that retrieval changed one answer, not that it was correct or generally better.
+In one earlier paired demonstration on a 57-chunk index, the RAG answer
+to ``What is overfitting?'' reused the course's first-/eighth-degree example,
+while no-RAG used leaf and house-price examples. This shows that retrieval
+changed one answer, not that it was correct or generally better.
 
 \subsection{Meaningful application of the 4T's}
-The four dimensions are explicit fields rendered into \sourcefile{app/prompts/system\_v1.md}, not merely UI labels (Table~\ref{tab:4ts}). Task varies per interaction; the other three belong to the Buddy snapshot. Grounding rules additionally forbid invented references, treat retrieved text as data rather than instructions, require uncertainty when context is insufficient, and prohibit course citations in general chat.
+The four dimensions are explicit fields rendered into
+\sourcefile{app/prompts/system\_v1.md}, not merely UI labels (Table~\ref{tab:4ts}).
+Task varies per interaction; the other three belong to the Buddy snapshot.
+Grounding rules additionally forbid invented references, treat retrieved text
+as data rather than instructions, require uncertainty when context is
+insufficient, and prohibit course citations in general chat.
 
 \begin{table}[htbp]
 \centering\small

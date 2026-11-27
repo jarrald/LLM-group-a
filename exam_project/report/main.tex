@@ -67,14 +67,26 @@ Roman Ghazi & \href{mailto:rogh1000@stud.ek.dk}{rogh1000@stud.ek.dk}\\
 \vspace{4mm}
 \section*{Abstract}
 \small
-This project explores local language models and machine learning through an application and two regression experiments. StudyGraph is a working minimum viable product (MVP) that uses a local LLM and retrieval-augmented generation (RAG) to support study with course sources. We describe its architecture, document retrieval, and use of Traits, Task, Tone, and Target. In an archived exploratory prediction run, linear regression achieved MAE 13.28 on three held-out cases, compared with 107.15 for a local LLM with RAG. In the later controlled code-generation experiment, none of six small-model programs ran, so no prediction MAE exists for that experiment. We also reflect on hallucinations, prompt injection, and ambiguity when using retrieved course material. The results show that retrieved context can change outputs, but it does not guarantee correct task execution or turn a generative model into a fitted numerical model.
+This project explores local language models and machine learning through an application and two regression experiments.
+StudyGraph is a working minimum viable product (MVP) that uses a local LLM and retrieval-augmented generation (RAG) to support study with course sources.
+We describe its architecture, document retrieval, and use of Traits, Task, Tone, and Target.
+In an exploratory prediction comparison, our manual linear regression achieved MAE 13.28 on three held-out cases,
+compared with 107.15 for a local LLM with RAG and 368.82 without RAG.
+In a separate code-generation experiment, none of six small-model programs ran, so no prediction MAE exists for that experiment.
+We also reflect on hallucinations, prompt injection, and ambiguity when using retrieved course material.
+The results show that retrieval can change LLM outputs, but manual regression was more accurate on this small comparison.
 \normalsize
 
 \section{Introduction and research questions}
-The project has two connected parts. StudyGraph applies local inference and course-material retrieval to a practical study problem. The regression work examines the same broader idea---giving external knowledge to an LLM---through numerical prediction and code generation. Course examples of embeddings and model training help us explain these systems. RAG means retrieving external context before generation, in the general tradition of Lewis et al.~\cite{lewis2020rag}, not reproducing their fine-tuned architecture. We ask:
+The project has two connected parts.
+StudyGraph applies local inference and course-material retrieval to a practical study problem.
+The regression work examines the same broader idea---giving external knowledge to an LLM---through numerical prediction and code generation.
+Course examples of embeddings and model training help us explain these systems.
+RAG means retrieving external context before generation, in the general tradition of Lewis et al.~\cite{lewis2020rag}, not reproducing their fine-tuned architecture.
+We ask:
 \begin{enumerate}[label=\textbf{RQ\arabic*:},leftmargin=3.2em]
 \item How does StudyGraph use a local LLM and course material to help students study?
-\item How accurate was the local LLM with RAG compared with linear regression when predicting ice-cream revenue?
+\item How accurate were our three approaches---manual linear regression, local LLM with RAG, and local LLM without RAG---when predicting ice-cream revenue?
 \item Could the smaller local LLMs use retrieved documentation to generate working regression code?
 \end{enumerate}
 

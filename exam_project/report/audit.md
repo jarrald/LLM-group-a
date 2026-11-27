@@ -83,6 +83,7 @@ and 19 November code-generation run are separate experiments.
 Keep the raw three-case numerical comparison with its archived/exploratory label; the six current
 unchanged-code execution outcomes; the manual 75-row baseline with an explicit denominator; and the
 verified implementation details. Add only the small StudyGraph paired observation. Attribute the
-6/6 retrieval summary rather than presenting it as independently reproduced. The recommendation to
-confirm the archived numerical comparison's acceptability with the teacher remains necessary.
+6/6 retrieval summary rather than presenting it as independently reproduced. Teacher feedback has
+confirmed that the broad implications of the report are acceptable, so no further confirmation is
+requested in the synopsis.
 

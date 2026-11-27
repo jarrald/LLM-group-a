@@ -1,2 +1,10 @@
 \section{Conclusion}
-StudyGraph uses Ollama to run a local LLM, Chroma to retrieve course passages, and the 4T's to shape its answers. These features provide course-specific study support with inspectable sources (RQ1). In the archived exploratory numerical comparison, linear regression achieved MAE 13.28, while the local LLM with RAG achieved 107.15 on the same three inputs. The LLM's MAE was lower with RAG than without it, but regression was much more accurate (RQ2). In the later controlled experiment, none of the six generated programs ran. The smaller local LLMs therefore did not produce working regression code, with or without retrieved documentation (RQ3). The project shows both the practical value of local models and RAG and their limits. Claims about their value require controlled settings and measures that match the task.
+StudyGraph uses Ollama to run a local LLM, Chroma to retrieve course passages, and the 4T's to shape its answers.
+This provides course-specific study support with inspectable sources (RQ1).
+For RQ2, we compared (1) our manual linear regression, (2) the local LLM with RAG, and (3) the same LLM without RAG on three held-out inputs.
+Manual regression had the lowest MAE (13.28), followed by LLM+RAG (107.15) and LLM without RAG (368.82).
+RAG improved the LLM's predictions relative to its no-RAG version in this small comparison, but manual regression remained more accurate;
+this does not show that RAG always improves results.
+RQ3 was a separate code-generation experiment.
+None of the six smaller-model programs ran successfully, so no prediction MAE was assigned to them.
+Overall, the project demonstrates a working local RAG application and shows both the value and limitations of LLMs for numerical tasks.
